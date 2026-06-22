@@ -1,1 +1,16 @@
-export const buttonStyles = { primary: 'rounded bg-black px-3 py-2 text-white' } as const;
+export {
+  IbaseBox,
+  IbaseButton,
+  IbaseCard,
+  IbaseFlex,
+  IbaseInput,
+  IbaseInputEmail,
+  IbaseInputNumber,
+  IbaseInputPassword,
+  IbaseInputPhone,
+  IbaseTextArea,
+  IbaseUpload,
+  IbaseUploadFile,
+  IbaseUploadImage,
+  IbaseViewImage,
+} from './ibase';

@@ -20,15 +20,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@heroui/react": "^3.2.1",
+    "@heroui/styles": "^3.2.1",
     "@tenora/client": "workspace:*",
     "next": "^16.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwind-variants": "^3.2.2"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.19.11",
+    "@tailwindcss/postcss": "^4.3.1",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.1",
     "typescript": "^5.8.3",
     "vercel": "^54.14.5",
     "wrangler": "^4.103.0"
