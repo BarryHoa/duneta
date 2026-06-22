@@ -1,0 +1,31 @@
+{
+  "name": "@tenora/server",
+  "private": false,
+  "version": "0.1.0",
+  "description": "Server utilities for Tenora applications.",
+  "license": "MIT",
+  "type": "module",
+  "files": ["dist"],
+  "forgeStack": { "kind": "backend", "runtime": "edge-or-server" },
+  "exports": {
+    "./configs": { "types": "./dist/configs/index.d.ts", "import": "./dist/configs/index.js" },
+    "./validators": { "types": "./dist/validators/index.d.ts", "import": "./dist/validators/index.js" },
+    "./helpers": { "types": "./dist/helpers/index.d.ts", "import": "./dist/helpers/index.js" },
+    "./middlewares": { "types": "./dist/middlewares/index.d.ts", "import": "./dist/middlewares/index.js" },
+    "./repositories": { "types": "./dist/repositories/index.d.ts", "import": "./dist/repositories/index.js" },
+    "./services": { "types": "./dist/services/index.d.ts", "import": "./dist/services/index.js" }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": { "access": "public" },
+  "dependencies": {
+    "drizzle-orm": "^0.44.0",
+    "hono": "^4.7.0",
+    "pg": "^8.16.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": { "@types/pg": "^8.15.0", "typescript": "^5.8.3" }
+}

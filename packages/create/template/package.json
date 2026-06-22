@@ -1,0 +1,10 @@
+{
+  "name": "tenora-app",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "dev": "pnpm --parallel --filter api --filter web dev",
+    "build": "pnpm --recursive --if-present run build",
+    "typecheck": "pnpm --recursive --if-present run typecheck"
+  }
+}
