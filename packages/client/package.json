@@ -36,6 +36,10 @@
       "types": "./dist/helpers/index.d.ts",
       "import": "./dist/helpers/index.js"
     },
+    "./hooks/link": {
+      "types": "./dist/hooks/link/index.d.ts",
+      "import": "./dist/hooks/link/index.js"
+    },
     "./components": {
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"

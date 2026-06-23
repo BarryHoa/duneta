@@ -9,6 +9,7 @@
     "config/index.ts",
     "validators",
     "helpers",
+    "hooks",
     "components",
     "layouts",
     "providers"

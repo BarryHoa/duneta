@@ -16,6 +16,7 @@
     "env.d.ts",
     "validators",
     "helpers",
+    "hooks",
     "components",
     "layouts",
     "providers",
