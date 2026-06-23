@@ -8,12 +8,12 @@
     "runtime": "hono"
   },
   "scripts": {
-    "dev": "node ../../node_modules/tsx/dist/cli.mjs watch server.ts",
-    "dev:cloudflare": "wrangler dev",
+    "dev": "tenora-api dev",
+    "dev:cloudflare": "tenora-api dev:cloudflare",
     "build": "node ../../node_modules/typescript/bin/tsc --noEmit",
-    "start": "node ../../node_modules/tsx/dist/cli.mjs server.ts",
+    "start": "tenora-api start",
     "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
-    "deploy:cloudflare": "wrangler deploy"
+    "deploy:cloudflare": "tenora-api deploy:cloudflare"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.0",

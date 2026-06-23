@@ -50,7 +50,7 @@ export function TenoraHome() {
             <Card.Content className="space-y-5 p-5 sm:p-7">
               <div className="flex items-center justify-between"><div><p className="text-sm text-slate-400">Release status</p><p className="mt-1 text-2xl font-semibold tracking-tight text-white">Ready to compose</p></div><span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-200">All systems go</span></div>
               <div className="grid grid-cols-3 gap-3">{[['WEB', 'React Router'], ['API', 'Hono'], ['UI', 'HeroUI']].map(([label, item]) => <div key={label} className="rounded-xl border border-white/8 bg-white/[0.035] p-3"><p className="text-[10px] font-semibold tracking-[0.14em] text-slate-500">{label}</p><p className="mt-2 text-sm font-medium text-slate-200">{item}</p></div>)}</div>
-              <div className="rounded-xl border border-cyan-300/10 bg-cyan-300/[0.045] p-4 font-mono text-sm leading-7 text-cyan-100"><span className="text-cyan-300">$</span> pnpm create tenora<br /><span className="text-emerald-300">✓</span> @tenora/client ready<br /><span className="text-emerald-300">✓</span> @tenora/server ready</div>
+              <div className="rounded-xl border border-cyan-300/10 bg-cyan-300/[0.045] p-4 font-mono text-sm leading-7 text-cyan-100"><span className="text-cyan-300">$</span> pnpm dev<br /><span className="text-emerald-300">✓</span> @tenora/client ready<br /><span className="text-emerald-300">✓</span> @tenora/server ready</div>
             </Card.Content>
           </Card>
         </section>

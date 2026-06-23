@@ -7,7 +7,6 @@
     "build": "pnpm -r --if-present run build",
     "dev": "node scripts/dev.mjs",
     "dev:cloudflare": "node scripts/dev.mjs cloudflare",
-    "create": "pnpm --filter create-tenora start",
     "lint": "pnpm -r --if-present run lint",
     "typecheck": "pnpm -r --if-present run typecheck",
     "format": "prettier --write .",

@@ -5,6 +5,6 @@ build
 dist
 .wrangler
 .dev.vars
-.env
-.env.local
+app/api/.env
+app/web/.env
 *.tsbuildinfo

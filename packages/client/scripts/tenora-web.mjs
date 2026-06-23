@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { loadEnvFile } from 'node:process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,6 +17,12 @@ function packageBin(packageName, binFile = 'bin.cjs') {
 const [command = 'dev', ...rest] = process.argv.slice(2);
 const cwd = process.cwd();
 
+try {
+  loadEnvFile(path.join(cwd, '.env'));
+} catch {
+  // Copy .env.example to .env in this directory.
+}
+
 if (['dev', 'build', 'typegen'].includes(command)) {
   syncRouters(cwd, clientRoot);
 }
@@ -24,12 +31,21 @@ let executable = process.execPath;
 let args;
 
 switch (command) {
-  case 'dev':
+  case 'dev': {
+    const webPort = process.env.TENORA_WEB_PORT ?? 3000;
+    console.log(`[tenora-web] dev → http://localhost:${webPort}/`);
+    args = [packageBin('@react-router/dev'), command, ...rest];
+    break;
+  }
   case 'build':
+    console.log('[tenora-web] building…');
+    args = [packageBin('@react-router/dev'), command, ...rest];
+    break;
   case 'typegen':
     args = [packageBin('@react-router/dev'), command, ...rest];
     break;
   case 'start':
+    console.log('[tenora-web] production server');
     args = [packageBin('@react-router/serve'), path.join(cwd, 'build/server/index.js'), ...rest];
     break;
   default:
