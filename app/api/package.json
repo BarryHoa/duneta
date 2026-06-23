@@ -16,9 +16,7 @@
     "deploy:cloudflare": "tenora-api deploy:cloudflare"
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.0",
-    "@tenora/server": "workspace:*",
-    "hono": "^4.7.0"
+    "@tenora/server": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250617.0",

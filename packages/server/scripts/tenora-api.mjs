@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -16,6 +17,12 @@ function resolveAppBin(cwd, packageName, relativePath) {
   return path.join(path.dirname(packageJson), relativePath);
 }
 
+function resolveServerEntry(cwd) {
+  const customServer = path.join(cwd, 'server.ts');
+  if (existsSync(customServer)) return customServer;
+  return path.join(packageRoot, 'runtime/server.ts');
+}
+
 const [command = 'dev', ...rest] = process.argv.slice(2);
 const cwd = process.cwd();
 
@@ -25,7 +32,8 @@ try {
   // Copy .env.example to .env in this directory.
 }
 
-const apiPort = process.env.TENORA_API_PORT ?? 3001;
+const apiPort = 3001; // log hint — actual port from tenora.config.ts → app.port
+const serverEntry = resolveServerEntry(cwd);
 
 let executable = process.execPath;
 let args;
@@ -33,18 +41,28 @@ let args;
 switch (command) {
   case 'dev':
     console.log(`[tenora-api] API → http://localhost:${apiPort}/api`);
-    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), 'watch', 'server.ts', ...rest];
+    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), 'watch', serverEntry, ...rest];
     break;
   case 'start':
     console.log(`[tenora-api] starting on :${apiPort}`);
-    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), 'server.ts', ...rest];
+    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), serverEntry, ...rest];
     break;
   case 'dev:cloudflare':
     console.log('[tenora-api] Cloudflare Worker dev');
-    args = [resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'), 'dev', ...rest];
+    args = [
+      resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'),
+      'dev',
+      serverEntry,
+      ...rest,
+    ];
     break;
   case 'deploy:cloudflare':
-    args = [resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'), 'deploy', ...rest];
+    args = [
+      resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'),
+      'deploy',
+      serverEntry,
+      ...rest,
+    ];
     break;
   default:
     console.error(`[tenora-api] unknown command: ${command}`);

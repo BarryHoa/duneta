@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { Handler, MiddlewareHandler } from 'hono';
-import type { BackendEnv } from '@tenora/server/middlewares';
+import type { BackendEnv } from '../middlewares/index.js';
 
 type Endpoint = {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

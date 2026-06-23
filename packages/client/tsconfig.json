@@ -12,6 +12,7 @@
     "noEmit": true
   },
   "include": [
+    "configs",
     "config/index.ts",
     "env.d.ts",
     "validators",

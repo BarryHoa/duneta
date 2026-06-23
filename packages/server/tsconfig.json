@@ -1,1 +1,21 @@
-{ "extends": "../../tsconfig.base.json", "include": ["configs", "validators", "helpers", "middlewares", "repositories", "services"] }
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": [
+    "app",
+    "configs",
+    "validators",
+    "helpers",
+    "middlewares",
+    "repositories",
+    "routers",
+    "runtime",
+    "services"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

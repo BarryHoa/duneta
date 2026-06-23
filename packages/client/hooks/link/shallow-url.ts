@@ -1,4 +1,4 @@
-import type { Location, NavigateFunction, SetURLSearchParamsFunction, To } from 'react-router';
+import type { Location, NavigateFunction, SetURLSearchParams, To } from 'react-router';
 import { isSamePathname, resolveTo } from './resolve-to';
 
 export type ShallowUrlOptions = {
@@ -14,7 +14,7 @@ export function navigateShallow(
   href: To,
   location: Location,
   navigate: NavigateFunction,
-  setSearchParams: SetURLSearchParamsFunction,
+  setSearchParams: SetURLSearchParams,
   options: ShallowUrlOptions = {},
 ) {
   const resolved = resolveTo(href, location);

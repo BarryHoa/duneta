@@ -79,7 +79,9 @@ cp app/api/.env.example app/api/.env
 cp app/web/.env.example app/web/.env
 ```
 
-| File | Variables |
-|------|-----------|
-| `app/api/.env` | `TENORA_API_PORT`, `DATABASE_URL` |
-| `app/web/.env` | `TENORA_WEB_PORT`, `TENORA_API_PORT` (dev proxy), `VITE_API_URL` |
+| File | Role |
+|------|------|
+| `app/api/tenora.config.ts` | Server config — `defineTenoraConfig({ runtime, app, auth, ... })` |
+| `app/web/tenora.config.ts` | Web config — `defineTenoraConfig({ app, api, router })` |
+| `app/api/server.ts` | Optional custom entry — copy from `server.ts.example` |
+| `app/web/.env` | Optional legacy `VITE_*` — prefer `tenora.config.ts` |

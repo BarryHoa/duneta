@@ -1,7 +1,7 @@
-import { getServiceStatus } from '@tenora/server/services';
+import { getServiceStatus } from '../services/index.js';
 import { healthResponseSchema } from '@tenora/server/validators';
-import { x, y, z } from '@tenora/server/middlewares';
-import { createRouter, defineGroup } from './define';
+import { x, y, z } from '../middlewares/index.js';
+import { createRouter, defineGroup } from '@tenora/server/routers';
 
 export const router = createRouter([
   defineGroup({

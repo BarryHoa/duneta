@@ -5,18 +5,30 @@
   "description": "Server utilities for Tenora applications.",
   "license": "MIT",
   "type": "module",
-  "files": ["dist", "scripts"],
+  "files": ["dist", "scripts", "runtime"],
   "forgeStack": { "kind": "backend", "runtime": "edge-or-server" },
   "bin": {
     "tenora-api": "./scripts/tenora-api.mjs"
   },
   "exports": {
-    "./configs": { "types": "./dist/configs/index.d.ts", "import": "./dist/configs/index.js" },
+    "./configs": {
+      "types": "./configs/index.ts",
+      "import": "./configs/index.ts",
+      "default": "./configs/index.ts"
+    },
     "./validators": { "types": "./dist/validators/index.d.ts", "import": "./dist/validators/index.js" },
     "./helpers": { "types": "./dist/helpers/index.d.ts", "import": "./dist/helpers/index.js" },
     "./middlewares": { "types": "./dist/middlewares/index.d.ts", "import": "./dist/middlewares/index.js" },
     "./repositories": { "types": "./dist/repositories/index.d.ts", "import": "./dist/repositories/index.js" },
-    "./services": { "types": "./dist/services/index.d.ts", "import": "./dist/services/index.js" }
+    "./services": { "types": "./dist/services/index.d.ts", "import": "./dist/services/index.js" },
+    "./app": { "types": "./dist/app/index.d.ts", "import": "./dist/app/index.js" },
+    "./routers": { "types": "./dist/routers/index.d.ts", "import": "./dist/routers/index.js" },
+    "./runtime": {
+      "types": "./runtime/index.ts",
+      "import": "./runtime/index.ts",
+      "default": "./runtime/index.ts"
+    },
+    "./runtime/server": "./runtime/server.ts"
   },
   "scripts": {
     "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
@@ -25,6 +37,8 @@
   },
   "publishConfig": { "access": "public" },
   "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "better-auth": "^1.2.0",
     "drizzle-orm": "^0.44.0",
     "hono": "^4.7.0",
     "pg": "^8.16.0",

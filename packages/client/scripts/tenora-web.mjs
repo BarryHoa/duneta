@@ -32,8 +32,7 @@ let args;
 
 switch (command) {
   case 'dev': {
-    const webPort = process.env.TENORA_WEB_PORT ?? 3000;
-    console.log(`[tenora-web] dev → http://localhost:${webPort}/`);
+    console.log('[tenora-web] dev → see app/web/tenora.config.ts for port');
     args = [packageBin('@react-router/dev'), command, ...rest];
     break;
   }

@@ -9,7 +9,8 @@
     "paths": {
       "~/*": ["./*"],
       "@tenora/client": ["../../packages/client"],
-      "@tenora/client/*": ["../../packages/client/*"]
+      "@tenora/client/*": ["../../packages/client/*"],
+      "@tenora/client/configs": ["../../packages/client/configs/index.ts"]
     },
     "rootDirs": [".", "./.react-router/types"],
     "noEmit": true
