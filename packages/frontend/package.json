@@ -34,6 +34,34 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
+    "./components/IbaseInput": {
+      "types": "./dist/components/IbaseInput/index.d.ts",
+      "import": "./dist/components/IbaseInput/index.js"
+    },
+    "./components/IbaseSelect": {
+      "types": "./dist/components/IbaseSelect/index.d.ts",
+      "import": "./dist/components/IbaseSelect/index.js"
+    },
+    "./components/IbaseForm": {
+      "types": "./dist/components/IbaseForm/index.d.ts",
+      "import": "./dist/components/IbaseForm/index.js"
+    },
+    "./components/IbaseUpload": {
+      "types": "./dist/components/IbaseUpload/index.d.ts",
+      "import": "./dist/components/IbaseUpload/index.js"
+    },
+    "./components/IbaseTable": {
+      "types": "./dist/components/IbaseTable/index.d.ts",
+      "import": "./dist/components/IbaseTable/index.js"
+    },
+    "./components/IbaseError": {
+      "types": "./dist/components/IbaseError/index.d.ts",
+      "import": "./dist/components/IbaseError/index.js"
+    },
+    "./components/IbaseLayout": {
+      "types": "./dist/components/IbaseLayout/index.d.ts",
+      "import": "./dist/components/IbaseLayout/index.js"
+    },
     "./layouts": {
       "types": "./dist/layouts/index.d.ts",
       "import": "./dist/layouts/index.js"
@@ -41,7 +69,7 @@
     "./styles": "./styles.css"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node ./scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm run build"
   },
@@ -55,10 +83,16 @@
   "dependencies": {
     "@heroui/react": "^3.2.1",
     "@heroui/styles": "^3.2.1",
+    "@leeoniya/ufuzzy": "^1.0.19",
+    "@tanstack/react-virtual": "^3.14.3",
+    "dayjs": "^1.11.21",
+    "lodash": "^4.18.1",
     "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.24",
     "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "typescript": "^5.8.3"

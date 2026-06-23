@@ -1,0 +1,3 @@
+import { mountIbaseAlert } from './mount';
+import type { IbaseAlertDialogController, IbaseConfirmOptions, IbaseConfirmResult } from './types';
+export function showIbaseConfirm(options: IbaseConfirmOptions): Promise<IbaseConfirmResult> { return new Promise((resolve) => { let isOk = false; let controller!: IbaseAlertDialogController; const finish = () => resolve({ isOk, close: controller.close }); controller = mountIbaseAlert({ ...options, status: options.confirmVariant === 'danger' ? 'danger' : 'default', isOpen: true, onOpenChange: (isOpen) => { if (!isOpen) finish(); }, onConfirm: async () => { await options.onConfirm?.(); isOk = true; }, onCancel: async () => { await options.onCancel?.(); } }); }); }
