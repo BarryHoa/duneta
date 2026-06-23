@@ -1,5 +1,3 @@
-import { appTheme } from '@tenora/client/themes';
-
 export default function Home() {
-  return <main className={appTheme.page}>Your Tenora app is ready.</main>;
+  return <main className="mx-auto max-w-5xl p-8">Your Tenora app is ready.</main>;
 }

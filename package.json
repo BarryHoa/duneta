@@ -10,7 +10,7 @@
     "dev:cloudflare": "node scripts/dev.mjs cloudflare",
     "create": "pnpm --filter create-tenora start",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
+    "typecheck": "node scripts/turbo.mjs typecheck",
     "format": "prettier --write .",
     "version:check": "node scripts/version.mjs check",
     "version:sync": "node scripts/version.mjs sync",

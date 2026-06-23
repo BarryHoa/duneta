@@ -26,10 +26,6 @@
       "types": "./dist/helpers/index.d.ts",
       "import": "./dist/helpers/index.js"
     },
-    "./themes": {
-      "types": "./dist/themes/index.d.ts",
-      "import": "./dist/themes/index.js"
-    },
     "./components": {
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
