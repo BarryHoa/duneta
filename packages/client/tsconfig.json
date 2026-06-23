@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@tenora/client": ["."],
+      "@tenora/client/*": ["./*"]
+    },
+    "noEmit": true
+  },
+  "include": [
+    "config/index.ts",
+    "validators",
+    "helpers",
+    "components",
+    "layouts",
+    "providers",
+    "routers"
+  ]
+}

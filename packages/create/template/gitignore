@@ -1,5 +1,8 @@
 node_modules
-.next
+build
+.react-router
+.router-runtime
+dist
 .wrangler
 .env
 .env.local

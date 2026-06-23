@@ -5,7 +5,6 @@ import { delimiter, join } from 'node:path';
 
 const corepack = process.platform === 'win32' ? 'corepack.cmd' : 'corepack';
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
-const turbo = process.platform === 'win32' ? 'node_modules/.bin/turbo.cmd' : 'node_modules/.bin/turbo';
 const corepackHome = process.env.COREPACK_HOME ?? join(tmpdir(), 'tenora-corepack');
 const shimDirectory = join(tmpdir(), 'tenora-bin');
 
@@ -53,16 +52,18 @@ function runTogether(commands) {
   }).then((code) => process.exit(code));
 }
 
-// The repo pins pnpm in package.json. Corepack fetches that exact version when needed.
 if (!existsSync('node_modules')) run(corepack, ['pnpm', 'install']);
 mkdirSync(shimDirectory, { recursive: true });
 run(corepack, ['enable', '--install-directory', shimDirectory]);
 
 if (process.argv[2] === 'cloudflare') {
   await runTogether([
-    [turbo, ['dev', '--filter=web']],
+    [pnpm, ['--filter', 'web', 'dev']],
     [pnpm, ['--filter', 'api', 'dev:cloudflare']],
   ]);
 } else {
-  run(turbo, ['dev']);
+  await runTogether([
+    [pnpm, ['--filter', 'web', 'dev']],
+    [pnpm, ['--filter', 'api', 'dev']],
+  ]);
 }

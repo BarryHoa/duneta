@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "private": true,
+  "scripts": {
+    "dev": "node ../../node_modules/tsx/dist/cli.mjs watch server.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@tenora/server": "workspace-version",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3"
+  }
+}

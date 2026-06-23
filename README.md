@@ -1,6 +1,6 @@
 # Tenora
 
-Tenora is a portable TypeScript toolkit: a Next.js web app, a Hono API, and two public packages that can be installed in any project.
+Tenora is a portable TypeScript toolkit: a React Router web shell, a Hono API, and two public packages that can be installed in any project.
 
 ```bash
 pnpm create tenora my-app
@@ -12,8 +12,8 @@ pnpm dev
 The generated project has only two applications:
 
 ```text
-apps/api  # Hono API, powered by @tenora/server
-apps/web  # Next.js app, powered by @tenora/client
+app/api  # Hono API, powered by @tenora/server
+app/web  # Thin React Router shell, powered by @tenora/client
 ```
 
 ## Packages
@@ -23,7 +23,7 @@ pnpm add @tenora/server
 pnpm add @tenora/client
 ```
 
-`@tenora/server` is server-only. `@tenora/client` is browser-safe and can be used from Next.js.
+`@tenora/server` is server-only. `@tenora/client` ships the UI kit, routes, and React Router tooling.
 
 ## Maintainers
 
@@ -41,11 +41,11 @@ pnpm --filter create-tenora pack
 npm run dev
 ```
 
-The launcher uses the pnpm version pinned by the repository, installs dependencies on its first run, and starts Next.js plus the Node/VPS API.
+The launcher uses the pnpm version pinned by the repository, installs dependencies on its first run, and starts the web shell plus the Node/VPS API.
 
 ## Choose an API runtime
 
-The routes are defined once in `apps/api/routers/index.ts`. Choose exactly one entry point:
+The routes are defined once in `app/api/routers/index.ts`. Choose exactly one entry point:
 
 ```bash
 # VPS / Node (also the default for npm run dev)
@@ -55,25 +55,19 @@ pnpm --filter api dev
 npm run dev:cloudflare
 ```
 
-The Cloudflare launcher starts both the Next.js UI and the Worker API. Do not run both API commands at the same time.
+The Cloudflare launcher starts both the web UI and the Worker API. Do not run both API commands at the same time.
 
 ## Deploy the web app
 
-The Next.js application can be deployed independently of the API. Run these commands from the repository root:
+The web shell can be deployed independently of the API. Run these commands from the repository root:
 
 ```bash
-# Vercel (link the project to apps/web on first use)
-pnpm --filter web deploy:vercel
-
-# Cloudflare Workers, using the OpenNext adapter
-pnpm --filter web deploy:cloudflare
-
 # VPS: build once, then run behind a process manager/reverse proxy
 pnpm --filter web build:vps
 pnpm --filter web start:vps
 ```
 
-The Cloudflare web Worker is named `tenora-web`; the API Worker remains `tenora-api`. Configure custom domains and production environment variables in the selected platform. On a VPS, set `PORT` before `start:vps` when the default port is unsuitable.
+On a VPS, proxy `/api` to the Hono service when the API runs separately. Set `TENORA_API_URL` when the browser must call an external API origin.
 
 Router groups inherit middleware from every parent. For example, the included `/api/con/:id` route executes `x`, then `y`, then `z`.
 

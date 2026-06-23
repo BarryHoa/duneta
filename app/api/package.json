@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "forgeStack": {
+    "kind": "backend-app",
+    "runtime": "hono"
+  },
+  "scripts": {
+    "dev": "node ../../node_modules/tsx/dist/cli.mjs watch server.ts",
+    "dev:cloudflare": "wrangler dev",
+    "build": "node ../../node_modules/typescript/bin/tsc --noEmit",
+    "start": "node ../../node_modules/tsx/dist/cli.mjs server.ts",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
+    "deploy:cloudflare": "wrangler deploy"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@tenora/server": "workspace:*",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250617.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.20.0"
+  }
+}

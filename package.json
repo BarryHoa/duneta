@@ -4,13 +4,12 @@
   "private": true,
   "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "build": "turbo build",
+    "build": "pnpm -r --if-present run build",
     "dev": "node scripts/dev.mjs",
-    "dev:turbo": "turbo dev",
     "dev:cloudflare": "node scripts/dev.mjs cloudflare",
     "create": "pnpm --filter create-tenora start",
-    "lint": "turbo lint",
-    "typecheck": "node scripts/turbo.mjs typecheck",
+    "lint": "pnpm -r --if-present run lint",
+    "typecheck": "pnpm -r --if-present run typecheck",
     "format": "prettier --write .",
     "version:check": "node scripts/version.mjs check",
     "version:sync": "node scripts/version.mjs sync",
@@ -18,7 +17,6 @@
   },
   "devDependencies": {
     "prettier": "^3.5.3",
-    "turbo": "^2.5.4",
     "typescript": "^5.8.3"
   }
 }

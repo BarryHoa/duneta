@@ -1,10 +1,8 @@
-# Shared packages
-
-Only two packages exist:
+# Packages
 
 ```text
-packages/backend  → @tenora/server
-packages/frontend → @tenora/client
+packages/server  → @tenora/server
+packages/client  → @tenora/client
 ```
 
-`@tenora/server` is only for Hono/server code. `@tenora/client` is only for Next.js/browser-safe code. Do not import `@tenora/server` from `apps/web`.
+`@tenora/server` is only for Hono/server code. `@tenora/client` ships browser-safe UI, default routes, and the `tenora-web` CLI. Do not import `@tenora/server` from `app/web`.

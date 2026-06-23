@@ -6,5 +6,8 @@
     "dev": "pnpm --parallel --filter api --filter web dev",
     "build": "pnpm --recursive --if-present run build",
     "typecheck": "pnpm --recursive --if-present run typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
   }
 }

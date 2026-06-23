@@ -1,0 +1,24 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "forgeStack": {
+    "kind": "ui-app",
+    "runtime": "react-router"
+  },
+  "scripts": {
+    "dev": "tenora-web dev",
+    "build": "tenora-web build",
+    "start": "tenora-web start",
+    "build:vps": "tenora-web build",
+    "start:vps": "tenora-web start",
+    "typecheck": "tenora-web typegen && node ../../node_modules/typescript/bin/tsc --noEmit"
+  },
+  "dependencies": {
+    "@tenora/client": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}

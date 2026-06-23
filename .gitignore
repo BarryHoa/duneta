@@ -1,7 +1,7 @@
 node_modules
-.turbo
-.next
-.open-next
+build
+.react-router
+.router-runtime
 dist
 .wrangler
 .dev.vars

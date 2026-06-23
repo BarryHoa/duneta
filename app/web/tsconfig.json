@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "types": ["vite/client", "@react-router/dev/routes"],
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@tenora/client": ["../../packages/client"],
+      "@tenora/client/*": ["../../packages/client/*"]
+    },
+    "rootDirs": [".", "./.react-router/types"],
+    "noEmit": true
+  },
+  "include": ["**/*", ".router-runtime/**/*", ".react-router/types/**/*"],
+  "exclude": ["node_modules", "build"]
+}

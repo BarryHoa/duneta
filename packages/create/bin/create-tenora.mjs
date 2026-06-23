@@ -27,7 +27,7 @@ const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 manifest.name = basename(targetDirectory).toLowerCase().replace(/[^a-z0-9-]/g, '-');
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
-for (const relativePath of ['apps/api/package.json', 'apps/web/package.json']) {
+for (const relativePath of ['app/api/package.json', 'app/web/package.json']) {
   const path = resolve(targetDirectory, relativePath);
   writeFileSync(path, readFileSync(path, 'utf8').replaceAll('workspace-version', `^${version}`));
 }
