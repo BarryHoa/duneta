@@ -1,19 +1,40 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { isAuthEnabled } from '../configs/features.js';
+import { bearer, jwt } from 'better-auth/plugins';
+import {
+  buildSocialProviders,
+  isAuthEnabled,
+  isBearerTokenEnabled,
+  isJwtEnabled,
+  resolveAuthBasePath,
+} from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { Database } from '../database/types.js';
 import * as schema from '../repositories/schemas/auth.js';
+import type { Auth } from './types.js';
 
-export function createAuth(config: TenoraServerConfig, db: Database | null) {
+export function createAuth(config: TenoraServerConfig, db: Database | null): Auth | null {
   if (!isAuthEnabled(config) || !db) return null;
 
   const { auth: authConfig } = config;
+  const { providers, session } = authConfig;
+  const plugins = [];
+
+  if (isBearerTokenEnabled(config)) {
+    plugins.push(bearer());
+  }
+
+  if (isJwtEnabled(config)) {
+    plugins.push(jwt());
+  }
+
+  const socialProviders = buildSocialProviders(providers);
+  const email = providers.email;
 
   return betterAuth({
     secret: authConfig.secret,
     baseURL: authConfig.baseUrl,
-    basePath: authConfig.basePath,
+    basePath: resolveAuthBasePath(authConfig.basePath),
     database: drizzleAdapter(db, {
       provider: 'pg',
       schema: {
@@ -23,17 +44,24 @@ export function createAuth(config: TenoraServerConfig, db: Database | null) {
         verification: schema.verification,
       },
     }),
-    emailAndPassword: {
-      enabled: authConfig.emailAndPassword.enabled,
-    },
+    emailAndPassword: email.enabled !== false
+      ? {
+          enabled: true,
+          requireEmailVerification: email.requireEmailVerification ?? false,
+          minPasswordLength: email.minPasswordLength ?? 8,
+          disableSignUp: email.disableSignUp ?? false,
+        }
+      : { enabled: false },
+    socialProviders,
+    plugins,
     session: {
-      expiresIn: Math.floor(config.session.expiration.default / 1000),
+      expiresIn: session.expiresIn,
       cookieCache: {
-        enabled: true,
-        maxAge: config.session.cookie.maxAge.default,
+        enabled: session.cookieCache?.enabled !== false,
+        maxAge: session.cookieCache?.maxAge ?? session.expiresIn,
       },
     },
-  });
+  }) as unknown as Auth;
 }
 
-export type Auth = NonNullable<ReturnType<typeof createAuth>>;
+export type { Auth } from './types.js';

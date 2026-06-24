@@ -14,46 +14,90 @@ export type AppConfig = {
   debug: boolean;
 };
 
-/** Default auth driver: [Better Auth](https://better-auth.com/docs/introduction) */
-export type BetterAuthConfig = {
+/** How a request value is resolved: query → cookie → header. */
+export type ContextResolveConfig = {
+  header: string;
+  cookie: string;
+  query: string;
+};
+
+export type OAuthProviderConfig = {
   enabled?: boolean;
-  driver: 'better-auth';
-  secret: string;
-  baseUrl: string;
-  basePath: string;
-  sessionCookieName: string;
-  emailAndPassword: {
-    enabled: boolean;
+  clientId: string;
+  clientSecret: string;
+};
+
+export type EmailProviderConfig = {
+  enabled?: boolean;
+  requireEmailVerification?: boolean;
+  minPasswordLength?: number;
+  disableSignUp?: boolean;
+};
+
+export type AuthProvidersConfig = {
+  email: EmailProviderConfig;
+  google?: OAuthProviderConfig;
+  github?: OAuthProviderConfig;
+};
+
+export type AuthTokenStrategy = 'cookie' | 'bearer' | 'both';
+
+export type AuthTokensConfig = {
+  strategy: AuthTokenStrategy;
+  bearer?: { enabled?: boolean };
+  jwt?: {
+    enabled?: boolean;
+    expiresIn?: number;
   };
 };
 
-export type AuthConfig = BetterAuthConfig;
-
-export type SessionConfig = {
-  expiration: {
-    default: number;
-    rememberMe: number;
-  };
+export type AuthSessionConfig = {
+  /** Session lifetime in seconds. */
+  expiresIn: number;
+  rememberMeExpiresIn: number;
   cookie: {
     name: string;
     httpOnly: boolean;
     secure: boolean;
     sameSite: 'lax' | 'strict' | 'none';
     path: string;
-    maxAge: {
-      default: number;
-      rememberMe: number;
-    };
+  };
+  cookieCache?: {
+    enabled?: boolean;
+    maxAge?: number;
   };
 };
 
-export type SystemConfig = {
-  defaultTimezone: string;
-  timezone: string;
+/** Default auth driver: [Better Auth](https://better-auth.com/docs/introduction) */
+export type BetterAuthConfig = {
+  enabled?: boolean;
+  driver: 'better-auth';
+  secret: string;
+  baseUrl: string;
+  /** Path relative to `/api` mount (e.g. `/auth` → `/api/auth`). */
+  basePath: string;
+  providers: AuthProvidersConfig;
+  tokens: AuthTokensConfig;
+  session: AuthSessionConfig;
 };
 
-export type RedisConfig = {
-  enabled: boolean;
+export type AuthConfig = BetterAuthConfig;
+
+export type LocaleConfig = {
+  default: string;
+  supported: string[];
+  resolve: ContextResolveConfig;
+};
+
+export type TimezoneConfig = {
+  default: string;
+  supported: string[];
+  resolve: ContextResolveConfig;
+};
+
+export type CacheProvider = 'redis' | 'memory';
+
+export type RedisCacheProviderConfig = {
   url?: string;
   host: string;
   port: number;
@@ -68,34 +112,23 @@ export type RedisConfig = {
   commandTimeout: number;
 };
 
+export type CacheConfig = {
+  enabled?: boolean;
+  provider: CacheProvider;
+  providers: {
+    redis: RedisCacheProviderConfig;
+  };
+};
+
 export type RateLimitConfig = {
   enabled?: boolean;
-  auth: {
-    max: number;
-    windowMs: number;
-  };
   api: {
     max: number;
     windowMs: number;
   };
-};
-
-export type LogConfig = {
-  enabled: boolean;
-  destination: 'file' | 'webhook';
-  file: {
-    directory: string;
-    maxSizeBytes: number;
-    compression: {
-      enabled: boolean;
-      compressAfterDays: number;
-      format: 'gzip' | 'zip';
-      deleteOriginal: boolean;
-    };
-  };
-  webhook: {
-    url: string;
-    headers: Record<string, string>;
+  auth: {
+    max: number;
+    windowMs: number;
   };
 };
 
@@ -104,6 +137,38 @@ export type CsrfConfig = {
   secret: string;
   tokenLength: number;
   expirationMs: number;
+};
+
+export type SecurityConfig = {
+  rateLimit: RateLimitConfig;
+  csrf: CsrfConfig;
+};
+
+export type LoggingProvider = 'file' | 'webhook';
+
+export type FileLoggingProviderConfig = {
+  directory: string;
+  maxSizeBytes: number;
+  compression: {
+    enabled: boolean;
+    compressAfterDays: number;
+    format: 'gzip' | 'zip';
+    deleteOriginal: boolean;
+  };
+};
+
+export type WebhookLoggingProviderConfig = {
+  url: string;
+  headers: Record<string, string>;
+};
+
+export type LoggingConfig = {
+  enabled?: boolean;
+  provider: LoggingProvider;
+  providers: {
+    file: FileLoggingProviderConfig;
+    webhook: WebhookLoggingProviderConfig;
+  };
 };
 
 export type DebugConfig = {
@@ -115,14 +180,13 @@ export type DebugConfig = {
 export interface TenoraCoreConfig {
   runtime: RuntimeConfig;
   app: AppConfig;
-  auth: AuthConfig;
   database: DatabaseConfig;
-  session: SessionConfig;
-  system: SystemConfig;
-  redis: RedisConfig;
-  rateLimit: RateLimitConfig;
-  log: LogConfig;
-  csrf: CsrfConfig;
+  auth: AuthConfig;
+  locale: LocaleConfig;
+  timezone: TimezoneConfig;
+  cache: CacheConfig;
+  security: SecurityConfig;
+  logging: LoggingConfig;
   debug: DebugConfig;
 }
 
@@ -140,3 +204,12 @@ export type TenoraServerConfig<
 > = Omit<TenoraCoreConfig, 'database'> & {
   database: TDatabase;
 } & TExtra;
+
+/** @deprecated Use `TimezoneConfig` */
+export type SystemConfig = TimezoneConfig;
+
+/** @deprecated Use `CacheConfig` */
+export type RedisConfig = CacheConfig;
+
+/** @deprecated Use `LoggingConfig` */
+export type LogConfig = LoggingConfig;

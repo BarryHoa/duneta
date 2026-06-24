@@ -1,10 +1,15 @@
 import { createMiddleware } from 'hono/factory';
-import type { Auth } from '../auth/index.js';
-import { isAuthEnabled, isLogEnabled, isRedisEnabled } from '../configs/features.js';
+import type { Auth } from '../auth/types.js';
+import {
+  isAuthEnabled,
+  isCacheEnabled,
+  isLoggingEnabled,
+  resolveAuthMountPath,
+} from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
+import type { CacheClient } from '../cache/index.js';
 import type { Container } from '../container/index.js';
 import type { Database } from '../database/types.js';
-import type { RedisClient } from '../redis/index.js';
 import type { TenoraProvider } from './types.js';
 
 const containerProvider: TenoraProvider = {
@@ -32,7 +37,7 @@ const authProvider: TenoraProvider = {
     if (!isAuthEnabled(config) || !container.has('auth')) return;
 
     const auth = container.resolve<Auth>('auth');
-    const authPath = config.auth.basePath.replace(/^\/api/, '') || '/auth';
+    const authPath = resolveAuthMountPath(config.auth.basePath);
 
     app.use('*', createMiddleware(async (c, next) => {
       c.set('auth', auth);
@@ -43,12 +48,12 @@ const authProvider: TenoraProvider = {
   },
 };
 
-const redisProvider: TenoraProvider = {
+const cacheProvider: TenoraProvider = {
   register(app, config, container) {
-    if (!isRedisEnabled(config) || !container.has('redis')) return;
-    const redis = container.resolve<RedisClient>('redis');
+    if (!isCacheEnabled(config) || !container.has('cache')) return;
+    const cache = container.resolve<CacheClient>('cache');
     app.use('*', createMiddleware(async (c, next) => {
-      c.set('redis', redis);
+      c.set('cache', cache);
       await next();
     }));
   },
@@ -56,7 +61,7 @@ const redisProvider: TenoraProvider = {
 
 const loggingProvider: TenoraProvider = {
   register(app, config) {
-    if (!isLogEnabled(config)) return;
+    if (!isLoggingEnabled(config)) return;
 
     app.use('*', async (c, next) => {
       const start = Date.now();
@@ -71,8 +76,8 @@ export function resolveCoreProviders(config: TenoraServerConfig): TenoraProvider
 
   if (config.database?.enabled) providers.push(databaseProvider);
   if (isAuthEnabled(config)) providers.push(authProvider);
-  if (isRedisEnabled(config)) providers.push(redisProvider);
-  if (isLogEnabled(config)) providers.push(loggingProvider);
+  if (isCacheEnabled(config)) providers.push(cacheProvider);
+  if (isLoggingEnabled(config)) providers.push(loggingProvider);
 
   return providers;
 }

@@ -1,21 +1,24 @@
 import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
-import type { Auth } from '../auth/index.js';
-import type { Container } from '../container/index.js';
-import type { Database } from '../database/types.js';
-import type { RedisClient } from '../redis/index.js';
+import type { TenoraServerConfig } from '../configs/types.js';
+import { requireAuth } from './auth.js';
+import type { BackendEnv } from './env.js';
+import { createLocaleMiddleware } from './locale.js';
+import { createTimezoneMiddleware } from './timezone.js';
 
-export type BackendEnv = {
-  Variables: {
-    db?: Database;
-    auth?: Auth;
-    redis?: RedisClient;
-    container: Container;
-    middlewareOrder?: string[];
-  };
-  Bindings: Record<string, string | undefined>;
-};
+export type { BackendEnv } from './env.js';
+
+export { createLocaleMiddleware, createTimezoneMiddleware, requireAuth };
+export type { AuthSession, AuthUser } from './types.js';
+
+export function createContextDefaultsMiddleware(config: TenoraServerConfig) {
+  return createMiddleware<BackendEnv>(async (c, next) => {
+    c.set('locale', config.locale.default);
+    c.set('timezone', config.timezone.default);
+    await next();
+  });
+}
 
 export function createCorsMiddleware(origins: string[] = ['*']) {
   return createMiddleware<BackendEnv>(async (c, next) => {
@@ -25,7 +28,10 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
     if (allowed) {
       c.header('Access-Control-Allow-Origin', origins.includes('*') ? '*' : origin);
       c.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-      c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      c.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, Accept-Language, X-Tenora-Timezone, X-Tenora-Locale',
+      );
       c.header('Access-Control-Allow-Credentials', 'true');
     }
 

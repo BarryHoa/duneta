@@ -9,13 +9,14 @@
   "include": [
     "app",
     "auth",
+    "cache",
     "configs",
     "container",
     "database",
+    "examples",
     "http",
     "middlewares",
     "providers",
-    "redis",
     "repositories",
     "routers",
     "runtime"

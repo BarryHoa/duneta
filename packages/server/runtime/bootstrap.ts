@@ -3,13 +3,13 @@ import { pathToFileURL } from 'node:url';
 import type { Hono } from 'hono';
 import { createAuth } from '../auth/index.js';
 import { createTenoraApp } from '../app/create-app.js';
+import { createCache } from '../cache/index.js';
 import { createContainer } from '../container/index.js';
 import { createDatabase } from '../database/index.js';
 import { getConfig, loadConfig, type DeepPartial } from '../configs/index.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { BackendEnv } from '../middlewares/index.js';
 import type { TenoraProvider } from '../providers/types.js';
-import { createRedis } from '../redis/index.js';
 
 let cachedApp: Hono<BackendEnv> | undefined;
 let configBootstrapped = false;
@@ -48,7 +48,7 @@ export async function loadApp() {
   const container = createContainer();
   const db = createDatabase(config);
   const auth = createAuth(config, db);
-  const redis = createRedis(config.redis);
+  const cache = createCache(config.cache);
 
   const appModule = await loadAppProviders();
   appModule.registerBindings?.(container, db);
@@ -68,7 +68,7 @@ export async function loadApp() {
     config,
     db,
     auth,
-    redis,
+    cache,
     container,
     providers: appProviders,
   });

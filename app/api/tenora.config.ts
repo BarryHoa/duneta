@@ -39,6 +39,6 @@ export default defineTenoraConfig({
         },
       }
     : {}),
-  // redis: { enabled: true, url: env('REDIS_URL') },
-  // rateLimit: { enabled: true },
+  // cache: { enabled: true, provider: 'redis', providers: { redis: { url: env('REDIS_URL') } } },
+  // security: { rateLimit: { enabled: true } },
 });

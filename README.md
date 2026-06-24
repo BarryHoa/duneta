@@ -19,8 +19,9 @@ Everything is optional — enable only what you need in `tenora.config.ts`:
 ```ts
 database: { enabled: true, connections: { ... } }
 auth: { enabled: true, secret: env('AUTH_SECRET') }
-redis: { enabled: true }
-rateLimit: { enabled: true }
+cache: { enabled: true, provider: 'redis' }
+security: { rateLimit: { enabled: true } }
+logging: { enabled: true, provider: 'file' }
 ```
 
 ## API layout (`app/api`)
