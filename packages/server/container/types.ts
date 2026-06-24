@@ -3,11 +3,11 @@ import type { RepositoryContainer } from './repository-container.js';
 import type { Database } from '../database/types.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 
-export type BindingContext = {
+export type ServiceRegistryContext = {
   controllers: ControllerContainer;
   repositories: RepositoryContainer;
   db: Database | null;
   config: TenoraServerConfig;
 };
 
-export type RegisterBindings = (ctx: BindingContext) => void;
+export type RegisterServices = (ctx: ServiceRegistryContext) => void;

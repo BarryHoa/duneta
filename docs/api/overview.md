@@ -1,77 +1,43 @@
-# API app — Tổng quan
+# API app (`app/api`)
 
-`app/api` là shell backend mỏng. Framework boot middleware, auth, database — bạn thêm domain code, `tenora-api sync` wire tự động.
-
-## Cấu trúc thư mục
+## Cấu trúc
 
 ```text
 app/api/
-├── server.ts              # Cloud entry (Wrangler)
-├── server.node.ts           # Bun entry
-├── tenora.config.ts         # cấu hình app
-├── controllers/             # *-controller.ts (optional)
-├── repositories/            # *-repository.ts (optional)
-├── routers/                 # *.routes.ts (optional)
-├── .api-runtime/            # generated — không sửa (gitignore)
-├── wrangler.jsonc
-├── .env
-└── package.json
+├── server.ts              # Cloud Worker entry
+├── server.node.ts         # Bun/Node entry
+├── tenora.config.ts       # Config
+├── services/index.ts      # registerServices (DI)
+├── routers/index.ts       # createAppRouter
+├── permissions/index.ts   # resolvePermissions
+├── controllers/           # *-controller.ts (sync)
+├── repositories/          # *-repository.ts (sync)
+├── routers/*.routes.ts    # route groups (sync)
+└── .api-runtime/          # generated bridge
 ```
 
-## Entry points
+## Entry
 
 ```ts
 import { defineServer } from '@tenora/server/runtime/cloud';
+import { resolvePermissions } from './permissions';
 import config from './tenora.config';
-import { createRouter, registerProviders } from './.api-runtime';
+import { createAppRouter, registerServices } from './.api-runtime';
 
-export default defineServer({ config, createRouter, providers: registerProviders });
+export default defineServer({
+  config,
+  createAppRouter,
+  registerServices,
+  resolvePermissions,
+});
 ```
 
-| File | Runtime | CLI |
-|------|---------|-----|
-| `server.ts` | Cloudflare Worker | `pnpm --filter api dev` |
-| `server.node.ts` | Bun | `pnpm --filter api dev:node` |
+## Hooks
 
-Hooks import từ `.api-runtime/` — file do `tenora-api sync` sinh ra trước mỗi `dev` / `deploy` / `typecheck`.
+| Hook | Việc |
+|------|------|
+| `createAppRouter` | Ghép routes theo config |
+| `registerServices` | DI controllers/repositories |
+| `resolvePermissions` | Role → grants (optional) |
 
-## Convention scan
-
-| Thư mục | Pattern | Ví dụ |
-|---------|---------|-------|
-| `controllers/` | `*-controller.ts` | `post-controller.ts` → `PostController` |
-| `repositories/` | `*-repository.ts` | `post-repository.ts` → `PostRepository` |
-| `routers/` | `*.routes.ts` | `posts.routes.ts` → `postsRoutes` |
-
-Cùng base name → controller inject repository (`post` + `post`).
-
-Override thủ công (optional): giữ `providers/index.ts` hoặc `routers/index.ts` — sync re-export từ đó.
-
-## Routes mặc định
-
-Framework ship trong `@tenora/server/routers`:
-
-| Route | Controller | Điều kiện |
-|-------|------------|-----------|
-| `GET /api/health` | `HealthController` | luôn |
-| `GET /api/me` | `MeController` | auth |
-| `GET /api/users` | `UserController` | auth + database |
-
-App routes merge thêm qua `.api-runtime/router.generated.ts`.
-
-## CLI `tenora-api`
-
-| Command | Hành vi |
-|---------|---------|
-| `sync` | Scan → generate `.api-runtime/` |
-| `dev` | sync + wrangler dev |
-| `deploy` | sync + wrangler deploy |
-| `dev:node` | sync + bun --watch |
-| `start:node` | sync + bun |
-
-## Tài liệu liên quan
-
-- [Sync & `.api-runtime`](./sync.md)
-- [Runtime](./runtime.md)
-- [Routes](./routes.md)
-- [Providers & DI](./providers.md)
+Xem [Sync](./sync.md), [Services](./services.md), [Routes](./routes.md).

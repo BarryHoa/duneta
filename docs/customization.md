@@ -65,20 +65,19 @@ export class PostController extends BaseController {
 ```ts
 // app/api/routers/posts.routes.ts
 import { defineGroup } from '@tenora/server/routers';
-import { bindContainerController } from '@tenora/server/http';
+import { resolveController } from '@tenora/server/http';
+import { requireSession } from '@tenora/server/middlewares';
 
 export const postsRoutes = defineGroup({
   path: '/posts',
+  middleware: [requireSession()],
   endpoints: [
-    {
-      method: 'GET',
-      handler: bindContainerController('PostController', 'index'),
-    },
+    { method: 'GET', handler: resolveController('PostController', 'index') },
   ],
 });
 ```
 
-`tenora-api sync` tự đăng ký DI + merge routes — **không cần** `providers/index.ts`.
+`tenora-api sync` tự đăng ký DI + merge routes — hoặc thêm vào `services/index.ts` / `routers/index.ts`.
 
 ### 5. Dev
 
@@ -91,20 +90,18 @@ pnpm --filter api dev   # sync → wrangler
 Thêm path vào `app/api/tsconfig.json` nếu tạo thư mục mới:
 
 ```json
-"include": ["server.ts", "server.node.ts", "tenora.config.ts", "routers", "providers", "controllers", "repositories"]
+"include": ["server.ts", "server.node.ts", "tenora.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
 ```
 
-## Workflow: override framework controller
-
-Framework đăng ký `UserController` trong boot. Override bằng cách đăng ký lại cùng key **sau** trong `registerProviders` (app providers chạy sau `registerFrameworkBindings`):
+Override trong `services/index.ts` — đăng ký lại cùng key:
 
 ```ts
 ctx.controllers.singleton('UserController', () => new MyUserController(...));
 ```
 
-## Workflow: chỉ dùng app routes
+## Workflow: default routes
 
-Không cần làm gì — sync sinh empty router, boot vẫn merge framework routes (`/health`, …).
+Default routes trong `routers/index.ts` (`healthRoutes`, `usersRoutes`, …).
 
 ## Workflow: web page gọi API mới
 
@@ -131,7 +128,7 @@ export default function PostsPage() {
 2. **Entry file** chọn runtime (cloud / node)
 3. **Convention + sync** — thêm `*-controller.ts`, `*-repository.ts`, `*.routes.ts`
 4. **Repository trước, Controller sau** — sync tự match theo base name
-5. **Arrow methods** trên controller cho `bindContainerController`
+5. **Arrow methods** trên controller cho `resolveController`
 
 ## Đọc thêm
 

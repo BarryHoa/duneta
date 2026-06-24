@@ -1,6 +1,6 @@
 import type { Hono } from 'hono';
 import { createAuth } from '../../auth/index.js';
-import { createTenoraApp } from '../../app/create-app.js';
+import { createHttpApp } from '../../assembly/create-app.js';
 import { createCache } from '../../cache/index.js';
 import { connectionUrl } from '../../configs/database.js';
 import { createControllerContainer } from '../../container/controller-container.js';
@@ -14,45 +14,37 @@ import {
 } from '../../configs/index.js';
 import type { TenoraServerConfig } from '../../configs/types.js';
 import type { BackendEnv } from '../../middlewares/env.js';
-import {
-  isHyperdriveBinding,
-  type RuntimeBindings,
-} from '../shared/bindings.js';
-import type { ServerManifest } from './types.js';
+import { registerPermissionResolver } from '../../permissions/context.js';
+import { isHyperdriveBinding, type PlatformEnv } from './platform-env.js';
+import type { ServerBoot } from './types.js';
 
 let cachedApp: Hono<BackendEnv> | undefined;
 let cachedAppKey: string | undefined;
 let configBootstrapped = false;
 
-function appCacheKey(
-  config: TenoraServerConfig,
-  bindings?: RuntimeBindings,
-): string {
+function appCacheKey(config: TenoraServerConfig, platform?: PlatformEnv): string {
   const dbUrl =
-    resolveDatabaseUrl(config, bindings) ??
+    resolveDatabaseUrl(config, platform) ??
     connectionUrl(config.database) ??
     '';
-  const hyperdrive = bindings?.HYPERDRIVE;
-  const hyperKey = isHyperdriveBinding(hyperdrive)
-    ? hyperdrive.connectionString
-    : '';
+  const hyperdrive = platform?.HYPERDRIVE;
+  const hyperKey = isHyperdriveBinding(hyperdrive) ? hyperdrive.connectionString : '';
   return `${dbUrl}:${hyperKey}`;
 }
 
-/** Merge app config with runtime target from entry file (`server.ts` vs `server.node.ts`). */
 export function bootstrapConfig(
-  manifest: ServerManifest,
+  boot: ServerBoot,
   overrides?: DeepPartial<TenoraServerConfig>,
 ): void {
   if (configBootstrapped && !overrides) return;
 
   const patch: DeepPartial<TenoraServerConfig> = {
-    ...manifest.config,
+    ...boot.config,
     ...overrides,
-    runtime: { target: manifest.target },
+    runtime: { target: boot.target },
   };
 
-  if (manifest.target === 'node' && manifest.config.app?.debug === undefined) {
+  if (boot.target === 'node' && boot.config.app?.debug === undefined) {
     patch.app = { ...patch.app, debug: true };
   }
 
@@ -60,28 +52,29 @@ export function bootstrapConfig(
   configBootstrapped = true;
 }
 
-export async function loadApp(
-  manifest: ServerManifest,
-  bindings?: RuntimeBindings,
-) {
-  bootstrapConfig(manifest);
+export async function loadApp(boot: ServerBoot, platform?: PlatformEnv) {
+  bootstrapConfig(boot);
+
+  if (boot.resolvePermissions) {
+    registerPermissionResolver(boot.resolvePermissions);
+  }
 
   const config = getConfig();
-  const cacheKey = appCacheKey(config, bindings);
+  const cacheKey = appCacheKey(config, platform);
 
   if (cachedApp && cachedAppKey === cacheKey) return cachedApp;
 
   const controllers = createControllerContainer();
   const repositories = createRepositoryContainer();
-  const db = createDatabase(config, bindings);
+  const db = createDatabase(config, platform);
   const auth = createAuth(config, db);
 
-  manifest.providers({ controllers, repositories, db, config });
+  boot.registerServices({ controllers, repositories, db, config });
 
   const cache = createCache(config.cache);
-  const router = manifest.createRouter(config);
+  const router = boot.createAppRouter(config);
 
-  cachedApp = createTenoraApp({
+  cachedApp = createHttpApp({
     router,
     config,
     db,

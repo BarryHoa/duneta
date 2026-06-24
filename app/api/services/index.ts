@@ -1,12 +1,9 @@
 import { isAuthEnabled, isDatabaseEnabled } from '@tenora/server/configs';
-import type { RegisterBindings } from '@tenora/server/container';
+import type { RegisterServices } from '@tenora/server/container';
 import { HealthController, MeController, UserController } from '@tenora/server/http';
 import { UserRepository } from '@tenora/server/repositories';
 
-// import { PostRepository } from '../repositories/post-repository';
-// import { PostController } from '../controllers/post-controller';
-
-export const registerProviders: RegisterBindings = ({
+export const registerServices: RegisterServices = ({
   controllers,
   repositories,
   db,
@@ -25,11 +22,4 @@ export const registerProviders: RegisterBindings = ({
       () => new UserController(repositories.resolve('UserRepository')),
     );
   }
-
-  // if (!db) return;
-  // repositories.singleton('PostRepository', () => new PostRepository(db));
-  // controllers.singleton(
-  //   'PostController',
-  //   () => new PostController(repositories.resolve('PostRepository')),
-  // );
 };

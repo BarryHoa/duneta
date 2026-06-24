@@ -4,7 +4,7 @@ import type { BackendEnv } from '../middlewares/env.js';
 
 type ControllerHandler = (c: Context<BackendEnv>) => Response | Promise<Response>;
 
-export function bindContainerController(key: string, method: string): Handler<BackendEnv> {
+export function resolveController(key: string, method: string): Handler<BackendEnv> {
   return (c) => {
     const controller = c.get('controllers').resolve<BaseController>(key);
     const handler = (controller as unknown as Record<string, ControllerHandler>)[method];

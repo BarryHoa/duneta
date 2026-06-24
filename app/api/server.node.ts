@@ -1,5 +1,11 @@
 import { defineServer } from '@tenora/server/runtime/node';
+import { resolvePermissions } from './permissions';
 import config from './tenora.config';
-import { createRouter, registerProviders } from './.api-runtime';
+import { createAppRouter, registerServices } from './.api-runtime';
 
-export default defineServer({ config, createRouter, providers: registerProviders });
+export default defineServer({
+  config,
+  createAppRouter,
+  registerServices,
+  resolvePermissions,
+});

@@ -2,7 +2,7 @@ import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { TenoraServerConfig } from '../configs/types.js';
-import { requireAuth } from './auth.js';
+import { HttpError } from '../permissions/errors.js';
 import { createCsrfMiddleware } from './csrf.js';
 import type { BackendEnv } from './env.js';
 import { createLocaleMiddleware } from './locale.js';
@@ -14,6 +14,7 @@ import { createTimezoneMiddleware } from './timezone.js';
 export type { BackendEnv } from './env.js';
 
 export { createCoreMiddleware } from './core.js';
+export { requireSession } from './session.js';
 export {
   createCsrfMiddleware,
   createLocaleMiddleware,
@@ -21,7 +22,6 @@ export {
   createRequestIdMiddleware,
   createSecurityHeadersMiddleware,
   createTimezoneMiddleware,
-  requireAuth,
 };
 export type { AuthSession, AuthUser } from './types.js';
 
@@ -61,8 +61,14 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
 export function createErrorHandler(debug: boolean) {
   return (error: Error, c: Context<BackendEnv>) => {
     console.error(error);
+
+    if (error instanceof HttpError) {
+      const message = debug || error.status < 500 ? error.message : 'Internal Server Error';
+      return c.json({ error: message, code: error.code }, error.status as ContentfulStatusCode);
+    }
+
     const status = ('status' in error ? Number(error.status) : 500) as ContentfulStatusCode;
     const message = debug ? error.message : 'Internal Server Error';
-    return c.json({ error: message }, status >= 400 && status < 600 ? status : 500);
+    return c.json({ error: message, code: 'INTERNAL_ERROR' }, status >= 400 && status < 600 ? status : 500);
   };
 }

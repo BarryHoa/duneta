@@ -1,2 +1,2 @@
-export { defineServer, type ServerExport, type ServerOptions, type ServerManifest } from './server.js';
-export type { BindingContext, RegisterBindings } from '../../container/index.js';
+export { defineServer, type ServerExport, type ServerOptions, type ServerBoot } from './server.js';
+export type { RegisterServices, ServiceRegistryContext } from '../../container/index.js';

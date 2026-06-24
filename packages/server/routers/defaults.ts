@@ -1,24 +1,29 @@
-import { bindContainerController } from '../http/bind-controller.js';
-import { requireAuth } from '../middlewares/auth.js';
-import { createRouter, defineGroup } from './define.js';
+import type { MiddlewareHandler } from 'hono';
+import { resolveController } from '../http/resolve-controller.js';
+import { requireSession } from '../middlewares/session.js';
+import { composeRouter, defineGroup } from './define.js';
 
 export const healthRoutes = defineGroup({
   path: '/health',
-  endpoints: [{ method: 'GET', handler: bindContainerController('HealthController', 'show') }],
+  endpoints: [{ method: 'GET', handler: resolveController('HealthController', 'show') }],
 });
 
 export const meRoutes = defineGroup({
   path: '/me',
-  endpoints: [{ method: 'GET', handler: bindContainerController('MeController', 'show') }],
+  endpoints: [{ method: 'GET', handler: resolveController('MeController', 'show') }],
 });
 
-export const usersRoutes = defineGroup({
-  path: '/users',
-  middleware: [requireAuth()],
-  endpoints: [
-    { method: 'GET', handler: bindContainerController('UserController', 'index') },
-    { method: 'GET', path: '/:id', handler: bindContainerController('UserController', 'show') },
-  ],
-});
+export function createUsersRoutes(middleware: MiddlewareHandler[] = [requireSession()]) {
+  return defineGroup({
+    path: '/users',
+    middleware,
+    endpoints: [
+      { method: 'GET', handler: resolveController('UserController', 'index') },
+      { method: 'GET', path: '/:id', handler: resolveController('UserController', 'show') },
+    ],
+  });
+}
 
-export { createRouter, defineGroup } from './define.js';
+export const usersRoutes = createUsersRoutes();
+
+export { composeRouter, defineGroup, type RouteGroup } from './define.js';

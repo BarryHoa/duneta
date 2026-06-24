@@ -4,15 +4,13 @@ import {
   type TenoraServerConfig,
 } from '@tenora/server/configs';
 import {
-  createRouter as buildRouter,
+  composeRouter,
+  createUsersRoutes,
   healthRoutes,
   meRoutes,
-  usersRoutes,
 } from '@tenora/server/routers';
 
-// import { postsRoutes } from './posts.routes';
-
-export function createRouter(config: TenoraServerConfig) {
+export function createAppRouter(config: TenoraServerConfig) {
   const groups = [healthRoutes];
 
   if (isAuthEnabled(config)) {
@@ -20,10 +18,8 @@ export function createRouter(config: TenoraServerConfig) {
   }
 
   if (isDatabaseEnabled(config)) {
-    groups.push(usersRoutes);
+    groups.push(createUsersRoutes());
   }
 
-  // groups.push(postsRoutes);
-
-  return buildRouter(groups);
+  return composeRouter(groups);
 }

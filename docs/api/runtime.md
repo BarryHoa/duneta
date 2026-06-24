@@ -43,7 +43,7 @@ runtime: { target: 'worker' | 'node' }  // từ entry, luôn thắng
 ```ts
 // app/api/server.ts
 import { defineServer } from '@tenora/server/runtime/cloud';
-export default defineServer({ config, createRouter, providers: registerProviders });
+export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
 ```
 
 `wrangler.jsonc` — secrets, Hyperdrive. Không cần `vars.RUNTIME`.
@@ -53,7 +53,7 @@ export default defineServer({ config, createRouter, providers: registerProviders
 ```ts
 // app/api/server.node.ts
 import { defineServer } from '@tenora/server/runtime/node';
-export default defineServer({ config, createRouter, providers: registerProviders });
+export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
 ```
 
 `.env`:

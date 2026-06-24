@@ -1,54 +1,28 @@
 # Tenora
 
-Portable TypeScript monorepo: **Hono API** + **React Router web**.
+Monorepo: `app/api` (backend), `app/web` (frontend), `packages/server`, `packages/client`.
 
-```bash
-pnpm install
-pnpm dev
-```
-
-| Service | URL |
-|---------|-----|
-| Web | http://localhost:3000 |
-| API | http://localhost:8787/api |
-
-## Cấu trúc
-
-```text
-app/api   →  @tenora/server   (backend shell)
-app/web   →  @tenora/client   (frontend shell)
-packages/ →  framework code
-```
-
-## Tài liệu
-
-**[docs/README.md](./docs/README.md)** — mục lục đầy đủ.
-
-| | |
-|---|---|
-| [Bắt đầu](./docs/getting-started.md) | Cài đặt, commands |
-| [Kiến trúc](./docs/architecture.md) | Boot flow, DI, layers |
-| [Cấu hình](./docs/configuration.md) | `tenora.config.ts`, `.env` |
-| [Customize](./docs/customization.md) | Thêm route, controller, page |
-| [API](./docs/api/overview.md) | `defineServer`, sync, runtime |
-| [Web](./docs/web/overview.md) | Routes, theme, proxy |
-
-## Quick start API
+## API entry
 
 ```ts
-// app/api/server.ts
 import { defineServer } from '@tenora/server/runtime/cloud';
+import { resolvePermissions } from './permissions';
 import config from './tenora.config';
-import { createRouter, registerProviders } from './.api-runtime';
+import { createAppRouter, registerServices } from './.api-runtime';
 
-export default defineServer({ config, createRouter, providers: registerProviders });
+export default defineServer({
+  config,
+  createAppRouter,
+  registerServices,
+  resolvePermissions,
+});
 ```
 
-## Commands
+## Thêm feature API
 
-```bash
-pnpm dev                          # web + api (wrangler)
-pnpm --filter api dev:node        # Bun API :3001
-pnpm --filter api deploy          # wrangler deploy
-pnpm typecheck
-```
+1. `repositories/post-repository.ts`
+2. `controllers/post-controller.ts`
+3. `routers/posts.routes.ts` hoặc thêm vào `routers/index.ts`
+4. `pnpm --filter api dev`
+
+Chi tiết: [docs/architecture.md](docs/architecture.md)

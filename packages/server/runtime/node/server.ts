@@ -1,9 +1,9 @@
 import { getConfig } from '../../configs/index.js';
 import { bootstrapConfig, loadApp } from '../shared/boot.js';
-import { toManifest, type ServerOptions } from '../shared/types.js';
+import { createServerBoot, type ServerOptions } from '../shared/types.js';
 
-export type { ServerOptions, ServerManifest } from '../shared/types.js';
-export type { BindingContext, RegisterBindings } from '../../container/index.js';
+export type { ServerOptions, ServerBoot } from '../shared/types.js';
+export type { RegisterServices, ServiceRegistryContext } from '../../container/index.js';
 
 export type ServerExport = {
   port: number;
@@ -12,11 +12,11 @@ export type ServerExport = {
 
 /** Bun / VPS — `export default defineServer({...})` in `server.node.ts`. */
 export function defineServer(options: ServerOptions): ServerExport {
-  const manifest = toManifest(options, 'node');
-  bootstrapConfig(manifest);
+  const boot = createServerBoot(options, 'node');
+  bootstrapConfig(boot);
 
   return {
     port: getConfig().app.port,
-    fetch: (request) => loadApp(manifest).then((app) => app.fetch(request)),
+    fetch: (request) => loadApp(boot).then((app) => app.fetch(request)),
   };
 }

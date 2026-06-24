@@ -1,35 +1,38 @@
 import { Hono } from 'hono';
 import type { Hono as HonoType } from 'hono';
+import type { PermissionResolver } from '../../permissions/types.js';
 import type { DeepPartial, Runtime, TenoraServerConfig } from '../../configs/index.js';
-import type { RegisterBindings } from '../../container/index.js';
+import type { RegisterServices } from '../../container/index.js';
 import type { BackendEnv } from '../../middlewares/env.js';
 
 export type ServerOptions = {
   config: DeepPartial<TenoraServerConfig>;
-  createRouter?: (config: TenoraServerConfig) => HonoType<BackendEnv>;
-  /** App controllers/repositories — framework defaults are wired in boot. */
-  providers?: RegisterBindings;
+  createAppRouter?: (config: TenoraServerConfig) => HonoType<BackendEnv>;
+  registerServices?: RegisterServices;
+  /** Role → grants; loaded by `requireSession()` on protected routes. */
+  resolvePermissions?: PermissionResolver;
 };
 
-export type ServerManifest = {
-  /** Set by `defineServer` from `runtime/cloud` or `runtime/node` — do not set in tenora.config. */
+export type ServerBoot = {
   target: Runtime;
   config: DeepPartial<TenoraServerConfig>;
-  createRouter: (config: TenoraServerConfig) => HonoType<BackendEnv>;
-  providers: RegisterBindings;
+  createAppRouter: (config: TenoraServerConfig) => HonoType<BackendEnv>;
+  registerServices: RegisterServices;
+  resolvePermissions?: PermissionResolver;
 };
 
-const noopProviders: RegisterBindings = () => {};
+const noopRegisterServices: RegisterServices = () => {};
 
 function emptyAppRouter(): HonoType<BackendEnv> {
   return new Hono<BackendEnv>();
 }
 
-export function toManifest(options: ServerOptions, target: Runtime): ServerManifest {
+export function createServerBoot(options: ServerOptions, target: Runtime): ServerBoot {
   return {
     target,
     config: options.config,
-    createRouter: options.createRouter ?? (() => emptyAppRouter()),
-    providers: options.providers ?? noopProviders,
+    createAppRouter: options.createAppRouter ?? (() => emptyAppRouter()),
+    registerServices: options.registerServices ?? noopRegisterServices,
+    resolvePermissions: options.resolvePermissions,
   };
 }

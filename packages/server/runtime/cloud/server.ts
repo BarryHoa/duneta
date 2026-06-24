@@ -1,20 +1,20 @@
 import { loadApp } from '../shared/boot.js';
-import type { RuntimeBindings } from '../shared/bindings.js';
-import { toManifest, type ServerOptions } from '../shared/types.js';
+import type { PlatformEnv } from '../shared/platform-env.js';
+import { createServerBoot, type ServerOptions } from '../shared/types.js';
 
-export type { ServerOptions, ServerManifest } from '../shared/types.js';
-export type { BindingContext, RegisterBindings } from '../../container/index.js';
+export type { ServerOptions, ServerBoot } from '../shared/types.js';
+export type { RegisterServices, ServiceRegistryContext } from '../../container/index.js';
 
 export type ServerExport = {
-  fetch: (request: Request, env?: RuntimeBindings) => Promise<Response>;
+  fetch: (request: Request, env?: PlatformEnv) => Promise<Response>;
 };
 
-/** Cloudflare Worker / Vercel edge — `export default defineServer({...})` in `server.ts`. */
+/** Cloudflare Worker — `export default defineServer({...})` in `server.ts`. */
 export function defineServer(options: ServerOptions): ServerExport {
-  const manifest = toManifest(options, 'worker');
+  const boot = createServerBoot(options, 'worker');
 
   return {
     fetch: (request, env = {}) =>
-      loadApp(manifest, env).then((app) => app.fetch(request, env)),
+      loadApp(boot, env).then((app) => app.fetch(request, env)),
   };
 }

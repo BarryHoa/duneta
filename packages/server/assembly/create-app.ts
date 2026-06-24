@@ -16,9 +16,9 @@ import {
   createRateLimitMiddleware,
   type BackendEnv,
 } from '../middlewares/index.js';
-import { wireRequestContext } from './wire-context.js';
+import { attachRequestServices } from './attach-request-services.js';
 
-export type CreateTenoraAppOptions = {
+export type CreateHttpAppOptions = {
   router: Hono<BackendEnv>;
   config: TenoraServerConfig;
   db: Database | null;
@@ -28,7 +28,7 @@ export type CreateTenoraAppOptions = {
   repositories: RepositoryContainer;
 };
 
-export function createTenoraApp({
+export function createHttpApp({
   router,
   config,
   db,
@@ -36,7 +36,7 @@ export function createTenoraApp({
   cache,
   controllers,
   repositories,
-}: CreateTenoraAppOptions) {
+}: CreateHttpAppOptions) {
   const app = new Hono<BackendEnv>().basePath('/api');
 
   app.use('*', createCorsMiddleware());
@@ -55,7 +55,7 @@ export function createTenoraApp({
 
   bindCached(cache);
 
-  wireRequestContext(app, config, { db, auth, cache, controllers, repositories });
+  attachRequestServices(app, config, { db, auth, cache, controllers, repositories });
 
   app.route('/', router);
   return app;

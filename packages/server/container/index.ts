@@ -6,4 +6,4 @@ export {
   RepositoryContainer,
   createRepositoryContainer,
 } from './repository-container.js';
-export type { BindingContext, RegisterBindings } from './types.js';
+export type { RegisterServices, ServiceRegistryContext } from './types.js';

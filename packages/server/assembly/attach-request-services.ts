@@ -14,7 +14,7 @@ import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
 import type { BackendEnv } from '../middlewares/env.js';
 
-export type WireContextOptions = {
+export type AttachRequestServicesOptions = {
   db: Database | null;
   auth: Auth | null;
   cache: Cache;
@@ -22,11 +22,11 @@ export type WireContextOptions = {
   repositories: RepositoryContainer;
 };
 
-/** Inject services into Hono context and mount auth routes. */
-export function wireRequestContext(
+/** Attach db, auth, cache, and DI containers to each request. */
+export function attachRequestServices(
   app: Hono<BackendEnv>,
   config: TenoraServerConfig,
-  { db, auth, cache, controllers, repositories }: WireContextOptions,
+  { db, auth, cache, controllers, repositories }: AttachRequestServicesOptions,
 ) {
   app.use('*', createMiddleware(async (c, next) => {
     c.set('controllers', controllers);

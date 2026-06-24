@@ -14,9 +14,10 @@
     "server.node.ts",
     "tenora.config.ts",
     ".api-runtime",
+    "permissions",
     "controllers",
     "repositories",
     "routers",
-    "providers"
+    "services",
   ]
 }

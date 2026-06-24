@@ -8,15 +8,14 @@ type Endpoint = {
   handler: Handler<BackendEnv>;
 };
 
-export type RouterGroup = {
-  /** Mount path relative to its parent. Both `:id` and `/:id` are accepted. */
+export type RouteGroup = {
   path: string;
   middleware?: MiddlewareHandler<BackendEnv>[];
   endpoints?: Endpoint[];
-  children?: RouterGroup[];
+  children?: RouteGroup[];
 };
 
-export function defineGroup(group: RouterGroup): RouterGroup {
+export function defineGroup(group: RouteGroup): RouteGroup {
   return group;
 }
 
@@ -24,7 +23,7 @@ function normalizePath(path: string) {
   return path.startsWith('/') ? path : `/${path}`;
 }
 
-function createGroup(group: RouterGroup) {
+function mountGroup(group: RouteGroup) {
   const router = new Hono<BackendEnv>();
 
   if (group.middleware?.length) router.use('*', ...group.middleware);
@@ -34,14 +33,14 @@ function createGroup(group: RouterGroup) {
   }
 
   for (const child of group.children ?? []) {
-    router.route(normalizePath(child.path), createGroup(child));
+    router.route(normalizePath(child.path), mountGroup(child));
   }
 
   return router;
 }
 
-export function createRouter(groups: RouterGroup[]) {
+export function composeRouter(groups: RouteGroup[]) {
   const router = new Hono<BackendEnv>();
-  for (const group of groups) router.route(normalizePath(group.path), createGroup(group));
+  for (const group of groups) router.route(normalizePath(group.path), mountGroup(group));
   return router;
 }
