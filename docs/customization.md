@@ -9,7 +9,7 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 | Đổi port, DB, auth, cache | `app/api/tenora.config.ts` + `.env` | [Configuration](../configuration.md) |
 | Thêm/sửa API route | `app/api/routers/` | [Routes](./api/routes.md) |
 | Thêm controller/repository | `app/api/providers/` + controllers/repos | [Providers](./api/providers.md) |
-| Đổi runtime local | `RUNTIME=node` + `server.node.ts` | [Runtime](./api/runtime.md) |
+| Đổi runtime local | Dùng `server.node.ts` + `dev:node` | [Runtime](./api/runtime.md) |
 | Deploy Worker | `wrangler.jsonc` + `server.ts` | [Runtime](./api/runtime.md) |
 | Thêm web page | `app/web/routers/` | [Web routes](../web/routes.md) |
 | Đổi theme / port web | `app/web/tenora.config.ts` | [Web overview](../web/overview.md) |

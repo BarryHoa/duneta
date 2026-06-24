@@ -85,7 +85,7 @@ switch (command) {
     break;
   case 'dev:node':
     linkServerDepsForBun();
-    console.log('[tenora-api] Bun dev → http://localhost:3001/api (RUNTIME=node in .env)');
+    console.log('[tenora-api] Bun dev → http://localhost:3001/api');
     executable = 'bun';
     args = ['--watch', resolveNodeEntry(cwd), ...rest];
     break;
@@ -103,10 +103,7 @@ switch (command) {
 const result = spawnSync(executable, args, {
   stdio: 'inherit',
   cwd,
-  env: {
-    ...process.env,
-    RUNTIME: command.includes('node') ? 'node' : process.env.RUNTIME,
-  },
+  env: process.env,
 });
 
 process.exit(result.status ?? 1);

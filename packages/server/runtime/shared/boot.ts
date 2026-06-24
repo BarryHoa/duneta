@@ -25,14 +25,29 @@ function appCacheKey(config: TenoraServerConfig, bindings?: RuntimeBindings): st
   return `${dbUrl}:${hyperKey}`;
 }
 
-function initConfig(manifest: ServerManifest, overrides?: DeepPartial<TenoraServerConfig>) {
+/** Merge app config with runtime target from entry file (`server.ts` vs `server.node.ts`). */
+export function bootstrapConfig(
+  manifest: ServerManifest,
+  overrides?: DeepPartial<TenoraServerConfig>,
+): void {
   if (configBootstrapped && !overrides) return;
-  loadConfig(overrides ?? manifest.config);
+
+  const patch: DeepPartial<TenoraServerConfig> = {
+    ...manifest.config,
+    ...overrides,
+    runtime: { target: manifest.target },
+  };
+
+  if (manifest.target === 'node' && manifest.config.app?.debug === undefined) {
+    patch.app = { ...patch.app, debug: true };
+  }
+
+  loadConfig(patch);
   configBootstrapped = true;
 }
 
 export async function loadApp(manifest: ServerManifest, bindings?: RuntimeBindings) {
-  initConfig(manifest);
+  bootstrapConfig(manifest);
 
   const config = getConfig();
   const cacheKey = appCacheKey(config, bindings);

@@ -1,5 +1,4 @@
 import {
-  databasePoolForRuntime,
   DEFAULT_DATABASE_POOL,
   defineConnections,
   defineTenoraConfig,
@@ -7,23 +6,17 @@ import {
   postgresConnection,
   RECOMMENDED_RATE_LIMIT_RULES,
   type NodeEnv,
-  type Runtime,
 } from '@tenora/server/configs';
 
-const runtime = (envFirst(['RUNTIME'], 'worker') === 'node' ? 'node' : 'worker') as Runtime;
-const defaultPort = runtime === 'node' ? '3001' : '8787';
-const port = Number(envFirst(['PORT'], defaultPort));
+const port = Number(envFirst(['PORT'], '3001'));
 const databaseUrl = envFirst(['DATABASE_URL']);
 const authSecret = envFirst(['AUTH_SECRET']);
 
 export default defineTenoraConfig({
-  runtime: { target: runtime },
-
   app: {
     name: 'tenora-api',
     env: envFirst(['NODE_ENV'], 'development') as NodeEnv,
     port,
-    debug: runtime === 'node',
   },
 
   database: {
@@ -34,7 +27,7 @@ export default defineTenoraConfig({
         ? postgresConnection({ url: databaseUrl })
         : undefined,
     }),
-    pool: databasePoolForRuntime(runtime, DEFAULT_DATABASE_POOL),
+    pool: DEFAULT_DATABASE_POOL,
   },
 
   ...(authSecret

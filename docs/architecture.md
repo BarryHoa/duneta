@@ -38,10 +38,14 @@ export default defineServer({ config, createRouter, providers: registerProviders
 
 ## Runtime
 
-| Import | Entry file | Deploy target |
-|--------|------------|---------------|
-| `@tenora/server/runtime/cloud` | `server.ts` | Wrangler, Vercel edge |
-| `@tenora/server/runtime/node` | `server.node.ts` | Bun VPS / local |
+Entry file quyết định runtime — **không cần** `RUNTIME` env hay `runtime` trong `tenora.config.ts`:
+
+| Entry | Import | `runtime.target` (tự set) |
+|-------|--------|---------------------------|
+| `server.ts` | `@tenora/server/runtime/cloud` | `worker` |
+| `server.node.ts` | `@tenora/server/runtime/node` | `node` |
+
+`defineServer` inject `runtime.target` lúc boot qua `bootstrapConfig()`.
 
 Chi tiết: [Runtime](./api/runtime.md).
 

@@ -1,83 +1,80 @@
 # Runtime: Cloud vs Bun
 
-Tenora hỗ trợ hai runtime API qua import path riêng — **không có** barrel `@tenora/server/runtime`.
+Hai entry file = hai runtime. Framework tự set `runtime.target` — **không cần** `RUNTIME` trong `.env` hay `tenora.config.ts`.
+
+## Quy tắc đơn giản
+
+| Muốn chạy | Entry file | Command |
+|-----------|------------|---------|
+| Cloudflare Worker | `server.ts` | `pnpm --filter api dev` |
+| Bun local / VPS | `server.node.ts` | `pnpm --filter api dev:node` |
+
+```text
+server.ts       →  import runtime/cloud  →  target = worker
+server.node.ts  →  import runtime/node   →  target = node
+```
 
 ## So sánh
 
-| | Cloud (`runtime/cloud`) | Node (`runtime/node`) |
+| | Cloud (`server.ts`) | Bun (`server.node.ts`) |
 |---|---|---|
-| Entry | `server.ts` | `server.node.ts` |
-| Chạy local | Wrangler `:8787` | Bun `:3001` |
-| Database | Neon serverless / Hyperdrive | `pg` pool |
+| CLI | `tenora-api dev` / `deploy` | `tenora-api dev:node` |
+| URL local | http://localhost:8787/api | http://localhost:3001/api |
 | Export | `{ fetch }` | `{ port, fetch }` |
-| `RUNTIME` env | `worker` | `node` |
+| DB | Hyperdrive / Neon serverless | `pg` pool |
+| Worker bindings | Có (`env` mỗi request) | Không |
 
-## Cloud — Wrangler / Vercel
+## Framework tự xử lý theo target
+
+Khi boot, `bootstrapConfig()` merge:
+
+```ts
+runtime: { target: 'worker' | 'node' }  // từ entry, luôn thắng
+```
+
+Ảnh hưởng nội bộ:
+
+- **DB pool**: worker cap `max` 1–2; node dùng pool đầy đủ (`databasePoolForRuntime`)
+- **DB without URL**: worker cho phép Hyperdrive binding lúc request
+- **debug**: node mặc định `app.debug: true` nếu bạn không set
+
+## Cloud — Wrangler
 
 ```ts
 // app/api/server.ts
 import { defineServer } from '@tenora/server/runtime/cloud';
-
 export default defineServer({ config, createRouter, providers: registerProviders });
-// → { fetch(request, env?) }
 ```
 
-Wrangler đọc `app/api/wrangler.jsonc`:
-
-```jsonc
-{
-  "main": "server.ts",
-  "compatibility_date": "2025-06-17"
-}
-```
-
-Worker nhận bindings (`env`) mỗi request — Hyperdrive, secrets, KV, etc.
+`wrangler.jsonc` — secrets, Hyperdrive. Không cần `vars.RUNTIME`.
 
 ## Bun — local / VPS
 
 ```ts
 // app/api/server.node.ts
 import { defineServer } from '@tenora/server/runtime/node';
-
 export default defineServer({ config, createRouter, providers: registerProviders });
-// → { port, fetch } — Bun auto-serve default export
 ```
 
-`.env` cần:
+`.env`:
 
 ```env
-RUNTIME=node
 PORT=3001
 DATABASE_URL=postgresql://...
 ```
 
-### pnpm + Bun
+## `tenora.config.ts` dùng chung
 
-`tenora-api dev:node` symlink deps từ repo root vào `packages/server/node_modules` (pnpm hoisting). Nếu Bun báo missing module, chạy lại `dev:node` hoặc xóa symlink cũ.
+Một file config cho cả hai entry. Runtime-specific logic do framework lo — bạn chỉ set:
 
-## Chọn runtime trong config
+- `PORT` (chủ yếu cho Bun + auth `baseUrl`)
+- `DATABASE_URL`, `AUTH_SECRET`, ...
 
-`tenora.config.ts` đọc `RUNTIME`:
-
-```ts
-const runtime = envFirst(['RUNTIME'], 'worker') === 'node' ? 'node' : 'worker';
-
-export default defineTenoraConfig({
-  runtime: { target: runtime },
-  app: { port: runtime === 'node' ? 3001 : 8787 },
-  database: {
-    pool: databasePoolForRuntime(runtime, DEFAULT_DATABASE_POOL),
-  },
-});
-```
+Worker dev port 8787 do Wrangler quản lý, không đọc `app.port`.
 
 ## Deploy
 
 | Target | Command |
 |--------|---------|
 | Cloudflare Worker | `pnpm --filter api deploy` |
-| Bun VPS | build + `bun server.node.ts` (process manager tùy bạn) |
-
-## Cùng codebase
-
-`createRouter`, `providers`, `tenora.config.ts` **dùng chung** giữa hai entry — chỉ đổi import runtime và file entry.
+| Bun VPS | `bun server.node.ts` (+ process manager) |

@@ -12,7 +12,7 @@ export type ServerExport = {
 
 /** Cloudflare Worker / Vercel edge — `export default defineServer({...})` in `server.ts`. */
 export function defineServer(options: ServerOptions): ServerExport {
-  const manifest = toManifest(options, defaultRegisterBindings);
+  const manifest = toManifest(options, 'worker', defaultRegisterBindings);
 
   return {
     fetch: (request, env = {}) =>

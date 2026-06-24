@@ -20,29 +20,28 @@ import {
   envFirst,
   defineConnections,
   postgresConnection,
-  databasePoolForRuntime,
   DEFAULT_DATABASE_POOL,
   RECOMMENDED_RATE_LIMIT_RULES,
 } from '@tenora/server/configs';
 
-const runtime = envFirst(['RUNTIME'], 'worker') === 'node' ? 'node' : 'worker';
-const port = Number(envFirst(['PORT'], runtime === 'node' ? '3001' : '8787'));
+const port = Number(envFirst(['PORT'], '3001'));
 
 export default defineTenoraConfig({
-  runtime: { target: runtime },
-  app: { name: 'tenora-api', env: 'development', port, debug: false },
+  app: { name: 'tenora-api', env: 'development', port },
   database: {
     enabled: true,
     connections: defineConnections({
       primary: postgresConnection({ url: envFirst(['DATABASE_URL']) }),
     }),
-    pool: databasePoolForRuntime(runtime, DEFAULT_DATABASE_POOL),
+    pool: DEFAULT_DATABASE_POOL,
   },
   security: {
     rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES },
   },
 });
 ```
+
+> **Không set `runtime`** trong `tenora.config.ts` — entry file (`server.ts` / `server.node.ts`) quyết định. Pool DB worker được framework tự điều chỉnh.
 
 ### Đọc config lúc runtime
 
@@ -54,12 +53,13 @@ import { config, getConfig } from '@tenora/server/configs';
 
 | Biến | Mô tả |
 |------|-------|
-| `RUNTIME` | `node` hoặc `worker` |
-| `PORT` | `3001` (node) / `8787` (worker) |
+| `PORT` | Bun listen port (mặc định `3001`) |
 | `DATABASE_URL` | Postgres connection string |
 | `AUTH_SECRET` | Bật auth khi có (≥ 32 ký tự) |
-| `AUTH_BASE_URL` | Base URL cho Better Auth |
-| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP (Upstash, etc.) |
+| `AUTH_BASE_URL` | Base URL Better Auth (worker: `http://localhost:8787`) |
+| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP |
+
+Runtime **không** qua env — chọn `server.ts` (worker) hoặc `server.node.ts` (node).
 
 Xem `app/api/.env.example`.
 
