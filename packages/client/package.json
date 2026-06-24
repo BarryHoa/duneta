@@ -12,8 +12,7 @@
     "config",
     "providers",
     "themes",
-    "scripts",
-    "styles.css"
+    "scripts"
   ],
   "bin": {
     "tenora-web": "./scripts/tenora-web.mjs"
@@ -45,6 +44,10 @@
     "./hooks/link": {
       "types": "./dist/hooks/link/index.d.ts",
       "import": "./dist/hooks/link/index.js"
+    },
+    "./hooks/use-api": {
+      "types": "./dist/hooks/use-api.d.ts",
+      "import": "./dist/hooks/use-api.js"
     },
     "./components": {
       "types": "./dist/components/index.d.ts",
@@ -86,8 +89,7 @@
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
     },
-    "./themes/globals.css": "./themes/globals.css",
-    "./styles": "./styles.css"
+    "./themes/globals.css": "./themes/globals.css"
   },
   "scripts": {
     "build": "node ./scripts/build.mjs",

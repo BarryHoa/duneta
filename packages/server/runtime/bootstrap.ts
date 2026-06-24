@@ -1,10 +1,15 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { Hono } from 'hono';
+import { createAuth } from '../auth/index.js';
 import { createTenoraApp } from '../app/create-app.js';
-import { loadConfig, type DeepPartial } from '../configs/index.js';
+import { createContainer } from '../container/index.js';
+import { createDatabase } from '../database/index.js';
+import { getConfig, loadConfig, type DeepPartial } from '../configs/index.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { BackendEnv } from '../middlewares/index.js';
+import type { TenoraProvider } from '../providers/types.js';
+import { createRedis } from '../redis/index.js';
 
 let cachedApp: Hono<BackendEnv> | undefined;
 let configBootstrapped = false;
@@ -20,9 +25,16 @@ async function loadTenoraConfigFile(): Promise<DeepPartial<TenoraServerConfig>> 
   }
 }
 
+async function loadAppProviders() {
+  try {
+    return await import(pathToFileURL(join(process.cwd(), 'providers/index.ts')).href);
+  } catch {
+    return {};
+  }
+}
+
 export async function initConfig(overrides?: DeepPartial<TenoraServerConfig>) {
   if (configBootstrapped && !overrides) return;
-
   loadConfig(overrides ?? (await loadTenoraConfigFile()));
   configBootstrapped = true;
 }
@@ -32,6 +44,15 @@ export async function loadApp() {
 
   await initConfig();
 
+  const config = getConfig();
+  const container = createContainer();
+  const db = createDatabase(config);
+  const auth = createAuth(config, db);
+  const redis = createRedis(config.redis);
+
+  const appModule = await loadAppProviders();
+  appModule.registerBindings?.(container, db);
+
   const routerModule = await import(
     pathToFileURL(join(process.cwd(), 'routers/index.ts')).href
   );
@@ -40,6 +61,17 @@ export async function loadApp() {
     throw new Error('routers/index.ts must export `router`.');
   }
 
-  cachedApp = createTenoraApp(routerModule.router);
+  const appProviders: TenoraProvider[] = appModule.providers ?? [];
+
+  cachedApp = await createTenoraApp({
+    router: routerModule.router,
+    config,
+    db,
+    auth,
+    redis,
+    container,
+    providers: appProviders,
+  });
+
   return cachedApp;
 }

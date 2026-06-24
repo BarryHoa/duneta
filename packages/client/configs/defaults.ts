@@ -10,6 +10,7 @@ export function createDefaultConfig(): TenoraWebConfig {
     app: {
       name: 'tenora-web',
       port: DEFAULT_WEB_PORT,
+      env: 'development',
     },
     api: {
       port: apiPort,
@@ -18,6 +19,12 @@ export function createDefaultConfig(): TenoraWebConfig {
     },
     router: {
       appDirectory: '.router-runtime',
+      ssr: {
+        streamTimeout: 5_000,
+      },
+    },
+    theme: {
+      default: 'dark',
     },
   };
 }

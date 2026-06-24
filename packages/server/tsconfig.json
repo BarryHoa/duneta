@@ -8,14 +8,17 @@
   },
   "include": [
     "app",
+    "auth",
     "configs",
-    "validators",
-    "helpers",
+    "container",
+    "database",
+    "http",
     "middlewares",
+    "providers",
+    "redis",
     "repositories",
     "routers",
-    "runtime",
-    "services"
+    "runtime"
   ],
   "exclude": ["dist", "node_modules"]
 }

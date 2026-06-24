@@ -29,6 +29,7 @@ export function TenoraHome() {
             <Link href="#stack" className="text-slate-400 hover:text-white">Stack</Link>
             <Link href="#modules" className="text-slate-400 hover:text-white">Modules</Link>
             <Link href="#deploy" className="text-slate-400 hover:text-white">Deploy</Link>
+            <Link href="/about" className="text-slate-400 hover:text-white">About</Link>
           </nav>
           <Link href="https://github.com/BarryHoa/Tenora" target="_blank" className="text-sm font-medium text-cyan-200 hover:text-white">GitHub <span aria-hidden="true">↗</span></Link>
         </header>

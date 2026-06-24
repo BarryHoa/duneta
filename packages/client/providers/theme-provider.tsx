@@ -1,9 +1,18 @@
+import type { ThemeMode } from '../configs/types.js';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { PropsWithChildren } from 'react';
 
-export function ThemeProvider({ children }: PropsWithChildren) {
+type ThemeProviderProps = PropsWithChildren<{
+  defaultTheme?: ThemeMode;
+}>;
+
+export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme={defaultTheme === 'system' ? 'system' : defaultTheme}
+      enableSystem={defaultTheme === 'system'}
+    >
       {children}
     </NextThemesProvider>
   );

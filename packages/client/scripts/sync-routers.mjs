@@ -9,7 +9,7 @@ const ROUTE_FILES = new Set(['layout.tsx', 'page.tsx', 'entry.server.tsx', 'load
  * Merge app/web/routers (overrides) with packages/client/routers (defaults)
  * into .router-runtime/ for React Router.
  */
-export function syncRouters(webRoot, clientRoot) {
+export function syncRouters(webRoot, clientRoot, webConfig) {
   const webRouters = path.join(webRoot, 'routers');
   const clientRouters = path.join(clientRoot, 'routers');
   const outDir = path.join(webRoot, '.router-runtime');
@@ -35,12 +35,11 @@ export function syncRouters(webRoot, clientRoot) {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
 
     if (rel.endsWith('layout.tsx')) {
+      const theme = webConfig?.theme?.default ?? 'dark';
       const content = fs
         .readFileSync(src, 'utf8')
-        .replace(
-          /@tenora\/client\/themes\/globals\.css/g,
-          '~/themes/globals.css',
-        );
+        .replace(/@tenora\/client\/themes\/globals\.css/g, '~/themes/globals.css')
+        .replace(/defaultTheme="[^"]*"/, `defaultTheme="${theme}"`);
       fs.writeFileSync(dest, content);
       continue;
     }
@@ -190,5 +189,5 @@ if (import.meta.url === pathToFileURL(path.resolve(process.argv[1] ?? '')).href)
     process.env.TENORA_CLIENT_ROOT ??
     path.resolve(webRoot, 'node_modules/@tenora/client');
 
-  syncRouters(webRoot, clientRoot);
+  syncRouters(webRoot, clientRoot, { theme: { default: 'dark' } });
 }

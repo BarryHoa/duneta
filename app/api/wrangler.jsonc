@@ -1,5 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tenora-api",
-  "compatibility_date": "2025-06-17"
+  "main": "server.ts",
+  "compatibility_date": "2025-06-17",
+  "compatibility_flags": ["nodejs_compat"]
 }

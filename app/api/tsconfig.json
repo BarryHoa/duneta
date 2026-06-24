@@ -13,10 +13,9 @@
   "include": [
     "server.ts",
     "tenora.config.ts",
-    "configs/**/*.ts",
-    "routers",
-    "middlewares",
+    "controllers",
+    "providers",
     "repositories",
-    "services"
+    "routers"
   ]
 }

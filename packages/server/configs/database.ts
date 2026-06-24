@@ -4,17 +4,7 @@ export type PostgresConnection = {
   schema?: string;
 };
 
-export type MysqlConnection = {
-  driver: 'mysql';
-  url: string;
-};
-
-export type SqliteConnection = {
-  driver: 'sqlite';
-  url: string;
-};
-
-export type DatabaseConnection = PostgresConnection | MysqlConnection | SqliteConnection;
+export type DatabaseConnection = PostgresConnection;
 
 export type DatabasePoolConfig = {
   max: number;
@@ -31,6 +21,7 @@ export const DEFAULT_DATABASE_POOL: DatabasePoolConfig = {
 export type DatabaseConfig<
   TConnections extends object = Record<string, DatabaseConnection>,
 > = {
+  enabled?: boolean;
   default: string;
   connections: TConnections;
   pool: DatabasePoolConfig;
@@ -40,15 +31,6 @@ export function postgresConnection(options: { url: string; schema?: string }): P
   return { driver: 'postgres', url: options.url, schema: options.schema };
 }
 
-export function mysqlConnection(options: { url: string }): MysqlConnection {
-  return { driver: 'mysql', url: options.url };
-}
-
-export function sqliteConnection(options: { url: string }): SqliteConnection {
-  return { driver: 'sqlite', url: options.url };
-}
-
-/** Drop undefined connections and preserve literal connection names for generics. */
 export function defineConnections<const T extends Record<string, DatabaseConnection | undefined>>(
   connections: T,
 ) {
@@ -57,18 +39,13 @@ export function defineConnections<const T extends Record<string, DatabaseConnect
   };
 
   for (const [name, connection] of Object.entries(connections)) {
-    if (connection) {
-      Object.assign(resolved, { [name]: connection });
-    }
+    if (connection) Object.assign(resolved, { [name]: connection });
   }
 
   return resolved;
 }
 
-export function connectionUrl(
-  config: DatabaseConfig,
-  name: string = config.default,
-) {
+export function connectionUrl(config: DatabaseConfig, name: string = config.default) {
   const connection = config.connections[name as keyof typeof config.connections] as
     | DatabaseConnection
     | undefined;

@@ -1,9 +1,12 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createDefaultConfig } from './defaults';
+import { env } from './env';
 import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
 import type { TenoraWebConfig } from './types';
+
+export { env };
 
 /** Like `defineConfig` in Next.js — all sections are optional. */
 export function defineTenoraConfig<const T extends Record<string, unknown>>(
@@ -15,7 +18,7 @@ export function defineTenoraConfig<const T extends Record<string, unknown>>(
 async function loadTenoraConfigFile(cwd: string): Promise<DeepPartial<TenoraWebConfig>> {
   try {
     const configModule = await import(
-      pathToFileURL(join(cwd, 'tenora.config.ts')).href
+      /* @vite-ignore */ pathToFileURL(join(cwd, 'tenora.config.ts')).href
     );
     return configModule.default ?? {};
   } catch {

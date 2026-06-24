@@ -12,7 +12,7 @@ export async function bootNodeServer() {
 
 export async function handleWorkerFetch(
   request: Request,
-  env: Record<string, string | undefined>,
+  env: Record<string, string | undefined> = {},
 ) {
   const app = await loadApp();
   return app.fetch(request, env);

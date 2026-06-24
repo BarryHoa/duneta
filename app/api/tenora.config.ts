@@ -1,13 +1,44 @@
-import { defineTenoraConfig } from '@tenora/server/configs';
+import {
+  defineConnections,
+  defineTenoraConfig,
+  env,
+  postgresConnection,
+} from '@tenora/server/configs';
+
+const port = Number(env('PORT', '3001'));
+const databaseUrl = process.env.DATABASE_URL;
+const authSecret = process.env.AUTH_SECRET;
 
 export default defineTenoraConfig({
   runtime: { target: 'node' },
   app: {
     name: 'tenora-api',
-    env:
-      (process.env.NODE_ENV as 'development' | 'production' | 'test') ??
-      'development',
-    port: Number(process.env.PORT ?? 3001),
+    env: env('NODE_ENV', 'development') as 'development' | 'production' | 'test',
+    port,
     debug: true,
   },
+  // Opt in — omit or set enabled: false to run without a database.
+  ...(databaseUrl
+    ? {
+        database: {
+          enabled: true,
+          default: 'primary',
+          connections: defineConnections({
+            primary: postgresConnection({ url: databaseUrl }),
+          }),
+        },
+      }
+    : {}),
+  // Auth requires database.enabled: true and AUTH_SECRET.
+  ...(databaseUrl && authSecret
+    ? {
+        auth: {
+          enabled: true,
+          secret: authSecret,
+          baseUrl: env('AUTH_BASE_URL', `http://localhost:${port}`),
+        },
+      }
+    : {}),
+  // redis: { enabled: true, url: env('REDIS_URL') },
+  // rateLimit: { enabled: true },
 });

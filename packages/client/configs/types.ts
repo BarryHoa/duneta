@@ -1,14 +1,23 @@
+export type ThemeMode = 'dark' | 'light' | 'system';
+
 export type TenoraWebConfig = {
   app: {
     name: string;
     port: number;
+    env: 'development' | 'production' | 'test';
   };
   api: {
     port: number;
-    proxyTarget: string;
+    proxyTarget?: string;
     baseUrl: string;
   };
   router: {
     appDirectory: string;
+    ssr: {
+      streamTimeout: number;
+    };
+  };
+  theme: {
+    default: ThemeMode;
   };
 };

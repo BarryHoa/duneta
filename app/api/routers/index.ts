@@ -1,32 +1,12 @@
-import { getServiceStatus } from '../services/index.js';
-import { healthResponseSchema } from '@tenora/server/validators';
-import { x, y, z } from '../middlewares/index.js';
-import { createRouter, defineGroup } from '@tenora/server/routers';
+import { getConfig, isDatabaseEnabled } from '@tenora/server/configs';
+import { createRouter } from '@tenora/server/routers';
+import { healthRoutes } from './health.routes.js';
+import { usersRoutes } from './users.routes.js';
 
-export const router = createRouter([
-  defineGroup({
-    path: '/health',
-    endpoints: [
-      {
-        method: 'GET',
-        handler: (c) => c.json(healthResponseSchema.parse(getServiceStatus())),
-      },
-    ],
-  }),
-  defineGroup({
-    path: '/con',
-    middleware: [x, y],
-    children: [
-      defineGroup({
-        path: ':id',
-        middleware: [z],
-        endpoints: [
-          {
-            method: 'GET',
-            handler: (c) => c.json({ id: c.req.param('id'), middleware: c.get('middlewareOrder') }),
-          },
-        ],
-      }),
-    ],
-  }),
-]);
+const groups = [healthRoutes];
+
+if (isDatabaseEnabled(getConfig())) {
+  groups.push(usersRoutes);
+}
+
+export const router = createRouter(groups);

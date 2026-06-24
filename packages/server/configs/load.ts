@@ -1,7 +1,10 @@
 import { createDefaultConfig } from './defaults';
+import { env } from './env';
 import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
 import type { TenoraServerConfig } from './types';
+
+export { env };
 
 /** Like `defineConfig` in Next.js — all sections are optional. */
 export function defineTenoraConfig<const T extends Record<string, unknown>>(

@@ -1,5 +1,0 @@
-/**
- * Optional custom server entry.
- * Re-export the default, or import `bootNodeServer` / `handleWorkerFetch` from `@tenora/server/runtime`.
- */
-export { default } from '@tenora/server/runtime/server';

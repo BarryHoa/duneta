@@ -2,11 +2,9 @@ import { DEFAULT_DATABASE_POOL } from './database';
 import type { TenoraServerConfig } from './types';
 
 export const DEFAULT_CONFIG_APP_PORT = 3001;
-export const DEFAULT_CONFIG_WEB_PORT = 3000;
-export const DEFAULT_DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/tenora';
 export const DEFAULT_TIMEZONE = 'Asia/Ho_Chi_Minh';
 
-/** Full default `TenoraServerConfig` — merged with `tenora.config.ts` at boot. */
+/** Minimal defaults — opt in to database, auth, redis, and other features in `tenora.config.ts`. */
 export function createDefaultConfig(): TenoraServerConfig {
   const port = DEFAULT_CONFIG_APP_PORT;
 
@@ -18,23 +16,20 @@ export function createDefaultConfig(): TenoraServerConfig {
       port,
       debug: true,
     },
+    database: {
+      enabled: false,
+      default: 'primary',
+      connections: {},
+      pool: { ...DEFAULT_DATABASE_POOL },
+    },
     auth: {
+      enabled: false,
       driver: 'better-auth',
-      secret: 'dev-only-change-me',
+      secret: '',
       baseUrl: `http://localhost:${port}`,
       basePath: '/api/auth',
       sessionCookieName: 'session_token',
       emailAndPassword: { enabled: true },
-    },
-    database: {
-      default: 'primary',
-      connections: {
-        primary: {
-          driver: 'postgres',
-          url: DEFAULT_DATABASE_URL,
-        },
-      },
-      pool: { ...DEFAULT_DATABASE_POOL },
     },
     session: {
       expiration: {
@@ -47,10 +42,7 @@ export function createDefaultConfig(): TenoraServerConfig {
         secure: false,
         sameSite: 'lax',
         path: '/',
-        maxAge: {
-          default: 3 * 24 * 60 * 60,
-          rememberMe: 30 * 24 * 60 * 60,
-        },
+        maxAge: { default: 3 * 24 * 60 * 60, rememberMe: 30 * 24 * 60 * 60 },
       },
     },
     system: {
@@ -62,20 +54,17 @@ export function createDefaultConfig(): TenoraServerConfig {
       host: 'localhost',
       port: 6379,
       db: 0,
-      retry: {
-        maxAttempts: 3,
-        delayMs: 1000,
-        backoffMultiplier: 2,
-      },
+      retry: { maxAttempts: 3, delayMs: 1000, backoffMultiplier: 2 },
       connectionTimeout: 5000,
       commandTimeout: 3000,
     },
     rateLimit: {
+      enabled: false,
       auth: { max: 5, windowMs: 15 * 60 * 1000 },
       api: { max: 100, windowMs: 60 * 1000 },
     },
     log: {
-      enabled: true,
+      enabled: false,
       destination: 'file',
       file: {
         directory: 'log',
@@ -87,19 +76,14 @@ export function createDefaultConfig(): TenoraServerConfig {
           deleteOriginal: true,
         },
       },
-      webhook: {
-        url: '',
-        headers: { 'Content-Type': 'application/json' },
-      },
+      webhook: { url: '', headers: { 'Content-Type': 'application/json' } },
     },
     csrf: {
-      secret: 'csrf-secret-key-change-in-production',
+      enabled: false,
+      secret: '',
       tokenLength: 32,
       expirationMs: 24 * 60 * 60 * 1000,
     },
-    debug: {
-      enabled: false,
-      logLevel: 'debug',
-    },
+    debug: { enabled: false, logLevel: 'debug' },
   };
 }

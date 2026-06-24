@@ -14,6 +14,21 @@ function packageBin(packageName, binFile = 'bin.cjs') {
   return path.join(packageRoot, binFile);
 }
 
+function loadWebConfig(cwd) {
+  const tsxEntry = packageBin('tsx', 'dist/cli.mjs');
+  const loadScript = path.join(clientRoot, 'scripts/load-config.mjs');
+  const result = spawnSync(process.execPath, [tsxEntry, loadScript, cwd], {
+    encoding: 'utf8',
+    cwd,
+  });
+
+  if (result.status !== 0) {
+    throw new Error(result.stderr || 'Failed to load tenora.config.ts');
+  }
+
+  return JSON.parse(result.stdout);
+}
+
 const [command = 'dev', ...rest] = process.argv.slice(2);
 const cwd = process.cwd();
 
@@ -23,8 +38,11 @@ try {
   // Copy .env.example to .env in this directory.
 }
 
+let webConfig = null;
+
 if (['dev', 'build', 'typegen'].includes(command)) {
-  syncRouters(cwd, clientRoot);
+  webConfig = loadWebConfig(cwd);
+  syncRouters(cwd, clientRoot, webConfig);
 }
 
 let executable = process.execPath;
@@ -32,7 +50,8 @@ let args;
 
 switch (command) {
   case 'dev': {
-    console.log('[tenora-web] dev → see app/web/tenora.config.ts for port');
+    const port = webConfig?.app?.port ?? 3000;
+    console.log(`[tenora-web] dev → http://localhost:${port}`);
     args = [packageBin('@react-router/dev'), command, ...rest];
     break;
   }

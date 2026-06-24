@@ -16,6 +16,7 @@ export type AppConfig = {
 
 /** Default auth driver: [Better Auth](https://better-auth.com/docs/introduction) */
 export type BetterAuthConfig = {
+  enabled?: boolean;
   driver: 'better-auth';
   secret: string;
   baseUrl: string;
@@ -68,6 +69,7 @@ export type RedisConfig = {
 };
 
 export type RateLimitConfig = {
+  enabled?: boolean;
   auth: {
     max: number;
     windowMs: number;
@@ -98,6 +100,7 @@ export type LogConfig = {
 };
 
 export type CsrfConfig = {
+  enabled?: boolean;
   secret: string;
   tokenLength: number;
   expirationMs: number;
