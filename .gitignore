@@ -2,6 +2,7 @@ node_modules
 build
 .react-router
 .router-runtime
+.api-runtime
 dist
 .wrangler
 .dev.vars

@@ -15,35 +15,32 @@ Hai app shell mỏng: framework logic nằm trong `packages/`, bạn chỉ mở 
 
 ```mermaid
 flowchart TD
-  A["app/api/server.ts\ndefineServer()"] --> B["loadConfig(tenora.config)"]
-  B --> C["createDatabase + createAuth + createCache"]
-  C --> D["providers()\nController + Repository DI"]
-  D --> E["createRouter(config)"]
-  E --> F["createTenoraApp\nmiddleware + wire context"]
-  F --> G["Hono /api/*"]
+  A["defineServer()"] --> B["loadConfig"]
+  B --> C["createDatabase + createAuth"]
+  C --> D["registerFrameworkBindings\n+ providers app"]
+  D --> E["createRouter\nrouters/index.ts"]
+  E --> F["createTenoraApp"]
+  F --> G["/api/*"]
 ```
 
-### `defineServer` — 3 hook do app cung cấp
+### `defineServer` — hooks từ sync (app only)
 
-| Hook | File app | Vai trò |
-|------|----------|---------|
-| `config` | `tenora.config.ts` | Cấu hình merge với defaults |
-| `createRouter` | `routers/index.ts` | Route groups → Hono router |
-| `providers` | `providers/index.ts` | Đăng ký controller + repository |
+| Hook           | Nguồn                                  | Nội dung             |
+| -------------- | -------------------------------------- | -------------------- |
+| `config`       | `tenora.config.ts`                     | App config           |
+| `createRouter` | `.api-runtime/` → `routers/index.ts`   | Default + app routes |
+| `providers`    | `.api-runtime/` → `providers/index.ts` | App DI only          |
 
-```ts
-// app/api/server.ts
-export default defineServer({ config, createRouter, providers: registerProviders });
-```
+Framework bindings (Health, Me, User controllers/repos) vẫn wire trong **boot** — không qua sync.
 
 ## Runtime
 
 Entry file quyết định runtime — **không cần** `RUNTIME` env hay `runtime` trong `tenora.config.ts`:
 
-| Entry | Import | `runtime.target` (tự set) |
-|-------|--------|---------------------------|
-| `server.ts` | `@tenora/server/runtime/cloud` | `worker` |
-| `server.node.ts` | `@tenora/server/runtime/node` | `node` |
+| Entry            | Import                         | `runtime.target` (tự set) |
+| ---------------- | ------------------------------ | ------------------------- |
+| `server.ts`      | `@tenora/server/runtime/cloud` | `worker`                  |
+| `server.node.ts` | `@tenora/server/runtime/node`  | `node`                    |
 
 `defineServer` inject `runtime.target` lúc boot qua `bootstrapConfig()`.
 
@@ -53,10 +50,10 @@ Chi tiết: [Runtime](./api/runtime.md).
 
 Không còn container infra chung. Chỉ 2 container domain:
 
-| Container | Đăng ký trong | Resolve qua context |
-|-----------|---------------|---------------------|
-| `ControllerContainer` | `providers/index.ts` | `c.get('controllers')` |
-| `RepositoryContainer` | `providers/index.ts` | `c.get('repositories')` |
+| Container             | App đăng ký qua    | Framework boot              |
+| --------------------- | ------------------ | --------------------------- |
+| `ControllerContainer` | `providers` (sync) | `registerFrameworkBindings` |
+| `RepositoryContainer` | `providers` (sync) | `registerFrameworkBindings` |
 
 Infra (`db`, `auth`, `cache`) được boot một lần và inject thẳng vào Hono context — không qua DI container.
 
@@ -66,15 +63,15 @@ Chi tiết: [Providers](./api/providers.md).
 
 Mỗi request có sẵn trên `c`:
 
-| Key | Kiểu | Khi nào có |
-|-----|------|------------|
-| `db` | Drizzle DB | database enabled |
-| `auth` | Better Auth | auth enabled |
-| `cache` | Cache | cache enabled |
-| `controllers` | ControllerContainer | luôn |
-| `repositories` | RepositoryContainer | luôn |
-| `userId` | string | sau auth middleware |
-| `requestId`, `locale`, `timezone` | string | core middleware |
+| Key                               | Kiểu                | Khi nào có          |
+| --------------------------------- | ------------------- | ------------------- |
+| `db`                              | Drizzle DB          | database enabled    |
+| `auth`                            | Better Auth         | auth enabled        |
+| `cache`                           | Cache               | cache enabled       |
+| `controllers`                     | ControllerContainer | luôn                |
+| `repositories`                    | RepositoryContainer | luôn                |
+| `userId`                          | string              | sau auth middleware |
+| `requestId`, `locale`, `timezone` | string              | core middleware     |
 
 ## Layer domain
 

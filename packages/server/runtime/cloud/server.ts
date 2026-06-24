@@ -1,6 +1,5 @@
 import { loadApp } from '../shared/boot.js';
 import type { RuntimeBindings } from '../shared/bindings.js';
-import { defaultRegisterBindings } from '../../container/bindings.js';
 import { toManifest, type ServerOptions } from '../shared/types.js';
 
 export type { ServerOptions, ServerManifest } from '../shared/types.js';
@@ -12,7 +11,7 @@ export type ServerExport = {
 
 /** Cloudflare Worker / Vercel edge — `export default defineServer({...})` in `server.ts`. */
 export function defineServer(options: ServerOptions): ServerExport {
-  const manifest = toManifest(options, 'worker', defaultRegisterBindings);
+  const manifest = toManifest(options, 'worker');
 
   return {
     fetch: (request, env = {}) =>

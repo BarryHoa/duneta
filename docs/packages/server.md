@@ -22,7 +22,8 @@ packages/server/
 ├── cache/             # memory, redis HTTP
 ├── cached/            # global cache facade
 └── scripts/
-    └── tenora-api.mjs # CLI bin
+    ├── tenora-api.mjs
+    └── sync-api.mjs       # scan → .api-runtime/
 ```
 
 ## Public exports
@@ -30,8 +31,8 @@ packages/server/
 | Path | Nội dung |
 |------|----------|
 | `@tenora/server/configs` | Config types, `defineTenoraConfig`, `env`, helpers |
-| `@tenora/server/container` | DI containers, `registerDefaultBindings` |
-| `@tenora/server/routers` | `defineGroup`, `createRouter`, `createDefaultRouter` |
+| `@tenora/server/container` | DI containers, `RegisterBindings` |
+| `@tenora/server/routers` | `defineGroup`, `createRouter`, route groups |
 | `@tenora/server/http` | `BaseController`, `BaseRepository`, `bindContainerController` |
 | `@tenora/server/middlewares` | `requireAuth`, CSRF, rate-limit factories |
 | `@tenora/server/repositories` | Built-in repositories |

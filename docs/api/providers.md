@@ -2,17 +2,20 @@
 
 ## Tổng quan
 
-`providers` là hook thứ 3 của `defineServer` — đăng ký **controller** và **repository** vào DI container.
+`providers` đăng ký **controller** và **repository** — thường import từ `.api-runtime/` (do `tenora-api sync` sinh ra).
 
 ```ts
-defineServer({
+import { createRouter, registerProviders } from './.api-runtime';
+export default defineServer({
   config,
   createRouter,
-  providers: registerProviders, // app/api/providers/index.ts
+  providers: registerProviders,
 });
 ```
 
-Nếu bỏ `providers`, framework dùng `registerDefaultBindings` (Health, Me, User).
+Bỏ `providers` → noop (framework bindings vẫn wire trong boot).
+
+Xem [Sync & `.api-runtime`](./sync.md).
 
 ## `BindingContext`
 
@@ -29,44 +32,28 @@ export type BindingContext = {
 export type RegisterBindings = (ctx: BindingContext) => void;
 ```
 
-## File mặc định
+## Generated (mặc định)
 
-```ts
-// app/api/providers/index.ts
-import type { RegisterBindings } from '@tenora/server/container';
-import { registerDefaultBindings } from '@tenora/server/container';
+`tenora-api sync` sinh `providers.generated.ts` — **chỉ app code**.
 
-export const registerProviders: RegisterBindings = (ctx) => {
-  registerDefaultBindings(ctx);
-};
-```
+Framework controllers (Health, Me, User) đăng ký trong `boot` qua `registerFrameworkBindings`.
 
-## Thứ tự đăng ký (quan trọng)
+Override thủ công: tạo `providers/index.ts` — sync re-export từ đó.
 
-1. **Repositories** — cần `db`
-2. **Controllers** — inject repository từ `repositories.resolve()`
-
-Framework tách sẵn trong `registerDefaultBindings`:
-
-```ts
-registerDefaultRepositories(ctx.repositories, ctx.db);
-registerDefaultControllers(ctx.controllers, ctx.repositories);
-```
-
-## Custom — thêm domain mới
+## Custom thủ công (advanced)
 
 ```ts
 import type { RegisterBindings } from '@tenora/server/container';
-import { registerDefaultBindings } from '@tenora/server/container';
 import { PostRepository } from '../repositories/post-repository';
 import { PostController } from '../controllers/post-controller';
 
 export const registerProviders: RegisterBindings = (ctx) => {
-  registerDefaultBindings(ctx);
-
   if (!ctx.db) return;
 
-  ctx.repositories.singleton('PostRepository', () => new PostRepository(ctx.db!));
+  ctx.repositories.singleton(
+    'PostRepository',
+    () => new PostRepository(ctx.db!),
+  );
   ctx.controllers.singleton(
     'PostController',
     () => new PostController(ctx.repositories.resolve('PostRepository')),
@@ -82,13 +69,13 @@ export const registerProviders: RegisterBindings = (ctx) => {
 
 ## Resolve trong handler
 
-| Cần | Cách lấy |
-|-----|----------|
-| Controller | `bindContainerController('Key', 'method')` |
-| Repository trong controller | Inject qua constructor lúc `providers` |
+| Cần                         | Cách lấy                                          |
+| --------------------------- | ------------------------------------------------- |
+| Controller                  | `bindContainerController('Key', 'method')`        |
+| Repository trong controller | Inject qua constructor lúc `providers`            |
 | Repository trong middleware | `c.get('repositories').resolve('UserRepository')` |
-| DB | `c.get('db')` |
-| Auth session | `BaseController.resolveSession(c)` |
+| DB                          | `c.get('db')`                                     |
+| Auth session                | `BaseController.resolveSession(c)`                |
 
 ## Hai container tách biệt
 
@@ -119,4 +106,4 @@ export const registerProviders: RegisterBindings = (ctx) => {
 };
 ```
 
-Hoặc fork hoàn toàn — không gọi `registerDefaultBindings`.
+Framework bindings không override được qua `providers` — chỉ thêm app controllers/repos.

@@ -9,5 +9,14 @@
       "@tenora/server/*": ["../../packages/server/*"]
     }
   },
-  "include": ["server.ts", "server.node.ts", "tenora.config.ts", "routers", "providers"]
+  "include": [
+    "server.ts",
+    "server.node.ts",
+    "tenora.config.ts",
+    ".api-runtime",
+    "controllers",
+    "repositories",
+    "routers",
+    "providers"
+  ]
 }

@@ -1,6 +1,4 @@
 import { bindContainerController } from '../http/bind-controller.js';
-import { isAuthEnabled, isDatabaseEnabled } from '../configs/features.js';
-import type { TenoraServerConfig } from '../configs/types.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { createRouter, defineGroup } from './define.js';
 
@@ -23,16 +21,4 @@ export const usersRoutes = defineGroup({
   ],
 });
 
-export function createDefaultRouter(config: TenoraServerConfig) {
-  const groups = [healthRoutes];
-
-  if (isAuthEnabled(config)) {
-    groups.push(meRoutes);
-  }
-
-  if (isDatabaseEnabled(config)) {
-    groups.push(usersRoutes);
-  }
-
-  return createRouter(groups);
-}
+export { createRouter, defineGroup } from './define.js';

@@ -5,6 +5,7 @@ import { loadEnvFile } from 'node:process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { syncApi } from './sync-api.mjs';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(packageRoot, '../..');
@@ -67,6 +68,16 @@ try {
   loadEnvFile(path.join(cwd, '.env'));
 } catch {
   // Copy .env.example to .env in this directory.
+}
+
+const SYNC_COMMANDS = new Set(['dev', 'deploy', 'dev:node', 'start:node', 'sync']);
+
+if (SYNC_COMMANDS.has(command)) {
+  syncApi(cwd);
+  if (command === 'sync') {
+    console.log('[tenora-api] synced .api-runtime/');
+    process.exit(0);
+  }
 }
 
 const wrangler = resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js');

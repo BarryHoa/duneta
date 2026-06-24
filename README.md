@@ -30,7 +30,7 @@ packages/ →  framework code
 | [Kiến trúc](./docs/architecture.md) | Boot flow, DI, layers |
 | [Cấu hình](./docs/configuration.md) | `tenora.config.ts`, `.env` |
 | [Customize](./docs/customization.md) | Thêm route, controller, page |
-| [API](./docs/api/overview.md) | `defineServer`, runtime, providers |
+| [API](./docs/api/overview.md) | `defineServer`, sync, runtime |
 | [Web](./docs/web/overview.md) | Routes, theme, proxy |
 
 ## Quick start API
@@ -39,8 +39,7 @@ packages/ →  framework code
 // app/api/server.ts
 import { defineServer } from '@tenora/server/runtime/cloud';
 import config from './tenora.config';
-import { registerProviders } from './providers';
-import { createRouter } from './routers';
+import { createRouter, registerProviders } from './.api-runtime';
 
 export default defineServer({ config, createRouter, providers: registerProviders });
 ```

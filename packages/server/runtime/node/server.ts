@@ -1,5 +1,4 @@
 import { getConfig } from '../../configs/index.js';
-import { defaultRegisterBindings } from '../../container/bindings.js';
 import { bootstrapConfig, loadApp } from '../shared/boot.js';
 import { toManifest, type ServerOptions } from '../shared/types.js';
 
@@ -13,7 +12,7 @@ export type ServerExport = {
 
 /** Bun / VPS — `export default defineServer({...})` in `server.node.ts`. */
 export function defineServer(options: ServerOptions): ServerExport {
-  const manifest = toManifest(options, 'node', defaultRegisterBindings);
+  const manifest = toManifest(options, 'node');
   bootstrapConfig(manifest);
 
   return {

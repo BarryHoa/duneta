@@ -1,6 +1,29 @@
-import type { TenoraServerConfig } from '@tenora/server/configs';
-import { createDefaultRouter } from '@tenora/server/routers';
+import {
+  isAuthEnabled,
+  isDatabaseEnabled,
+  type TenoraServerConfig,
+} from '@tenora/server/configs';
+import {
+  createRouter as buildRouter,
+  healthRoutes,
+  meRoutes,
+  usersRoutes,
+} from '@tenora/server/routers';
+
+// import { postsRoutes } from './posts.routes';
 
 export function createRouter(config: TenoraServerConfig) {
-  return createDefaultRouter(config);
+  const groups = [healthRoutes];
+
+  if (isAuthEnabled(config)) {
+    groups.push(meRoutes);
+  }
+
+  if (isDatabaseEnabled(config)) {
+    groups.push(usersRoutes);
+  }
+
+  // groups.push(postsRoutes);
+
+  return buildRouter(groups);
 }

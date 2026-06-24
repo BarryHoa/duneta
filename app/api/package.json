@@ -12,7 +12,7 @@
     "dev:node": "tenora-api dev:node",
     "start:node": "tenora-api start:node",
     "deploy": "tenora-api deploy",
-    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
+    "typecheck": "tenora-api sync && node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {
     "@tenora/server": "workspace:*"

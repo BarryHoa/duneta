@@ -3,25 +3,39 @@ import { createAuth } from '../../auth/index.js';
 import { createTenoraApp } from '../../app/create-app.js';
 import { createCache } from '../../cache/index.js';
 import { connectionUrl } from '../../configs/database.js';
-import { defaultRegisterBindings } from '../../container/bindings.js';
 import { createControllerContainer } from '../../container/controller-container.js';
 import { createRepositoryContainer } from '../../container/repository-container.js';
 import { createDatabase } from '../../database/index.js';
 import { resolveDatabaseUrl } from '../../database/resolve-url.js';
-import { getConfig, loadConfig, type DeepPartial } from '../../configs/index.js';
+import {
+  getConfig,
+  loadConfig,
+  type DeepPartial,
+} from '../../configs/index.js';
 import type { TenoraServerConfig } from '../../configs/types.js';
 import type { BackendEnv } from '../../middlewares/env.js';
-import { isHyperdriveBinding, type RuntimeBindings } from '../shared/bindings.js';
+import {
+  isHyperdriveBinding,
+  type RuntimeBindings,
+} from '../shared/bindings.js';
 import type { ServerManifest } from './types.js';
 
 let cachedApp: Hono<BackendEnv> | undefined;
 let cachedAppKey: string | undefined;
 let configBootstrapped = false;
 
-function appCacheKey(config: TenoraServerConfig, bindings?: RuntimeBindings): string {
-  const dbUrl = resolveDatabaseUrl(config, bindings) ?? connectionUrl(config.database) ?? '';
+function appCacheKey(
+  config: TenoraServerConfig,
+  bindings?: RuntimeBindings,
+): string {
+  const dbUrl =
+    resolveDatabaseUrl(config, bindings) ??
+    connectionUrl(config.database) ??
+    '';
   const hyperdrive = bindings?.HYPERDRIVE;
-  const hyperKey = isHyperdriveBinding(hyperdrive) ? hyperdrive.connectionString : '';
+  const hyperKey = isHyperdriveBinding(hyperdrive)
+    ? hyperdrive.connectionString
+    : '';
   return `${dbUrl}:${hyperKey}`;
 }
 
@@ -46,7 +60,10 @@ export function bootstrapConfig(
   configBootstrapped = true;
 }
 
-export async function loadApp(manifest: ServerManifest, bindings?: RuntimeBindings) {
+export async function loadApp(
+  manifest: ServerManifest,
+  bindings?: RuntimeBindings,
+) {
   bootstrapConfig(manifest);
 
   const config = getConfig();

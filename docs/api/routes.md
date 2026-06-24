@@ -2,18 +2,16 @@
 
 ## Hook `createRouter`
 
-File: `app/api/routers/index.ts`
+File generated: `.api-runtime/router.generated.ts` — re-export từ `routers/index.ts`.
+
+Default routes (`/health`, `/me`, `/users`) khai báo trong **`routers/index.ts`** — bật `/me`, `/users` theo feature flags auth/database.
 
 ```ts
-import type { TenoraServerConfig } from '@tenora/server/configs';
-import { createDefaultRouter } from '@tenora/server/routers';
-
-export function createRouter(config: TenoraServerConfig) {
-  return createDefaultRouter(config);
-}
+import { createRouter, defineGroup } from '@tenora/server/routers';
+import { bindContainerController } from '@tenora/server/http';
 ```
 
-`createDefaultRouter` tự thêm route theo feature flags (`isAuthEnabled`, `isDatabaseEnabled`).
+Route groups theo feature flags: `isAuthEnabled` / `isDatabaseEnabled` trong `routers/index.ts`.
 
 ## `defineGroup` — khai báo route
 
@@ -42,32 +40,18 @@ export const postsRoutes = defineGroup({
 | `endpoints` | `{ method, path?, handler }` |
 | `children` | Nested groups |
 
-## Custom router — thay default
+## Custom router — thêm app routes
 
 ```ts
 import { createRouter, defineGroup } from '@tenora/server/routers';
-import { createDefaultRouter } from '@tenora/server/routers';
 import { postsRoutes } from './posts.routes';
 
-export function createRouter(config: TenoraServerConfig) {
-  const base = createDefaultRouter(config);
-
-  const extra = createRouter([postsRoutes]);
-  base.route('/', extra);
-
-  return base;
+export function createRouter(_config: TenoraServerConfig) {
+  return createRouter([postsRoutes]);
 }
 ```
 
-Hoặc build từ đầu:
-
-```ts
-export function createRouter(config: TenoraServerConfig) {
-  const groups = [healthRoutes, postsRoutes];
-  if (isAuthEnabled(config)) groups.push(meRoutes);
-  return createRouter(groups);
-}
-```
+Hoặc dùng `routers/posts.routes.ts` + sync — boot vẫn merge framework routes.
 
 ## `bindContainerController`
 
