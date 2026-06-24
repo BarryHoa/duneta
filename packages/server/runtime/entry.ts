@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { getConfig } from '../configs/index.js';
 import { loadApp } from './bootstrap.js';
+import type { RuntimeBindings } from './bindings.js';
 
 export async function bootNodeServer() {
   const app = await loadApp();
@@ -12,8 +13,8 @@ export async function bootNodeServer() {
 
 export async function handleWorkerFetch(
   request: Request,
-  env: Record<string, string | undefined> = {},
+  env: RuntimeBindings = {},
 ) {
-  const app = await loadApp();
+  const app = await loadApp(env);
   return app.fetch(request, env);
 }

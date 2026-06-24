@@ -6,6 +6,7 @@ import { requireAuth } from './auth.js';
 import { createCsrfMiddleware } from './csrf.js';
 import type { BackendEnv } from './env.js';
 import { createLocaleMiddleware } from './locale.js';
+import { createRateLimitMiddleware } from './rate-limit.js';
 import { createRequestIdMiddleware } from './request-id.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { createTimezoneMiddleware } from './timezone.js';
@@ -19,6 +20,7 @@ export {
 export {
   createCsrfMiddleware,
   createLocaleMiddleware,
+  createRateLimitMiddleware,
   createRequestIdMiddleware,
   createSecurityHeadersMiddleware,
   createTimezoneMiddleware,
@@ -55,29 +57,6 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
       return c.body(null, 204);
     }
 
-    await next();
-  });
-}
-
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-
-export function createRateLimitMiddleware(max: number, windowMs: number) {
-  return createMiddleware<BackendEnv>(async (c, next) => {
-    const key = c.req.header('x-forwarded-for') ?? c.req.header('cf-connecting-ip') ?? 'local';
-    const now = Date.now();
-    const entry = rateLimitStore.get(key);
-
-    if (!entry || entry.resetAt <= now) {
-      rateLimitStore.set(key, { count: 1, resetAt: now + windowMs });
-      await next();
-      return;
-    }
-
-    if (entry.count >= max) {
-      return c.json({ error: 'Too many requests' }, 429);
-    }
-
-    entry.count += 1;
     await next();
   });
 }

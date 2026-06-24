@@ -18,6 +18,24 @@ export const DEFAULT_DATABASE_POOL: DatabasePoolConfig = {
   connectTimeout: 10,
 };
 
+/** Conservative defaults for Cloudflare Worker isolates (use with Hyperdrive / pooler). */
+export const DEFAULT_WORKER_DATABASE_POOL: DatabasePoolConfig = {
+  max: 1,
+  idleTimeout: 5,
+  connectTimeout: 10,
+};
+
+export function databasePoolForRuntime(
+  target: 'node' | 'worker',
+  pool: DatabasePoolConfig,
+): DatabasePoolConfig {
+  if (target === 'worker') {
+    const base = { ...DEFAULT_WORKER_DATABASE_POOL, ...pool };
+    return { ...base, max: Math.min(base.max, 2) };
+  }
+  return pool;
+}
+
 export type DatabaseConfig<
   TConnections extends object = Record<string, DatabaseConnection>,
 > = {

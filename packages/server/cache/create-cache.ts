@@ -1,18 +1,25 @@
-import type { CacheConfig, CacheProvider } from '../configs/types.js';
+import type { CacheDriver, CacheConfig } from '../configs/cache.js';
+import { createCacheStore, isDistributedCache } from './registry.js';
+import type { CacheStore } from './types.js';
 
-/** Placeholder client — replace with ioredis/node-redis when wired. */
-export type CacheClient = {
+export type CacheClient = CacheStore & {
   enabled: true;
-  provider: CacheProvider;
-  ping: () => Promise<string>;
+  driver: CacheDriver;
+  distributed: boolean;
 };
+
+function toCacheClient(driver: CacheDriver, store: CacheStore, distributed: boolean): CacheClient {
+  return {
+    ...store,
+    enabled: true,
+    driver,
+    distributed,
+  };
+}
 
 export function createCache(config: CacheConfig): CacheClient | null {
   if (config.enabled !== true) return null;
 
-  return {
-    enabled: true,
-    provider: config.provider,
-    ping: async () => 'PONG',
-  };
+  const store = createCacheStore(config);
+  return toCacheClient(config.driver, store, isDistributedCache(config.driver, config));
 }

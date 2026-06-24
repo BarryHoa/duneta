@@ -43,8 +43,7 @@ export async function createTenoraApp({
   app.use('*', createCoreMiddleware(config));
 
   if (isRateLimitEnabled(config)) {
-    const { api } = config.security.rateLimit;
-    app.use('*', createRateLimitMiddleware(api.max, api.windowMs));
+    app.use('*', createRateLimitMiddleware(config.security.rateLimit, cache));
   }
 
   if (isCsrfEnabled(config)) {

@@ -3,5 +3,17 @@
   "name": "tenora-api",
   "main": "server.ts",
   "compatibility_date": "2025-06-17",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "RUNTIME": "worker"
+  }
+  // Hyperdrive (recommended for Postgres on Workers):
+  // "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "<your-hyperdrive-config-id>" }]
+  //
+  // Secrets (wrangler secret put):
+  //   DATABASE_URL
+  //   AUTH_SECRET
+  //   CACHE_DRIVER=redis
+  //   CACHE_URL
+  //   CACHE_TOKEN
 }

@@ -1,4 +1,6 @@
 import type { DatabaseConfig } from './database';
+import type { CacheConfig } from './cache';
+import type { RateLimitConfig } from './rate-limit';
 
 export type Runtime = 'node' | 'worker';
 export type NodeEnv = 'development' | 'production' | 'test';
@@ -93,43 +95,6 @@ export type TimezoneConfig = {
   default: string;
   supported: string[];
   resolve: ContextResolveConfig;
-};
-
-export type CacheProvider = 'redis' | 'memory';
-
-export type RedisCacheProviderConfig = {
-  url?: string;
-  host: string;
-  port: number;
-  password?: string;
-  db: number;
-  retry: {
-    maxAttempts: number;
-    delayMs: number;
-    backoffMultiplier: number;
-  };
-  connectionTimeout: number;
-  commandTimeout: number;
-};
-
-export type CacheConfig = {
-  enabled?: boolean;
-  provider: CacheProvider;
-  providers: {
-    redis: RedisCacheProviderConfig;
-  };
-};
-
-export type RateLimitConfig = {
-  enabled?: boolean;
-  api: {
-    max: number;
-    windowMs: number;
-  };
-  auth: {
-    max: number;
-    windowMs: number;
-  };
 };
 
 export type CsrfConfig = {
@@ -233,6 +198,8 @@ export type SystemConfig = TimezoneConfig;
 
 /** @deprecated Use `CacheConfig` */
 export type RedisConfig = CacheConfig;
+
+export type { CacheConfig } from './cache';
 
 /** @deprecated Use `LoggingConfig` */
 export type LogConfig = LoggingConfig;

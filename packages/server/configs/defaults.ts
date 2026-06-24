@@ -1,4 +1,5 @@
 import { DEFAULT_DATABASE_POOL } from './database';
+import { DEFAULT_RATE_LIMIT_RULES } from './rate-limit';
 import type { TenoraServerConfig } from './types';
 
 export const DEFAULT_CONFIG_APP_PORT = 3001;
@@ -91,24 +92,14 @@ export function createDefaultConfig(): TenoraServerConfig {
 
     cache: {
       enabled: false,
-      provider: 'redis',
-      providers: {
-        redis: {
-          host: 'localhost',
-          port: 6379,
-          db: 0,
-          retry: { maxAttempts: 3, delayMs: 1000, backoffMultiplier: 2 },
-          connectionTimeout: 5000,
-          commandTimeout: 3000,
-        },
-      },
+      driver: 'memory',
+      stores: { memory: {} },
     },
 
     security: {
       rateLimit: {
         enabled: false,
-        api: { max: 100, windowMs: 60 * 1000 },
-        auth: { max: 5, windowMs: 15 * 60 * 1000 },
+        rules: DEFAULT_RATE_LIMIT_RULES,
       },
       csrf: {
         enabled: false,

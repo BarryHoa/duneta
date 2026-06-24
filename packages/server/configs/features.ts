@@ -3,8 +3,13 @@ import type { AuthProvidersConfig, TenoraServerConfig } from './types.js';
 
 export function isDatabaseEnabled(config: TenoraServerConfig): boolean {
   if (config.database?.enabled !== true) return false;
-  const url = connectionUrl(config.database);
-  return Boolean(url);
+  if (connectionUrl(config.database)) return true;
+  // Worker can supply DATABASE_URL / Hyperdrive via bindings at request time.
+  return isWorkerRuntime(config);
+}
+
+export function isWorkerRuntime(config: TenoraServerConfig): boolean {
+  return config.runtime?.target === 'worker';
 }
 
 export function isAuthEnabled(config: TenoraServerConfig): boolean {
