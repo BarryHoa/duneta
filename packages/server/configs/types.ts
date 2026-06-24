@@ -135,13 +135,33 @@ export type RateLimitConfig = {
 export type CsrfConfig = {
   enabled?: boolean;
   secret: string;
+  cookie: string;
+  header: string;
   tokenLength: number;
   expirationMs: number;
+  /** Path prefixes skipped (e.g. `/auth` for OAuth callbacks). */
+  excludePaths: string[];
 };
 
 export type SecurityConfig = {
   rateLimit: RateLimitConfig;
   csrf: CsrfConfig;
+  trustedProxies: string[];
+};
+
+export type RequestIdConfig = {
+  header: string;
+};
+
+export type RequestConfig = {
+  id: RequestIdConfig;
+};
+
+export type SecurityHeadersConfig = {
+  frameOptions: 'DENY' | 'SAMEORIGIN';
+  contentTypeOptions: boolean;
+  referrerPolicy: string;
+  permissionsPolicy: string;
 };
 
 export type LoggingProvider = 'file' | 'webhook';
@@ -184,6 +204,8 @@ export interface TenoraCoreConfig {
   auth: AuthConfig;
   locale: LocaleConfig;
   timezone: TimezoneConfig;
+  request: RequestConfig;
+  headers: SecurityHeadersConfig;
   cache: CacheConfig;
   security: SecurityConfig;
   logging: LoggingConfig;
@@ -199,6 +221,7 @@ export type TenoraCoreConfigKey = keyof TenoraCoreConfig;
  * type HrmConfig = TenoraServerConfig<{ hrm: HrmModuleConfig }>;
  */
 export type TenoraServerConfig<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- default: no app-specific config extensions
   TExtra extends Record<string, unknown> = {},
   TDatabase extends DatabaseConfig = DatabaseConfig,
 > = Omit<TenoraCoreConfig, 'database'> & {

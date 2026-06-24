@@ -29,19 +29,19 @@ logging: { enabled: true, provider: 'file' }
 ```text
 tenora.config.ts
 server.ts              # Node + Worker entry
-providers/index.ts     # registerBindings() + TenoraProvider[]
-controllers/           # extend BaseController
-repositories/          # extend BaseRepository
-routers/               # createRouter + defineGroup
+providers/index.ts     # registerDefaultBindings() + custom providers
+routers/index.ts       # createDefaultRouter(config)
 ```
 
-```ts
-// providers/index.ts
-export function registerBindings(container, db) { ... }
+Default controllers & routes ship in `@tenora/server`:
 
-// routers
-bindContainerController('UserController', 'index'); // from @tenora/server/http
-```
+| Controller | Route | Requires |
+|---|---|---|
+| `HealthController` | `GET /api/health` | — |
+| `MeController` | `GET /api/me` | auth |
+| `UserController` | `GET /api/users` | auth + database |
+
+Override by registering your own bindings or adding route groups in `routers/index.ts`.
 
 Layer: **Controller → Repository**. Better Auth mounts when `auth.enabled: true`.
 

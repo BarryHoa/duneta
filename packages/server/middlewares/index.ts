@@ -3,17 +3,32 @@ import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { TenoraServerConfig } from '../configs/types.js';
 import { requireAuth } from './auth.js';
+import { createCsrfMiddleware } from './csrf.js';
 import type { BackendEnv } from './env.js';
 import { createLocaleMiddleware } from './locale.js';
+import { createRequestIdMiddleware } from './request-id.js';
+import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { createTimezoneMiddleware } from './timezone.js';
 
 export type { BackendEnv } from './env.js';
 
-export { createLocaleMiddleware, createTimezoneMiddleware, requireAuth };
+export {
+  createCoreMiddleware,
+  createRequestContextMiddleware,
+} from '../examples/middleware.js';
+export {
+  createCsrfMiddleware,
+  createLocaleMiddleware,
+  createRequestIdMiddleware,
+  createSecurityHeadersMiddleware,
+  createTimezoneMiddleware,
+  requireAuth,
+};
 export type { AuthSession, AuthUser } from './types.js';
 
 export function createContextDefaultsMiddleware(config: TenoraServerConfig) {
   return createMiddleware<BackendEnv>(async (c, next) => {
+    c.set('requestId', '');
     c.set('locale', config.locale.default);
     c.set('timezone', config.timezone.default);
     await next();
@@ -30,8 +45,9 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
       c.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
       c.header(
         'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, Accept-Language, X-Tenora-Timezone, X-Tenora-Locale',
+        'Content-Type, Authorization, Accept-Language, X-Tenora-Timezone, X-Tenora-Locale, X-Request-Id, X-CSRF-Token',
       );
+      c.header('Access-Control-Expose-Headers', 'X-Request-Id, Content-Language, X-Tenora-Timezone');
       c.header('Access-Control-Allow-Credentials', 'true');
     }
 
@@ -62,18 +78,6 @@ export function createRateLimitMiddleware(max: number, windowMs: number) {
     }
 
     entry.count += 1;
-    await next();
-  });
-}
-
-export function createCsrfMiddleware(enabled: boolean) {
-  return createMiddleware<BackendEnv>(async (c, next) => {
-    if (!enabled) {
-      await next();
-      return;
-    }
-
-    // Stub: full CSRF validation ships in a later phase.
     await next();
   });
 }

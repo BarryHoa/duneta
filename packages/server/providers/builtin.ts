@@ -8,7 +8,6 @@ import {
 } from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { CacheClient } from '../cache/index.js';
-import type { Container } from '../container/index.js';
 import type { Database } from '../database/types.js';
 import type { TenoraProvider } from './types.js';
 

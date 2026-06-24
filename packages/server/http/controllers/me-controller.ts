@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Context } from 'hono';
-import { BaseController } from '@tenora/server/http';
-import type { BackendEnv } from '@tenora/server/middlewares';
+import { BaseController } from '../base-controller.js';
+import type { BackendEnv } from '../../middlewares/env.js';
 
 const meResponseSchema = z.object({
   data: z.object({

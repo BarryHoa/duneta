@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { Handler, MiddlewareHandler } from 'hono';
-import type { BackendEnv } from '../middlewares/index.js';
+import type { BackendEnv } from '../middlewares/env.js';
 
 type Endpoint = {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

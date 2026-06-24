@@ -1,6 +1,6 @@
 import type { Context, Handler } from 'hono';
 import type { BaseController } from './base-controller.js';
-import type { BackendEnv } from '../middlewares/index.js';
+import type { BackendEnv } from '../middlewares/env.js';
 
 type ControllerHandler = (c: Context<BackendEnv>) => Response | Promise<Response>;
 

@@ -78,6 +78,17 @@ export function createDefaultConfig(): TenoraServerConfig {
       },
     },
 
+    request: {
+      id: { header: 'X-Request-Id' },
+    },
+
+    headers: {
+      frameOptions: 'DENY',
+      contentTypeOptions: true,
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      permissionsPolicy: 'camera=(), microphone=(), geolocation=()',
+    },
+
     cache: {
       enabled: false,
       provider: 'redis',
@@ -102,9 +113,13 @@ export function createDefaultConfig(): TenoraServerConfig {
       csrf: {
         enabled: false,
         secret: '',
+        cookie: 'tenora_csrf',
+        header: 'X-CSRF-Token',
         tokenLength: 32,
         expirationMs: 24 * 60 * 60 * 1000,
+        excludePaths: ['/auth'],
       },
+      trustedProxies: ['127.0.0.1', '::1'],
     },
 
     logging: {

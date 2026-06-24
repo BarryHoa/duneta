@@ -1,7 +1,7 @@
 import type { Hono } from 'hono';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { Container } from '../container/index.js';
-import type { BackendEnv } from '../middlewares/index.js';
+import type { BackendEnv } from '../middlewares/env.js';
 
 export interface TenoraProvider {
   register(

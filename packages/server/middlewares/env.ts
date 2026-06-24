@@ -10,6 +10,7 @@ export type BackendEnv = {
     cache?: CacheClient;
     container: Container;
     userId?: string;
+    requestId: string;
     locale: string;
     timezone: string;
     middlewareOrder?: string[];

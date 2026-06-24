@@ -22,7 +22,8 @@ export function isRateLimitEnabled(config: TenoraServerConfig): boolean {
 }
 
 export function isCsrfEnabled(config: TenoraServerConfig): boolean {
-  return config.security?.csrf?.enabled === true;
+  if (config.security?.csrf?.enabled !== true) return false;
+  return Boolean(config.security.csrf.secret);
 }
 
 export function isLoggingEnabled(config: TenoraServerConfig): boolean {

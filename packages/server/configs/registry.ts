@@ -9,6 +9,7 @@ export function commitConfig<T extends TenoraServerConfig>(config: T): T {
 }
 
 export function getConfig<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- default: no app-specific config extensions
   TExtra extends Record<string, unknown> = {},
   TDatabase extends TenoraServerConfig['database'] = TenoraServerConfig['database'],
 >(): TenoraServerConfig<TExtra, TDatabase> {

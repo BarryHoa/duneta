@@ -8,7 +8,7 @@ import { createContainer } from '../container/index.js';
 import { createDatabase } from '../database/index.js';
 import { getConfig, loadConfig, type DeepPartial } from '../configs/index.js';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from '../middlewares/index.js';
+import type { BackendEnv } from '../middlewares/env.js';
 import type { TenoraProvider } from '../providers/types.js';
 
 let cachedApp: Hono<BackendEnv> | undefined;

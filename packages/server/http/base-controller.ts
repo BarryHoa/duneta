@@ -32,4 +32,8 @@ export abstract class BaseController {
   protected timezone(c: Context<BackendEnv>): string {
     return c.get('timezone');
   }
+
+  protected requestId(c: Context<BackendEnv>): string {
+    return c.get('requestId');
+  }
 }

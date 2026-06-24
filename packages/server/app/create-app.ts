@@ -5,9 +5,9 @@ import { isCsrfEnabled, isRateLimitEnabled } from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
 import type { Container } from '../container/index.js';
 import type { Database } from '../database/types.js';
-import { createRequestContextMiddleware } from '../examples/middleware.js';
 import {
   createContextDefaultsMiddleware,
+  createCoreMiddleware,
   createCorsMiddleware,
   createCsrfMiddleware,
   createErrorHandler,
@@ -40,14 +40,17 @@ export async function createTenoraApp({
 
   app.use('*', createCorsMiddleware());
   app.use('*', createContextDefaultsMiddleware(config));
-  app.use('*', createRequestContextMiddleware(config));
+  app.use('*', createCoreMiddleware(config));
 
   if (isRateLimitEnabled(config)) {
     const { api } = config.security.rateLimit;
     app.use('*', createRateLimitMiddleware(api.max, api.windowMs));
   }
 
-  app.use('*', createCsrfMiddleware(isCsrfEnabled(config)));
+  if (isCsrfEnabled(config)) {
+    app.use('*', createCsrfMiddleware(config));
+  }
+
   app.onError(createErrorHandler(config.app.debug || config.debug.enabled));
 
   if (db) container.singleton('db', () => db);
