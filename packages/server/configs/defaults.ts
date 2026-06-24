@@ -13,13 +13,13 @@ export function createDefaultConfig(): TenoraServerConfig {
   const port = DEFAULT_CONFIG_APP_PORT;
 
   return {
-    runtime: { target: 'node' },
+    runtime: { target: 'worker' },
 
     app: {
       name: 'tenora-api',
       env: 'development',
       port,
-      debug: true,
+      debug: false,
     },
 
     database: {
@@ -90,11 +90,7 @@ export function createDefaultConfig(): TenoraServerConfig {
       permissionsPolicy: 'camera=(), microphone=(), geolocation=()',
     },
 
-    cache: {
-      enabled: false,
-      driver: 'memory',
-      stores: { memory: {} },
-    },
+    cache: { enabled: false },
 
     security: {
       rateLimit: {
@@ -110,26 +106,9 @@ export function createDefaultConfig(): TenoraServerConfig {
         expirationMs: 24 * 60 * 60 * 1000,
         excludePaths: ['/auth'],
       },
-      trustedProxies: ['127.0.0.1', '::1'],
     },
 
-    logging: {
-      enabled: false,
-      provider: 'file',
-      providers: {
-        file: {
-          directory: 'log',
-          maxSizeBytes: 5 * 1024 * 1024,
-          compression: {
-            enabled: true,
-            compressAfterDays: 30,
-            format: 'gzip',
-            deleteOriginal: true,
-          },
-        },
-        webhook: { url: '', headers: { 'Content-Type': 'application/json' } },
-      },
-    },
+    logging: { enabled: false },
 
     debug: { enabled: false, logLevel: 'debug' },
   };

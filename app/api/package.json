@@ -5,15 +5,14 @@
   "type": "module",
   "forgeStack": {
     "kind": "backend-app",
-    "runtime": "hono"
+    "runtime": "cloudflare-worker"
   },
   "scripts": {
     "dev": "tenora-api dev",
-    "dev:cloudflare": "tenora-api dev:cloudflare",
-    "build": "node ../../node_modules/typescript/bin/tsc --noEmit",
-    "start": "tenora-api start",
-    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
-    "deploy:cloudflare": "tenora-api deploy:cloudflare"
+    "dev:node": "tenora-api dev:node",
+    "start:node": "tenora-api start:node",
+    "deploy": "tenora-api deploy",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {
     "@tenora/server": "workspace:*"
@@ -21,7 +20,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250617.0",
     "@types/node": "^22.0.0",
-    "tsx": "^4.19.0",
     "typescript": "^5.8.3",
     "wrangler": "^4.20.0"
   }

@@ -1,12 +1,11 @@
 import { createMiddleware } from 'hono/factory';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from '../middlewares/env.js';
-import { createLocaleMiddleware } from '../middlewares/locale.js';
-import { createRequestIdMiddleware } from '../middlewares/request-id.js';
-import { createSecurityHeadersMiddleware } from '../middlewares/security-headers.js';
-import { createTimezoneMiddleware } from '../middlewares/timezone.js';
+import type { BackendEnv } from './env.js';
+import { createLocaleMiddleware } from './locale.js';
+import { createRequestIdMiddleware } from './request-id.js';
+import { createSecurityHeadersMiddleware } from './security-headers.js';
+import { createTimezoneMiddleware } from './timezone.js';
 
-/** Core middleware applied on every request. */
 export function createCoreMiddleware(config: TenoraServerConfig) {
   const requestIdMw = createRequestIdMiddleware(config);
   const securityHeadersMw = createSecurityHeadersMiddleware(config);
@@ -23,6 +22,3 @@ export function createCoreMiddleware(config: TenoraServerConfig) {
     });
   });
 }
-
-/** @deprecated Use `createCoreMiddleware` */
-export const createRequestContextMiddleware = createCoreMiddleware;

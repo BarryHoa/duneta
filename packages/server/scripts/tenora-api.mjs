@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const repoRoot = path.resolve(packageRoot, '../..');
 
 function requireFromApp(cwd) {
   return createRequire(path.join(cwd, 'package.json'));
@@ -17,10 +18,46 @@ function resolveAppBin(cwd, packageName, relativePath) {
   return path.join(path.dirname(packageJson), relativePath);
 }
 
-function resolveServerEntry(cwd) {
-  const customServer = path.join(cwd, 'server.ts');
-  if (existsSync(customServer)) return customServer;
-  return path.join(packageRoot, 'runtime/server.ts');
+function resolveCloudEntry(cwd) {
+  const entry = path.join(cwd, 'server.ts');
+  if (existsSync(entry)) return entry;
+
+  console.error('[tenora-api] Missing server.ts — create app/api/server.ts');
+  process.exit(1);
+}
+
+function resolveNodeEntry(cwd) {
+  const entry = path.join(cwd, 'server.node.ts');
+  if (existsSync(entry)) return entry;
+
+  console.error('[tenora-api] Missing server.node.ts — create app/api/server.node.ts');
+  process.exit(1);
+}
+
+/** pnpm hoists deps to repo root — Bun resolves from `packages/server`. */
+function linkServerDepsForBun() {
+  const serverNm = path.join(packageRoot, 'node_modules');
+  const rootNm = path.join(repoRoot, 'node_modules');
+  const deps = Object.keys(
+    JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')).dependencies ?? {},
+  );
+
+  mkdirSync(serverNm, { recursive: true });
+
+  for (const name of deps) {
+    const src = name.startsWith('@')
+      ? path.join(rootNm, name.split('/')[0], name.split('/')[1])
+      : path.join(rootNm, name);
+    const dest = name.startsWith('@')
+      ? path.join(serverNm, name.split('/')[0], name.split('/')[1])
+      : path.join(serverNm, name);
+
+    if (!existsSync(src) || src === dest) continue;
+
+    mkdirSync(path.dirname(dest), { recursive: true });
+    if (existsSync(dest)) rmSync(dest, { recursive: true, force: true });
+    symlinkSync(src, dest);
+  }
 }
 
 const [command = 'dev', ...rest] = process.argv.slice(2);
@@ -32,37 +69,31 @@ try {
   // Copy .env.example to .env in this directory.
 }
 
-const apiPort = 3001; // log hint — actual port from tenora.config.ts → app.port
-const serverEntry = resolveServerEntry(cwd);
+const wrangler = resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js');
 
 let executable = process.execPath;
 let args;
 
 switch (command) {
   case 'dev':
-    console.log(`[tenora-api] API → http://localhost:${apiPort}/api`);
-    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), 'watch', serverEntry, ...rest];
+    console.log('[tenora-api] Cloud dev (Wrangler) → http://localhost:8787/api');
+    args = [wrangler, 'dev', resolveCloudEntry(cwd), ...rest];
     break;
-  case 'start':
-    console.log(`[tenora-api] starting on :${apiPort}`);
-    args = [resolveAppBin(cwd, 'tsx', 'dist/cli.mjs'), serverEntry, ...rest];
+  case 'deploy':
+    console.log('[tenora-api] Cloud deploy (Wrangler)');
+    args = [wrangler, 'deploy', resolveCloudEntry(cwd), ...rest];
     break;
-  case 'dev:cloudflare':
-    console.log('[tenora-api] Cloudflare Worker dev');
-    args = [
-      resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'),
-      'dev',
-      serverEntry,
-      ...rest,
-    ];
+  case 'dev:node':
+    linkServerDepsForBun();
+    console.log('[tenora-api] Bun dev → http://localhost:3001/api (RUNTIME=node in .env)');
+    executable = 'bun';
+    args = ['--watch', resolveNodeEntry(cwd), ...rest];
     break;
-  case 'deploy:cloudflare':
-    args = [
-      resolveAppBin(cwd, 'wrangler', 'bin/wrangler.js'),
-      'deploy',
-      serverEntry,
-      ...rest,
-    ];
+  case 'start:node':
+    linkServerDepsForBun();
+    console.log('[tenora-api] Bun start');
+    executable = 'bun';
+    args = [resolveNodeEntry(cwd), ...rest];
     break;
   default:
     console.error(`[tenora-api] unknown command: ${command}`);
@@ -74,7 +105,7 @@ const result = spawnSync(executable, args, {
   cwd,
   env: {
     ...process.env,
-    TENORA_SERVER_ROOT: packageRoot,
+    RUNTIME: command.includes('node') ? 'node' : process.env.RUNTIME,
   },
 });
 

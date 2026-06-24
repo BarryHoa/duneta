@@ -1,6 +1,6 @@
 import { connectionUrl } from '../configs/database.js';
 import type { TenoraServerConfig } from '../configs/types.js';
-import { isHyperdriveBinding, type RuntimeBindings } from '../runtime/bindings.js';
+import { isHyperdriveBinding, type RuntimeBindings } from '../runtime/shared/bindings.js';
 
 /** Resolve Postgres URL: Hyperdrive binding → worker env → config. */
 export function resolveDatabaseUrl(

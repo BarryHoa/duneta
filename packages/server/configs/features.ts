@@ -73,9 +73,3 @@ export function resolveAuthBasePath(basePath: string) {
 export function resolveAuthMountPath(basePath: string) {
   return basePath.replace(/^\/api/, '') || '/auth';
 }
-
-/** @deprecated Use `isCacheEnabled` */
-export const isRedisEnabled = isCacheEnabled;
-
-/** @deprecated Use `isLoggingEnabled` */
-export const isLogEnabled = isLoggingEnabled;

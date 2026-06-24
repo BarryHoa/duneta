@@ -56,14 +56,7 @@ if (!existsSync('node_modules')) run(corepack, ['pnpm', 'install']);
 mkdirSync(shimDirectory, { recursive: true });
 run(corepack, ['enable', '--install-directory', shimDirectory]);
 
-if (process.argv[2] === 'cloudflare') {
-  await runTogether([
-    [pnpm, ['--filter', 'web', 'dev']],
-    [pnpm, ['--filter', 'api', 'dev:cloudflare']],
-  ]);
-} else {
-  await runTogether([
-    [pnpm, ['--filter', 'web', 'dev']],
-    [pnpm, ['--filter', 'api', 'dev']],
-  ]);
-}
+await runTogether([
+  [pnpm, ['--filter', 'web', 'dev']],
+  [pnpm, ['--filter', 'api', 'dev']],
+]);

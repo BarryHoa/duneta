@@ -6,7 +6,6 @@
   "scripts": {
     "build": "pnpm -r --if-present run build",
     "dev": "node scripts/dev.mjs",
-    "dev:cloudflare": "node scripts/dev.mjs cloudflare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "pnpm -r --if-present run typecheck",

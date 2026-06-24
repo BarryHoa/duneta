@@ -63,5 +63,3 @@ export function createAuth(config: TenoraServerConfig, db: Database | null): Aut
     },
   }) as unknown as Auth;
 }
-
-export type { Auth } from './types.js';

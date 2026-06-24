@@ -1,9 +1,6 @@
-import type { Container } from '@tenora/server/container';
-import type { Database } from '@tenora/server/database';
-import { registerDefaultBindings, type TenoraProvider } from '@tenora/server/providers';
+import type { RegisterBindings } from '@tenora/server/container';
+import { registerDefaultBindings } from '@tenora/server/container';
 
-export function registerBindings(container: Container, db: Database | null) {
-  registerDefaultBindings(container, db);
-}
-
-export const providers: TenoraProvider[] = [];
+export const registerProviders: RegisterBindings = (ctx) => {
+  registerDefaultBindings(ctx);
+};

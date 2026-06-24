@@ -13,10 +13,7 @@ import { createTimezoneMiddleware } from './timezone.js';
 
 export type { BackendEnv } from './env.js';
 
-export {
-  createCoreMiddleware,
-  createRequestContextMiddleware,
-} from '../examples/middleware.js';
+export { createCoreMiddleware } from './core.js';
 export {
   createCsrfMiddleware,
   createLocaleMiddleware,

@@ -6,7 +6,7 @@ type ControllerHandler = (c: Context<BackendEnv>) => Response | Promise<Response
 
 export function bindContainerController(key: string, method: string): Handler<BackendEnv> {
   return (c) => {
-    const controller = c.get('container').resolve<BaseController>(key);
+    const controller = c.get('controllers').resolve<BaseController>(key);
     const handler = (controller as unknown as Record<string, ControllerHandler>)[method];
     if (typeof handler !== 'function') {
       throw new Error(`Controller "${key}" has no handler "${method}".`);

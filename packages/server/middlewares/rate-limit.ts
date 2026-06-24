@@ -1,6 +1,6 @@
 import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
-import type { CacheClient } from '../cache/index.js';
+import type { Cache } from '../cache/index.js';
 import { resolveAuthSession } from '../auth/resolve-session.js';
 import {
   activeRateLimitRules,
@@ -87,7 +87,7 @@ function setRateLimitHeaders(
 }
 
 async function consumeLimit(
-  cache: CacheClient | null,
+  cache: Cache | null,
   storageKey: string,
   max: number,
   windowMs: number,
@@ -117,7 +117,7 @@ function compileRule(rule: RateLimitRule): CompiledRule {
   };
 }
 
-export function createRateLimitMiddleware(config: RateLimitConfig, cache: CacheClient | null = null) {
+export function createRateLimitMiddleware(config: RateLimitConfig, cache: Cache | null = null) {
   const rules = activeRateLimitRules(config).map(compileRule);
 
   return createMiddleware<BackendEnv>(async (c, next) => {

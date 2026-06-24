@@ -11,35 +11,39 @@ export {
   type PostgresConnection,
 } from './database.js';
 export {
-  activeCacheStore,
   DEFAULT_CACHE_RETRY,
   DEFAULT_CACHE_TIMEOUT,
-  defineCacheStores,
-  memcachedStore,
-  memoryStore,
-  redisStore,
+  isCacheActive,
+  memcachedCache,
+  memoryCache,
+  redisCache,
   resolveRedisTransport,
+  type ActiveCacheConfig,
   type CacheConfig,
+  type CacheDisabled,
   type CacheDriver,
-  type CacheProvider,
   type CacheRetryConfig,
-  type CacheStoreConfig,
   type CacheTimeoutConfig,
   type CacheTransport,
-  type MemcachedStoreConfig,
-  type MemoryStoreConfig,
-  type RedisStoreConfig,
+  type MemcachedCacheConfig,
+  type MemcachedStoreOptions,
+  type MemoryCacheConfig,
+  type MemoryStoreOptions,
+  type RedisCacheConfig,
+  type RedisStoreOptions,
 } from './cache.js';
 export {
   activeRateLimitRules,
   DEFAULT_RATE_LIMIT_RULES,
   defineRateLimitRules,
   rateLimitRule,
+  RECOMMENDED_RATE_LIMIT_RULES,
   type RateLimitConfig,
   type RateLimitKey,
   type RateLimitRule,
 } from './rate-limit.js';
 export { createDefaultConfig, DEFAULT_CONFIG_APP_PORT, DEFAULT_TIMEZONE } from './defaults.js';
+export { env, envBool, envFirst } from './env.js';
 export {
   buildSocialProviders,
   isAuthEnabled,
@@ -54,7 +58,7 @@ export {
   resolveAuthBasePath,
   resolveAuthMountPath,
 } from './features.js';
-export { defineTenoraConfig, env, loadConfig } from './load.js';
+export { defineTenoraConfig, loadConfig } from './load.js';
 export { mergeConfig, type DeepPartial } from './merge.js';
 export { config, getConfig } from './registry.js';
 export type {
@@ -69,10 +73,8 @@ export type {
   CsrfConfig,
   DebugConfig,
   EmailProviderConfig,
-  FileLoggingProviderConfig,
   LocaleConfig,
   LoggingConfig,
-  LoggingProvider,
   NodeEnv,
   OAuthProviderConfig,
   RequestConfig,
@@ -84,5 +86,4 @@ export type {
   TimezoneConfig,
   TenoraCoreConfig,
   TenoraServerConfig,
-  WebhookLoggingProviderConfig,
 } from './types.js';

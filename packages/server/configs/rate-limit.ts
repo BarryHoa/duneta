@@ -53,3 +53,38 @@ export const DEFAULT_RATE_LIMIT_RULES = defineRateLimitRules(
 export function activeRateLimitRules(config: RateLimitConfig): RateLimitRule[] {
   return (config.rules ?? DEFAULT_RATE_LIMIT_RULES).filter((rule) => rule.enabled !== false);
 }
+
+/** Sensible multi-hop rules for production APIs (used by `defineTenoraConfigFromEnv`). */
+export const RECOMMENDED_RATE_LIMIT_RULES = defineRateLimitRules(
+  rateLimitRule({
+    name: 'global-ip',
+    max: 300,
+    windowMs: 60_000,
+    key: 'ip',
+    excludePaths: ['/health'],
+  }),
+  rateLimitRule({
+    name: 'public-read',
+    max: 120,
+    windowMs: 60_000,
+    key: 'ip',
+    path: '/users',
+    methods: ['GET'],
+  }),
+  rateLimitRule({
+    name: 'authenticated',
+    max: 100,
+    windowMs: 60_000,
+    key: 'user',
+    path: '/users',
+  }),
+  rateLimitRule({
+    name: 'auth-brute-force',
+    max: 5,
+    windowMs: 15 * 60_000,
+    key: 'ip+identifier',
+    path: '/auth',
+    methods: ['POST'],
+    identifierQuery: 'email',
+  }),
+);

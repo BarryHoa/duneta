@@ -1,4 +1,6 @@
-import { getConfig } from '@tenora/server/configs';
+import type { TenoraServerConfig } from '@tenora/server/configs';
 import { createDefaultRouter } from '@tenora/server/routers';
 
-export const router = createDefaultRouter(getConfig());
+export function createRouter(config: TenoraServerConfig) {
+  return createDefaultRouter(config);
+}

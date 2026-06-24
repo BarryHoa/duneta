@@ -1,9 +1,11 @@
 import { Hono } from 'hono';
 import type { Auth } from '../auth/types.js';
-import type { CacheClient } from '../cache/index.js';
-import { isCsrfEnabled, isRateLimitEnabled } from '../configs/features.js';
+import { bindCached } from '../cached/index.js';
+import type { Cache } from '../cache/index.js';
+import { isCsrfEnabled, isCacheEnabled, isRateLimitEnabled } from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { Container } from '../container/index.js';
+import type { ControllerContainer } from '../container/controller-container.js';
+import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
 import {
   createContextDefaultsMiddleware,
@@ -14,27 +16,26 @@ import {
   createRateLimitMiddleware,
   type BackendEnv,
 } from '../middlewares/index.js';
-import { registerProviders, resolveCoreProviders } from '../providers/index.js';
-import type { TenoraProvider } from '../providers/types.js';
+import { wireRequestContext } from './wire-context.js';
 
 export type CreateTenoraAppOptions = {
   router: Hono<BackendEnv>;
   config: TenoraServerConfig;
   db: Database | null;
   auth: Auth | null;
-  cache: CacheClient | null;
-  container: Container;
-  providers?: TenoraProvider[];
+  cache: Cache;
+  controllers: ControllerContainer;
+  repositories: RepositoryContainer;
 };
 
-export async function createTenoraApp({
+export function createTenoraApp({
   router,
   config,
   db,
   auth,
   cache,
-  container,
-  providers = [],
+  controllers,
+  repositories,
 }: CreateTenoraAppOptions) {
   const app = new Hono<BackendEnv>().basePath('/api');
 
@@ -43,7 +44,7 @@ export async function createTenoraApp({
   app.use('*', createCoreMiddleware(config));
 
   if (isRateLimitEnabled(config)) {
-    app.use('*', createRateLimitMiddleware(config.security.rateLimit, cache));
+    app.use('*', createRateLimitMiddleware(config.security.rateLimit, isCacheEnabled(config) ? cache : null));
   }
 
   if (isCsrfEnabled(config)) {
@@ -52,15 +53,9 @@ export async function createTenoraApp({
 
   app.onError(createErrorHandler(config.app.debug || config.debug.enabled));
 
-  if (db) container.singleton('db', () => db);
-  if (auth) container.singleton('auth', () => auth);
-  if (cache) container.singleton('cache', () => cache);
-  container.singleton('config', () => config);
+  bindCached(cache);
 
-  await registerProviders(
-    { app, config, container },
-    [...resolveCoreProviders(config), ...providers],
-  );
+  wireRequestContext(app, config, { db, auth, cache, controllers, repositories });
 
   app.route('/', router);
   return app;

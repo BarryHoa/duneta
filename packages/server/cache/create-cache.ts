@@ -1,25 +1,14 @@
-import type { CacheDriver, CacheConfig } from '../configs/cache.js';
-import { createCacheStore, isDistributedCache } from './registry.js';
-import type { CacheStore } from './types.js';
+import type { CacheConfig } from '../configs/cache.js';
+import { isCacheActive } from '../configs/cache.js';
+import { Cache } from './cache.js';
+import { createCacheStore, isDistributedCache } from './stores/index.js';
+import { NullCacheStore } from './stores/null.js';
 
-export type CacheClient = CacheStore & {
-  enabled: true;
-  driver: CacheDriver;
-  distributed: boolean;
-};
-
-function toCacheClient(driver: CacheDriver, store: CacheStore, distributed: boolean): CacheClient {
-  return {
-    ...store,
-    enabled: true,
-    driver,
-    distributed,
-  };
-}
-
-export function createCache(config: CacheConfig): CacheClient | null {
-  if (config.enabled !== true) return null;
+export function createCache(config: CacheConfig): Cache {
+  if (!isCacheActive(config)) {
+    return new Cache(new NullCacheStore(), 'none', false, false);
+  }
 
   const store = createCacheStore(config);
-  return toCacheClient(config.driver, store, isDistributedCache(config.driver, config));
+  return new Cache(store, config.driver, isDistributedCache(config), true);
 }

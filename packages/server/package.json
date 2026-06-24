@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "files": ["dist", "scripts", "runtime"],
-  "forgeStack": { "kind": "backend", "runtime": "edge-or-server" },
+  "forgeStack": { "kind": "backend", "runtime": "cloudflare-worker" },
   "bin": {
     "tenora-api": "./scripts/tenora-api.mjs"
   },
@@ -24,14 +24,18 @@
     "./container": { "types": "./dist/container/index.d.ts", "import": "./dist/container/index.js" },
     "./database": { "types": "./dist/database/index.d.ts", "import": "./dist/database/index.js" },
     "./http": { "types": "./dist/http/index.d.ts", "import": "./dist/http/index.js" },
-    "./providers": { "types": "./dist/providers/index.d.ts", "import": "./dist/providers/index.js" },
     "./cache": { "types": "./dist/cache/index.d.ts", "import": "./dist/cache/index.js" },
-    "./runtime": {
-      "types": "./runtime/index.ts",
-      "import": "./runtime/index.ts",
-      "default": "./runtime/index.ts"
+    "./cached": { "types": "./dist/cached/index.d.ts", "import": "./dist/cached/index.js" },
+    "./runtime/cloud": {
+      "types": "./runtime/cloud/index.ts",
+      "import": "./runtime/cloud/index.ts",
+      "default": "./runtime/cloud/index.ts"
     },
-    "./runtime/server": "./runtime/server.ts"
+    "./runtime/node": {
+      "types": "./runtime/node/index.ts",
+      "import": "./runtime/node/index.ts",
+      "default": "./runtime/node/index.ts"
+    }
   },
   "scripts": {
     "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
@@ -40,7 +44,6 @@
   },
   "publishConfig": { "access": "public" },
   "dependencies": {
-    "@hono/node-server": "^1.14.0",
     "better-auth": "^1.2.0",
     "drizzle-orm": "^0.44.0",
     "hono": "^4.7.0",

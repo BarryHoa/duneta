@@ -1,5 +1,6 @@
 import type { DatabaseConfig } from './database';
 import type { CacheConfig } from './cache';
+export type { CacheConfig } from './cache';
 import type { RateLimitConfig } from './rate-limit';
 
 export type Runtime = 'node' | 'worker';
@@ -111,7 +112,6 @@ export type CsrfConfig = {
 export type SecurityConfig = {
   rateLimit: RateLimitConfig;
   csrf: CsrfConfig;
-  trustedProxies: string[];
 };
 
 export type RequestIdConfig = {
@@ -129,31 +129,8 @@ export type SecurityHeadersConfig = {
   permissionsPolicy: string;
 };
 
-export type LoggingProvider = 'file' | 'webhook';
-
-export type FileLoggingProviderConfig = {
-  directory: string;
-  maxSizeBytes: number;
-  compression: {
-    enabled: boolean;
-    compressAfterDays: number;
-    format: 'gzip' | 'zip';
-    deleteOriginal: boolean;
-  };
-};
-
-export type WebhookLoggingProviderConfig = {
-  url: string;
-  headers: Record<string, string>;
-};
-
 export type LoggingConfig = {
   enabled?: boolean;
-  provider: LoggingProvider;
-  providers: {
-    file: FileLoggingProviderConfig;
-    webhook: WebhookLoggingProviderConfig;
-  };
 };
 
 export type DebugConfig = {
@@ -192,14 +169,3 @@ export type TenoraServerConfig<
 > = Omit<TenoraCoreConfig, 'database'> & {
   database: TDatabase;
 } & TExtra;
-
-/** @deprecated Use `TimezoneConfig` */
-export type SystemConfig = TimezoneConfig;
-
-/** @deprecated Use `CacheConfig` */
-export type RedisConfig = CacheConfig;
-
-export type { CacheConfig } from './cache';
-
-/** @deprecated Use `LoggingConfig` */
-export type LogConfig = LoggingConfig;

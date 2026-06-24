@@ -6,9 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@tenora/server/configs": ["../../packages/server/configs/index.ts"],
-      "@tenora/server": ["../../packages/server"],
       "@tenora/server/*": ["../../packages/server/*"]
     }
   },
-  "include": ["server.ts", "tenora.config.ts", "providers", "routers"]
+  "include": ["server.ts", "server.node.ts", "tenora.config.ts", "routers", "providers"]
 }

@@ -23,6 +23,11 @@ export class MemoryCacheStore implements CacheStore {
     return Promise.resolve();
   }
 
+  del(key: string): Promise<void> {
+    this.store.delete(key);
+    return Promise.resolve();
+  }
+
   incr(key: string): Promise<number> {
     const current = Number(this.store.get(key)?.value ?? '0');
     const next = current + 1;

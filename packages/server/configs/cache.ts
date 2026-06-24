@@ -1,8 +1,5 @@
 export type CacheDriver = 'memory' | 'redis' | 'memcached';
 
-/** @deprecated Use `CacheDriver` */
-export type CacheProvider = CacheDriver;
-
 export type CacheTransport = 'tcp' | 'http';
 
 export type CacheRetryConfig = {
@@ -27,10 +24,9 @@ export const DEFAULT_CACHE_TIMEOUT: CacheTimeoutConfig = {
   commandTimeout: 3000,
 };
 
-export type MemoryStoreConfig = Record<string, never>;
+export type MemoryStoreOptions = Record<string, never>;
 
-export type RedisStoreConfig = CacheTimeoutConfig & {
-  driver: 'redis';
+export type RedisStoreOptions = CacheTimeoutConfig & {
   /** `redis://` / `rediss://` (TCP) or `https://` (HTTP command API). */
   url?: string;
   transport?: CacheTransport;
@@ -43,8 +39,7 @@ export type RedisStoreConfig = CacheTimeoutConfig & {
   retry?: Partial<CacheRetryConfig>;
 };
 
-export type MemcachedStoreConfig = CacheTimeoutConfig & {
-  driver: 'memcached';
+export type MemcachedStoreOptions = CacheTimeoutConfig & {
   url?: string;
   host?: string;
   port?: number;
@@ -53,79 +48,65 @@ export type MemcachedStoreConfig = CacheTimeoutConfig & {
   retry?: Partial<CacheRetryConfig>;
 };
 
-export type CacheStoreConfig = MemoryStoreConfig | RedisStoreConfig | MemcachedStoreConfig;
+export type CacheDisabled = { enabled?: false };
 
-export type CacheConfig<
-  TStores extends Partial<Record<CacheDriver, CacheStoreConfig>> = Partial<
-    Record<CacheDriver, CacheStoreConfig>
-  >,
-> = {
-  enabled?: boolean;
-  driver: CacheDriver;
-  stores: TStores;
+export type MemoryCacheConfig = {
+  enabled: true;
+  driver: 'memory';
+  store?: MemoryStoreOptions;
 };
 
-export function memoryStore(): MemoryStoreConfig {
-  return {};
+export type RedisCacheConfig = {
+  enabled: true;
+  driver: 'redis';
+  store: RedisStoreOptions;
+};
+
+export type MemcachedCacheConfig = {
+  enabled: true;
+  driver: 'memcached';
+  store: MemcachedStoreOptions;
+};
+
+export type CacheConfig =
+  | CacheDisabled
+  | MemoryCacheConfig
+  | RedisCacheConfig
+  | MemcachedCacheConfig;
+
+export type ActiveCacheConfig = MemoryCacheConfig | RedisCacheConfig | MemcachedCacheConfig;
+
+export function isCacheActive(config: CacheConfig): config is ActiveCacheConfig {
+  return config.enabled === true;
 }
 
-export function redisStore(
-  options: Partial<Omit<RedisStoreConfig, 'driver' | 'retry'>> & {
-    retry?: Partial<CacheRetryConfig>;
-  } = {},
-): RedisStoreConfig {
+export function memoryCache(store: MemoryStoreOptions = {}): MemoryCacheConfig {
+  return { enabled: true, driver: 'memory', store };
+}
+
+export function redisCache(store: Partial<RedisStoreOptions> = {}): RedisCacheConfig {
   return {
+    enabled: true,
     driver: 'redis',
-    host: 'localhost',
-    port: 6379,
-    db: 0,
-    retry: { ...DEFAULT_CACHE_RETRY, ...options.retry },
-    ...DEFAULT_CACHE_TIMEOUT,
-    ...options,
+    store: { ...DEFAULT_CACHE_TIMEOUT, retry: { ...DEFAULT_CACHE_RETRY }, ...store },
   };
 }
 
-export function memcachedStore(
-  options: Partial<Omit<MemcachedStoreConfig, 'driver' | 'retry'>> & {
-    retry?: Partial<CacheRetryConfig>;
-  } = {},
-): MemcachedStoreConfig {
+export function memcachedCache(store: Partial<MemcachedStoreOptions> = {}): MemcachedCacheConfig {
   return {
+    enabled: true,
     driver: 'memcached',
-    host: 'localhost',
-    port: 11211,
-    retry: { ...DEFAULT_CACHE_RETRY, ...options.retry },
-    ...DEFAULT_CACHE_TIMEOUT,
-    ...options,
+    store: {
+      host: 'localhost',
+      port: 11211,
+      retry: { ...DEFAULT_CACHE_RETRY },
+      ...DEFAULT_CACHE_TIMEOUT,
+      ...store,
+    },
   };
 }
 
-export function defineCacheStores<
-  const T extends Partial<Record<CacheDriver, CacheStoreConfig | undefined>>,
->(stores: T) {
-  const resolved = {} as {
-    [K in keyof T as T[K] extends CacheStoreConfig ? K : never]: NonNullable<T[K]>;
-  };
-
-  for (const [name, store] of Object.entries(stores)) {
-    if (store) Object.assign(resolved, { [name]: store });
-  }
-
-  return resolved;
-}
-
-export function activeCacheStore<T extends CacheDriver>(
-  config: CacheConfig,
-  driver: T = config.driver as T,
-): Extract<CacheStoreConfig, { driver: T }> | MemoryStoreConfig {
-  const store = config.stores[driver];
-  if (!store) {
-    throw new Error(`Cache driver "${driver}" is not configured in cache.stores.`);
-  }
-  return store as Extract<CacheStoreConfig, { driver: T }>;
-}
-
-export function resolveRedisTransport(config: RedisStoreConfig): CacheTransport {
+export function resolveRedisTransport(config: RedisStoreOptions): CacheTransport {
   if (config.transport) return config.transport;
 
   const url = config.url?.trim();
