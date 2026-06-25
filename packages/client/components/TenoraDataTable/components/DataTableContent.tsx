@@ -8,6 +8,8 @@ import { TenoraTable } from '../../TenoraTable';
 type DataTableContentProps = {
   ariaLabel: string;
   resizeEnabled: boolean;
+  pinEnabled: boolean;
+  tableMinWidth?: number;
   sortDescriptor: SortDescriptor | undefined;
   onSortChange: (descriptor: SortDescriptor) => void;
   children: ReactNode;
@@ -16,6 +18,8 @@ type DataTableContentProps = {
 export function DataTableContent({
   ariaLabel,
   resizeEnabled,
+  pinEnabled,
+  tableMinWidth,
   sortDescriptor,
   onSortChange,
   children,
@@ -27,6 +31,7 @@ export function DataTableContent({
         'min-w-full !overflow-visible',
         resizeEnabled && '[table-layout:fixed]',
       )}
+      style={pinEnabled && tableMinWidth ? { minWidth: tableMinWidth } : undefined}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
     >

@@ -27,6 +27,7 @@ import {
 type DataTableColumnDnDProps = {
   enabled: boolean;
   columnIds: string[];
+  lockedColumnIds?: readonly string[];
   columnOrder: string[];
   columnLabels: Record<string, string>;
   onColumnOrderChange: (order: string[]) => void;
@@ -36,6 +37,7 @@ type DataTableColumnDnDProps = {
 export function DataTableColumnDnD({
   enabled,
   columnIds,
+  lockedColumnIds = [],
   columnOrder,
   columnLabels,
   onColumnOrderChange,
@@ -64,9 +66,16 @@ export function DataTableColumnDnD({
     setOverId(null);
   }, []);
 
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(String(event.active.id));
-  }, []);
+  const locked = useMemo(() => new Set(lockedColumnIds), [lockedColumnIds]);
+
+  const handleDragStart = useCallback(
+    (event: DragStartEvent) => {
+      const id = String(event.active.id);
+      if (locked.has(id)) return;
+      setActiveId(id);
+    },
+    [locked],
+  );
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     setOverId(event.over ? String(event.over.id) : null);
@@ -79,14 +88,18 @@ export function DataTableColumnDnD({
 
       if (!over || active.id === over.id) return;
 
+      const activeColumnId = String(active.id);
+      const overColumnId = String(over.id);
+      if (locked.has(activeColumnId) || locked.has(overColumnId)) return;
+
       const currentOrder = columnIds.length > 0 ? columnIds : columnOrder;
-      const oldIndex = currentOrder.indexOf(String(active.id));
-      const newIndex = currentOrder.indexOf(String(over.id));
+      const oldIndex = currentOrder.indexOf(activeColumnId);
+      const newIndex = currentOrder.indexOf(overColumnId);
       if (oldIndex < 0 || newIndex < 0) return;
 
       onColumnOrderChange(arrayMove(currentOrder, oldIndex, newIndex));
     },
-    [columnIds, columnOrder, onColumnOrderChange, resetDragState],
+    [columnIds, columnOrder, locked, onColumnOrderChange, resetDragState],
   );
 
   if (!enabled) {

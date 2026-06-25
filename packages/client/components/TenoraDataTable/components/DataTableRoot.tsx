@@ -7,7 +7,7 @@ import {
   TABLE_SCROLL_CONTAINER_CLASS,
   TABLE_SHELL_RADIUS_CLASS,
 } from '../constants';
-import { resolveTableScrollMaxHeight } from '../core/resolve-table-scroll-height';
+import { resolveTableScrollMaxHeight } from '../core/table';
 import { TenoraTable } from '../../TenoraTable';
 import type { TenoraTableProps } from '../../TenoraTable/types';
 

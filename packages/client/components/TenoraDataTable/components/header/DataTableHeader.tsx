@@ -2,7 +2,11 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { Table } from '@heroui/react';
-import { flexRender, type Header } from '@tanstack/react-table';
+import {
+  flexRender,
+  type Header,
+  type Table as ReactTable,
+} from '@tanstack/react-table';
 import {
   useCallback,
   type PointerEvent,
@@ -11,26 +15,31 @@ import {
 } from 'react';
 import { cn } from '../../../../helpers';
 import {
+  getColumnPinPresentation,
   isColumnDragEnabled,
   isColumnDraggable,
-  type ColumnDragConfig,
-} from '../../core/column-drag';
-import {
+  isColumnPinned,
   isColumnResizable,
+  resolveColumnWidthProps,
+  type ColumnDragConfig,
   type ColumnResizeConfig,
-} from '../../core/column-resize';
-import { resolveColumnWidthProps } from '../../core/column-width';
-import { TABLE_STICKY_HEADER_CLASS } from '../../constants';
+} from '../../core/columns';
+import { TABLE_STICKY_HEADER_CELL_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import { useColumnDragState } from './column-drag-context';
-import { ColumnDragHandle } from './ColumnDragHandle';
-import { ColumnResizerHandle } from './ColumnResizerHandle';
+import {
+  ColumnDragHandle,
+  ColumnPinHandle,
+  ColumnResizerHandle,
+} from './column-handles';
 
 type DataTableHeaderProps<TData> = {
   headers: Array<Header<TData, unknown>>;
+  table: ReactTable<TData>;
   columnDrag: ColumnDragConfig;
   columnResize: ColumnResizeConfig;
   resizeEnabled: boolean;
+  pinEnabled: boolean;
 };
 
 type HeaderColumnShellProps = {
@@ -41,6 +50,7 @@ type HeaderColumnShellProps = {
   resizeEnabled: boolean;
   resizable: boolean;
   widthProps?: ReturnType<typeof resolveColumnWidthProps>;
+  pinClassName?: string;
   style?: React.CSSProperties;
   label: ReactNode;
   leading?: ReactNode;
@@ -67,6 +77,7 @@ function HeaderColumnShell({
   resizeEnabled,
   resizable,
   widthProps,
+  pinClassName,
   style,
   label,
   leading,
@@ -77,7 +88,9 @@ function HeaderColumnShell({
       ref={columnRef}
       allowsSorting={allowsSorting}
       className={cn(
+        TABLE_STICKY_HEADER_CELL_CLASS,
         'bg-surface-secondary',
+        pinClassName,
         resizable &&
           'group/column relative data-[resizing]:bg-cyan-500/10 data-[resizing]:text-foreground',
       )}
@@ -135,6 +148,8 @@ function SortableHeaderColumn({
   resizeEnabled,
   resizable,
   widthProps,
+  pinClassName,
+  columnStyle,
   label,
 }: {
   columnId: string;
@@ -145,20 +160,17 @@ function SortableHeaderColumn({
   resizeEnabled: boolean;
   resizable: boolean;
   widthProps: ReturnType<typeof resolveColumnWidthProps>;
+  pinClassName?: string;
+  columnStyle?: React.CSSProperties;
   label: ReactNode;
 }) {
   const { activeId, overId, columnIds } = useColumnDragState();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    setActivatorNodeRef,
-    isDragging,
-  } = useSortable({
-    id: columnId,
-    disabled: !draggable,
-    animateLayoutChanges: () => false,
-  });
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging } =
+    useSortable({
+      id: columnId,
+      disabled: !draggable,
+      animateLayoutChanges: () => false,
+    });
 
   const columnRef = useCallback(
     (element: HTMLTableCellElement | null) => {
@@ -207,7 +219,8 @@ function SortableHeaderColumn({
       }
       resizeEnabled={resizeEnabled}
       resizable={resizable}
-      style={{ opacity: isDragging ? 0.35 : undefined }}
+      pinClassName={pinClassName}
+      style={{ ...columnStyle, opacity: isDragging ? 0.35 : undefined }}
       widthProps={widthProps}
     />
   );
@@ -215,14 +228,16 @@ function SortableHeaderColumn({
 
 export function DataTableHeader<TData>({
   headers,
+  table,
   columnDrag,
   columnResize,
   resizeEnabled,
+  pinEnabled,
 }: DataTableHeaderProps<TData>) {
   const dragEnabled = isColumnDragEnabled(columnDrag);
 
   return (
-    <TenoraTable.Header className={TABLE_STICKY_HEADER_CLASS}>
+    <TenoraTable.Header>
       {headers.map((header, index) => {
         const label = flexRender(
           header.column.columnDef.header,
@@ -235,17 +250,26 @@ export function DataTableHeader<TData>({
           ? resolveColumnWidthProps(header.column.columnDef.meta)
           : {};
         const resizable = isColumnResizable(columnResize, columnId);
+        const pinnedSide = header.column.getIsPinned();
+        const draggable =
+          dragEnabled &&
+          isColumnDraggable(columnDrag, columnId, isColumnPinned(header.column));
+        const pin = pinEnabled
+          ? getColumnPinPresentation(header.column, table, 'header')
+          : { className: '', style: {} };
 
-        if (dragEnabled) {
+        if (draggable) {
           return (
             <SortableHeaderColumn
               key={header.id}
               allowsSorting={allowsSorting}
               columnId={columnId}
-              draggable={isColumnDraggable(columnDrag, columnId)}
+              columnStyle={pin.style}
+              draggable
               id={columnId}
               isRowHeader={isRowHeader}
               label={label}
+              pinClassName={pin.className}
               resizeEnabled={resizeEnabled}
               resizable={resizable}
               widthProps={widthProps}
@@ -260,8 +284,15 @@ export function DataTableHeader<TData>({
             id={columnId}
             isRowHeader={isRowHeader}
             label={label}
+            leading={
+              dragEnabled && pinnedSide ? (
+                <ColumnPinHandle columnId={columnId} side={pinnedSide} />
+              ) : null
+            }
+            pinClassName={pin.className}
             resizeEnabled={resizeEnabled}
             resizable={resizable}
+            style={pin.style}
             widthProps={widthProps}
           />
         );

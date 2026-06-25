@@ -36,7 +36,7 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     id: 'name',
     accessorKey: 'name',
     header: 'Product',
-    meta: { defaultWidth: 'auto', minWidth: 160 },
+    meta: { defaultWidth: 'auto', minWidth: 160, pin: 'left' },
   },
   {
     id: 'category',
@@ -102,6 +102,7 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
       </button>
     ),
     enableSorting: false,
+    meta: { pin: 'right' },
   },
 ];
 
@@ -136,7 +137,7 @@ export default function DataTableDemoPage() {
           </h1>
           <p className="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
             Test: {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE}{' '}
-            rows/page (3 pages) · drag columns · resize columns · sort. Route:{' '}
+            rows/page (3 pages) · drag · resize · pin columns · sort. Route:{' '}
             <code className="text-cyan-700 dark:text-cyan-200">/datatable</code>
           </p>
         </div>

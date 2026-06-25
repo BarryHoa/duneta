@@ -1,25 +1,29 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useClientMounted } from './state/use-client-mounted';
-import { isColumnDragEnabled } from './core/column-drag';
-import { isColumnResizeEnabled } from './core/column-resize';
-import { getDataTableEngineState } from './core/get-engine-state';
-import { toSortingState } from './core/sort-bridge';
-import { useTenoraDataTable } from './core/useTenoraDataTable';
-import { DEFAULT_TABLE_HEIGHT } from './constants';
 import { DataTableContent } from './components/DataTableContent';
 import { DataTablePlaceholder } from './components/DataTablePlaceholder';
 import { DataTableRoot } from './components/DataTableRoot';
+import { DataTableVirtualizer } from './components/DataTableVirtualizer';
 import {
   DataTableStaticBody,
   DataTableVirtualBody,
 } from './components/body/DataTableBody';
 import { DataTableColumnDnD } from './components/header/DataTableColumnDnD';
 import { DataTableHeader } from './components/header/DataTableHeader';
-import { getHeaderLabel } from './components/header/get-header-label';
-import { DataTableFooter } from './components/pagination/DataTablePagination';
-import { DataTableVirtualizer } from './components/DataTableVirtualizer';
+import { DataTableFooter } from './components/footer/DataTableFooter';
+import { DEFAULT_TABLE_HEIGHT } from './constants';
+import {
+  getTablePinnedColumnIds,
+  isColumnDragEnabled,
+  isColumnDraggable,
+  isColumnPinned,
+  isColumnResizeEnabled,
+} from './core/columns';
+import { toSortingState } from './core/sort';
+import { getDataTableEngineState, getHeaderLabel } from './core/table';
+import { useClientMounted } from './hooks/use-client-mounted';
+import { useTenoraDataTable } from './hooks/use-tenora-data-table';
 import type { TenoraDataTableProps } from './types';
 
 function TenoraDataTableImpl<TData extends object>({
@@ -43,10 +47,21 @@ function TenoraDataTableImpl<TData extends object>({
   const showPagination = pagination !== false;
   const columnDragEnabled = isColumnDragEnabled(columnDrag);
   const columnResizeEnabled = isColumnResizeEnabled(columnResize);
+  const pinEnabled = table.getIsSomeColumnsPinned();
+  const pinnedColumnIds = getTablePinnedColumnIds(table);
 
   const sortableColumnIds = useMemo(
-    () => headers.map((header) => header.column.id),
-    [headers],
+    () =>
+      headers
+        .filter((header) =>
+          isColumnDraggable(
+            columnDrag,
+            header.column.id,
+            isColumnPinned(header.column),
+          ),
+        )
+        .map((header) => header.column.id),
+    [columnDrag, headers],
   );
 
   const columnLabels = useMemo(
@@ -69,6 +84,7 @@ function TenoraDataTableImpl<TData extends object>({
       <DataTableColumnDnD
         enabled={columnDragEnabled}
         columnIds={sortableColumnIds}
+        lockedColumnIds={pinnedColumnIds}
         columnOrder={columnOrder}
         columnLabels={columnLabels}
         onColumnOrderChange={setColumnOrder}
@@ -88,14 +104,18 @@ function TenoraDataTableImpl<TData extends object>({
           <DataTableContent
             ariaLabel={ariaLabel}
             resizeEnabled={columnResizeEnabled}
+            pinEnabled={pinEnabled}
+            tableMinWidth={pinEnabled ? table.getTotalSize() : undefined}
             sortDescriptor={sortDescriptor}
             onSortChange={handleSortChange}
           >
             <DataTableHeader
               headers={headers}
+              table={table}
               columnDrag={columnDrag}
               columnResize={columnResize}
               resizeEnabled={columnResizeEnabled}
+              pinEnabled={pinEnabled}
             />
             {virtualEnabled ? (
               <DataTableVirtualBody
@@ -103,9 +123,14 @@ function TenoraDataTableImpl<TData extends object>({
                 data={data}
                 getRowId={getRowId}
                 columnCount={columnCount}
+                pinEnabled={pinEnabled}
               />
             ) : (
-              <DataTableStaticBody table={table} columnCount={columnCount} />
+              <DataTableStaticBody
+                table={table}
+                columnCount={columnCount}
+                pinEnabled={pinEnabled}
+              />
             )}
           </DataTableContent>
         </DataTableRoot>
@@ -114,7 +139,7 @@ function TenoraDataTableImpl<TData extends object>({
   );
 }
 
-/** Client-only table — skips SSR to avoid React Aria collection / dnd-kit hydration issues. */
+/** Client-only — skips SSR to avoid React Aria / dnd-kit hydration issues. */
 export function TenoraDataTable<TData extends object>(
   props: TenoraDataTableProps<TData>,
 ) {

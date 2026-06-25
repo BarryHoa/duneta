@@ -1,7 +1,6 @@
-import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef, ColumnPinningState } from '@tanstack/react-table';
 import type { TenoraTableProps } from '../TenoraTable/types';
-import type { ColumnDragConfig } from './core/column-drag';
-import type { ColumnResizeConfig } from './core/column-resize';
+import type { ColumnDragConfig, ColumnResizeConfig } from './core/columns';
 
 export type TenoraDataTablePaginationConfig = {
   total: number;
@@ -48,8 +47,7 @@ export type TenoraDataTableProps<TData extends object> = {
 };
 
 export type { ColumnDef };
-export type { ColumnDragConfig } from './core/column-drag';
-export type { ColumnResizeConfig } from './core/column-resize';
+export type { ColumnDragConfig, ColumnResizeConfig, ColumnPinningState };
 export type {
   ColumnDefaultWidth,
   ColumnMaxWidth,

@@ -1,6 +1,8 @@
 'use client';
 
 import { flexRender, type Table as ReactTable } from '@tanstack/react-table';
+import { cn } from '../../../../helpers';
+import { getColumnPinPresentation } from '../../core/columns';
 import { TenoraTable } from '../../../TenoraTable';
 import type { TenoraDataTableProps } from '../../types';
 import { DataTableEmptyState } from './DataTableEmptyState';
@@ -8,11 +10,13 @@ import { DataTableEmptyState } from './DataTableEmptyState';
 type DataTableStaticBodyProps<TData> = {
   table: ReactTable<TData>;
   columnCount: number;
+  pinEnabled: boolean;
 };
 
 export function DataTableStaticBody<TData>({
   table,
   columnCount,
+  pinEnabled,
 }: DataTableStaticBodyProps<TData>) {
   const rows = table.getRowModel().rows;
 
@@ -22,11 +26,21 @@ export function DataTableStaticBody<TData>({
     >
       {rows.map((row) => (
         <TenoraTable.Row key={row.id} id={row.id}>
-          {row.getVisibleCells().map((cell) => (
-            <TenoraTable.Cell key={cell.id}>
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </TenoraTable.Cell>
-          ))}
+          {row.getVisibleCells().map((cell) => {
+            const pin = pinEnabled
+              ? getColumnPinPresentation(cell.column, table, 'body')
+              : { className: '', style: {} };
+
+            return (
+              <TenoraTable.Cell
+                key={cell.id}
+                className={cn(pin.className)}
+                style={pin.style}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TenoraTable.Cell>
+            );
+          })}
         </TenoraTable.Row>
       ))}
     </TenoraTable.Body>
@@ -38,6 +52,7 @@ type DataTableVirtualBodyProps<TData extends object> = {
   data: TData[];
   getRowId?: TenoraDataTableProps<TData>['getRowId'];
   columnCount: number;
+  pinEnabled: boolean;
 };
 
 export function DataTableVirtualBody<TData extends object>({
@@ -45,6 +60,7 @@ export function DataTableVirtualBody<TData extends object>({
   data,
   getRowId,
   columnCount,
+  pinEnabled,
 }: DataTableVirtualBodyProps<TData>) {
   const rowsById = table.getRowModel().rowsById;
 
@@ -65,11 +81,21 @@ export function DataTableVirtualBody<TData extends object>({
 
         return (
           <TenoraTable.Row id={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TenoraTable.Cell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TenoraTable.Cell>
-            ))}
+            {row.getVisibleCells().map((cell) => {
+              const pin = pinEnabled
+                ? getColumnPinPresentation(cell.column, table, 'body')
+                : { className: '', style: {} };
+
+              return (
+                <TenoraTable.Cell
+                  key={cell.id}
+                  className={cn(pin.className)}
+                  style={pin.style}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TenoraTable.Cell>
+              );
+            })}
           </TenoraTable.Row>
         );
       }}

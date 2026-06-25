@@ -1,0 +1,129 @@
+'use client';
+
+import type { DraggableAttributes } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import { GripVertical, Pin } from 'lucide-react';
+import type { PointerEvent } from 'react';
+import { cn } from '../../../../helpers';
+import { TenoraTable } from '../../../TenoraTable';
+import { TenoraTooltip } from '../../../TenoraTooltip';
+
+const COLUMN_HANDLE_ICON_CLASS = 'size-3.5 shrink-0';
+const COLUMN_HANDLE_ICON_STROKE = 2;
+
+type ColumnDragHandleProps = {
+  columnId: string;
+  isDragActive: boolean;
+  activatorRef: (node: HTMLElement | null) => void;
+  attributes: DraggableAttributes;
+  listeners: SyntheticListenerMap | undefined;
+  onPointerDown: (event: PointerEvent<HTMLButtonElement>) => void;
+};
+
+export function ColumnDragHandle({
+  columnId,
+  isDragActive,
+  activatorRef,
+  attributes,
+  listeners,
+  onPointerDown,
+}: ColumnDragHandleProps) {
+  return (
+    <TenoraTooltip closeDelay={0} delay={400} isDisabled={isDragActive}>
+      <button
+        type="button"
+        ref={activatorRef}
+        aria-label={`Drag ${columnId} column`}
+        className={cn(
+          'shrink-0 cursor-grab rounded p-0.5 text-muted',
+          'hover:bg-default-100 hover:text-foreground active:cursor-grabbing',
+        )}
+        {...attributes}
+        {...listeners}
+        onPointerDown={onPointerDown}
+      >
+        <GripVertical
+          aria-hidden
+          className={COLUMN_HANDLE_ICON_CLASS}
+          strokeWidth={COLUMN_HANDLE_ICON_STROKE}
+        />
+      </button>
+      <TenoraTooltip.Content offset={8} placement="top" showArrow>
+        <TenoraTooltip.Arrow />
+        Drag column
+      </TenoraTooltip.Content>
+    </TenoraTooltip>
+  );
+}
+
+type ColumnPinHandleProps = {
+  columnId: string;
+  side: 'left' | 'right';
+};
+
+export function ColumnPinHandle({ columnId, side }: ColumnPinHandleProps) {
+  return (
+    <TenoraTooltip closeDelay={0} delay={400}>
+      <span
+        role="img"
+        aria-label={`${columnId} column pinned ${side}`}
+        className="shrink-0 rounded p-0.5 text-muted"
+      >
+        <Pin
+          aria-hidden
+          className={COLUMN_HANDLE_ICON_CLASS}
+          strokeWidth={COLUMN_HANDLE_ICON_STROKE}
+        />
+      </span>
+      <TenoraTooltip.Content offset={8} placement="top" showArrow>
+        <TenoraTooltip.Arrow />
+        Pinned column
+      </TenoraTooltip.Content>
+    </TenoraTooltip>
+  );
+}
+
+type ColumnResizerHandleProps = {
+  columnId: string;
+  isResizing: boolean;
+};
+
+export function ColumnResizerHandle({
+  columnId,
+  isResizing,
+}: ColumnResizerHandleProps) {
+  return (
+    <TenoraTooltip closeDelay={0} delay={400} isDisabled={isResizing}>
+      <TenoraTooltip.Trigger
+        aria-label={`Resize ${columnId} column`}
+        className={cn(
+          '!absolute !inset-y-0 !top-0 !bottom-0 !end-0 z-30 w-3 translate-x-1/2',
+          'cursor-col-resize touch-none border-0 bg-transparent p-0 outline-none',
+          'opacity-0 transition-opacity',
+          isResizing && 'opacity-100',
+          'group-hover/column:opacity-100',
+          'hover:opacity-100',
+          'data-[hovered]:opacity-100',
+          'before:pointer-events-none before:absolute before:inset-y-0 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-cyan-500/45 before:transition-[width,background-color,box-shadow]',
+          'group-hover/column:before:bg-cyan-500/80',
+          'hover:before:bg-cyan-500',
+          'data-[hovered]:before:bg-cyan-500/90',
+          isResizing &&
+            'before:w-1 before:bg-cyan-500 before:shadow-[0_0_8px_rgba(6,182,212,0.65)]',
+        )}
+      >
+        <TenoraTable.ColumnResizer
+          aria-label={`Resize ${columnId} column`}
+          className={cn(
+            '!absolute !inset-0 !top-0 !bottom-0 !end-0 !h-auto !w-full',
+            '!translate-x-0 !-translate-y-0 touch-none !bg-transparent',
+          )}
+        />
+      </TenoraTooltip.Trigger>
+      <TenoraTooltip.Content offset={8} placement="top" showArrow>
+        <TenoraTooltip.Arrow />
+        Resize column
+      </TenoraTooltip.Content>
+    </TenoraTooltip>
+  );
+}

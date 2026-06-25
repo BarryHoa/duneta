@@ -10,6 +10,8 @@ export type TenoraDataTableColumnMeta = {
   defaultWidth?: ColumnDefaultWidth;
   minWidth?: ColumnWidthValue | undefined;
   maxWidth?: ColumnMaxWidth;
+  /** Freeze column on horizontal scroll. Synced to TanStack `columnPinning` state. */
+  pin?: 'left' | 'right';
 };
 
 declare module '@tanstack/react-table' {

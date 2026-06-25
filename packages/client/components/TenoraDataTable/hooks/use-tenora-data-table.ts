@@ -6,13 +6,24 @@ import {
   useReactTable,
   type ColumnDef,
   type ColumnOrderState,
+  type ColumnPinningState,
   type SortingState,
   type Table as ReactTable,
 } from '@tanstack/react-table';
-import { useMemo, useState, type Dispatch, type SetStateAction } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
+import {
+  createInitialColumnOrder,
+  createInitialColumnPinning,
+  withTanStackColumnSizing,
+} from '../core/columns';
+import { toSortDescriptor } from '../core/sort';
 import type { TenoraDataTableProps } from '../types';
-import { createInitialColumnOrder } from './column-order';
-import { toSortDescriptor } from './sort-bridge';
 
 export type UseTenoraDataTableOptions<TData extends object> = {
   columns: Array<ColumnDef<TData, unknown>>;
@@ -37,9 +48,31 @@ export function useTenoraDataTable<TData extends object>({
   sortDescriptor: ReturnType<typeof toSortDescriptor>;
 } {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [internalColumnOrder, setInternalColumnOrder] = useState<ColumnOrderState>(
-    () => createInitialColumnOrder(columns),
+
+  const sizedColumns = useMemo(
+    () => withTanStackColumnSizing(columns),
+    [columns],
   );
+
+  const columnPinningFromMeta = useMemo(
+    () => createInitialColumnPinning(sizedColumns),
+    [sizedColumns],
+  );
+
+  const columnOrderFromMeta = useMemo(
+    () => createInitialColumnOrder(sizedColumns, columnPinningFromMeta),
+    [sizedColumns, columnPinningFromMeta],
+  );
+
+  const [columnPinning, setColumnPinning] =
+    useState<ColumnPinningState>(columnPinningFromMeta);
+  const [internalColumnOrder, setInternalColumnOrder] =
+    useState<ColumnOrderState>(columnOrderFromMeta);
+
+  useEffect(() => {
+    setColumnPinning(columnPinningFromMeta);
+    setInternalColumnOrder(columnOrderFromMeta);
+  }, [columnPinningFromMeta, columnOrderFromMeta]);
 
   const columnOrder = controlledColumnOrder ?? internalColumnOrder;
 
@@ -56,16 +89,22 @@ export function useTenoraDataTable<TData extends object>({
   };
 
   const table = useReactTable({
-    columns,
+    columns: sizedColumns,
     data,
     getRowId,
-    state: { sorting, columnOrder },
+    enableColumnPinning: true,
+    initialState: {
+      columnPinning: columnPinningFromMeta,
+      columnOrder: columnOrderFromMeta,
+    },
+    state: { sorting, columnOrder, columnPinning },
     onSortingChange: setSorting,
     onColumnOrderChange: (updater) => {
       const next =
         typeof updater === 'function' ? updater(columnOrder) : updater;
       setColumnOrder(next);
     },
+    onColumnPinningChange: setColumnPinning,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

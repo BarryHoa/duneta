@@ -1,15 +1,16 @@
-export { TenoraDataTable } from './TenoraDataTable';
 import './types/column-meta';
-export { useTenoraDataTable } from './core/useTenoraDataTable';
+export { TenoraDataTable } from './TenoraDataTable';
+export { useTenoraDataTable } from './hooks/use-tenora-data-table';
 export type {
   TenoraDataTableProps,
   TenoraDataTablePaginationConfig,
   ColumnDef,
   ColumnDragConfig,
+  ColumnPinningState,
   ColumnResizeConfig,
   ColumnDefaultWidth,
   ColumnMaxWidth,
   ColumnWidthValue,
   TenoraDataTableColumnMeta,
 } from './types';
-export type { UseTenoraDataTableOptions } from './core/useTenoraDataTable';
+export type { UseTenoraDataTableOptions } from './hooks/use-tenora-data-table';
