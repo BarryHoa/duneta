@@ -1,7 +1,8 @@
 'use client';
 
-import { Pagination } from '@heroui/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { TenoraLabel } from '../../../TenoraLabel';
+import { TenoraPagination } from '../../../TenoraPagination';
 import { TenoraTable } from '../../../TenoraTable';
 import type { TenoraDataTablePaginationConfig } from '../../types';
 
@@ -28,19 +29,17 @@ export function DataTableFooter({ pagination }: DataTableFooterProps) {
 
   return (
     <TenoraTable.Footer>
-      <Pagination size="sm">
-        <Pagination.Summary>
+      <TenoraPagination size="sm">
+        <TenoraPagination.Summary>
           {start} to {end} of {total} results
-        </Pagination.Summary>
+        </TenoraPagination.Summary>
         {onPageSizeChange ? (
-          <label className="flex items-center gap-2 text-sm text-muted">
+          <TenoraLabel className="flex items-center gap-2 text-sm text-muted">
             <span>Rows</span>
             <select
               className="rounded-md border border-border bg-surface px-2 py-1 text-sm"
               value={pageSize}
-              onChange={(event) =>
-                onPageSizeChange(Number(event.target.value))
-              }
+              onChange={(event) => onPageSizeChange(Number(event.target.value))}
             >
               {pageSizeOptions.map((option) => (
                 <option key={option} value={option}>
@@ -48,39 +47,37 @@ export function DataTableFooter({ pagination }: DataTableFooterProps) {
                 </option>
               ))}
             </select>
-          </label>
+          </TenoraLabel>
         ) : null}
-        <Pagination.Content>
-          <Pagination.Item>
-            <Pagination.Previous
+        <TenoraPagination.Content>
+          <TenoraPagination.Item>
+            <TenoraPagination.Previous
               isDisabled={page <= 1}
               onPress={() => onPageChange?.(Math.max(1, page - 1))}
             >
               <ChevronLeft aria-hidden className="size-4" strokeWidth={2} />
-              Prev
-            </Pagination.Previous>
-          </Pagination.Item>
+            </TenoraPagination.Previous>
+          </TenoraPagination.Item>
           {pages.map((pageNumber) => (
-            <Pagination.Item key={pageNumber}>
-              <Pagination.Link
+            <TenoraPagination.Item key={pageNumber}>
+              <TenoraPagination.Link
                 isActive={pageNumber === page}
                 onPress={() => onPageChange?.(pageNumber)}
               >
                 {pageNumber}
-              </Pagination.Link>
-            </Pagination.Item>
+              </TenoraPagination.Link>
+            </TenoraPagination.Item>
           ))}
-          <Pagination.Item>
-            <Pagination.Next
+          <TenoraPagination.Item>
+            <TenoraPagination.Next
               isDisabled={page >= pageCount}
               onPress={() => onPageChange?.(Math.min(pageCount, page + 1))}
             >
-              Next
               <ChevronRight aria-hidden className="size-4" strokeWidth={2} />
-            </Pagination.Next>
-          </Pagination.Item>
-        </Pagination.Content>
-      </Pagination>
+            </TenoraPagination.Next>
+          </TenoraPagination.Item>
+        </TenoraPagination.Content>
+      </TenoraPagination>
     </TenoraTable.Footer>
   );
 }

@@ -3,4 +3,14 @@ import type { ComponentProps } from 'react';
 import { Pagination } from '@heroui/react';
 
 export type TenoraPaginationProps = ComponentProps<typeof Pagination>;
+export type TenoraPaginationSummaryProps = ComponentProps<typeof Pagination.Summary>;
 export type TenoraPaginationContentProps = ComponentProps<typeof Pagination.Content>;
+export type TenoraPaginationItemProps = ComponentProps<typeof Pagination.Item>;
+export type TenoraPaginationLinkProps = ComponentProps<typeof Pagination.Link>;
+export type TenoraPaginationPreviousProps = ComponentProps<typeof Pagination.Previous>;
+export type TenoraPaginationPreviousIconProps = ComponentProps<
+  typeof Pagination.PreviousIcon
+>;
+export type TenoraPaginationNextProps = ComponentProps<typeof Pagination.Next>;
+export type TenoraPaginationNextIconProps = ComponentProps<typeof Pagination.NextIcon>;
+export type TenoraPaginationEllipsisProps = ComponentProps<typeof Pagination.Ellipsis>;

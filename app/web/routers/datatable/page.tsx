@@ -3,8 +3,13 @@
 import type { SortDescriptor } from '@heroui/react';
 import { useCallback, useMemo, useState } from 'react';
 import {
+  TenoraButton,
+  TenoraButtonGroup,
+  TenoraChip,
   TenoraDataTable,
+  TenoraLabel,
   TenoraLink as Link,
+  TenoraTypography,
   type ColumnDef,
   type TenoraDataTableDataType,
 } from '@tenora/client/components';
@@ -52,13 +57,14 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     header: 'Status',
     cell: ({ getValue }) => {
       const value = String(getValue() ?? '');
-      const tone =
-        value === 'active'
-          ? 'text-emerald-600 dark:text-emerald-300'
-          : value === 'draft'
-            ? 'text-amber-600 dark:text-amber-300'
-            : 'text-slate-500';
-      return <span className={`capitalize ${tone}`}>{value}</span>;
+      const color =
+        value === 'active' ? 'success' : value === 'draft' ? 'warning' : 'default';
+
+      return (
+        <TenoraChip color={color} size="sm" variant="soft">
+          <TenoraChip.Label className="capitalize">{value}</TenoraChip.Label>
+        </TenoraChip>
+      );
     },
   },
   {
@@ -96,12 +102,9 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     id: 'actions',
     header: 'Actions',
     cell: () => (
-      <button
-        type="button"
-        className="text-sm text-cyan-600 hover:underline dark:text-cyan-300"
-      >
+      <TenoraButton size="sm" variant="ghost">
         View
-      </button>
+      </TenoraButton>
     ),
     enableSorting: false,
     meta: { pin: 'right' },
@@ -181,14 +184,14 @@ export default function DataTableDemoPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300">
             Playground
           </p>
-          <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white">
+          <TenoraTypography.Heading level={1} className="text-3xl font-semibold">
             TenoraDataTable
-          </h1>
-          <p className="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+          </TenoraTypography.Heading>
+          <TenoraTypography.Paragraph className="max-w-2xl text-sm leading-6 text-muted">
             {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page ·
             drag · resize · pin · row selection · sort. Route:{' '}
-            <code className="text-cyan-700 dark:text-cyan-200">/datatable</code>
-          </p>
+            <TenoraTypography.Code>/datatable</TenoraTypography.Code>
+          </TenoraTypography.Paragraph>
         </div>
         <Link
           href="/about"
@@ -199,26 +202,24 @@ export default function DataTableDemoPage() {
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="text-sm text-zinc-600 dark:text-zinc-400">dataType</span>
-        {(['static', 'dynamic'] as const).map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            onClick={() => handleDataTypeChange(mode)}
-            className={
-              dataType === mode
-                ? 'rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-medium text-white'
-                : 'rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800'
-            }
-          >
-            {mode}
-          </button>
-        ))}
-        <span className="text-xs text-zinc-500 dark:text-zinc-500">
+        <TenoraLabel className="text-sm text-muted">dataType</TenoraLabel>
+        <TenoraButtonGroup>
+          {(['static', 'dynamic'] as const).map((mode) => (
+            <TenoraButton
+              key={mode}
+              size="sm"
+              variant={dataType === mode ? 'primary' : 'secondary'}
+              onPress={() => handleDataTypeChange(mode)}
+            >
+              {mode}
+            </TenoraButton>
+          ))}
+        </TenoraButtonGroup>
+        <TenoraTypography.Paragraph className="text-xs text-muted">
           {dataType === 'static'
             ? 'Full dataset in table — client sort & pagination'
             : 'Simulated server page — server sort & pagination'}
-        </span>
+        </TenoraTypography.Paragraph>
       </div>
 
       <TenoraDataTable<DemoProductRow>
@@ -255,12 +256,10 @@ export default function DataTableDemoPage() {
       />
 
       {selectedIds.length > 0 ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <TenoraTypography.Paragraph className="text-sm text-muted">
           Selected {selectedIds.length} row{selectedIds.length === 1 ? '' : 's'}:{' '}
-          <code className="text-cyan-700 dark:text-cyan-200">
-            {selectedIds.join(', ')}
-          </code>
-        </p>
+          <TenoraTypography.Code>{selectedIds.join(', ')}</TenoraTypography.Code>
+        </TenoraTypography.Paragraph>
       ) : null}
     </main>
   );
