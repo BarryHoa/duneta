@@ -10,3 +10,6 @@ export type TenoraTableColumnProps = ComponentProps<typeof Table.Column>;
 export type TenoraTableColumnResizerProps = ComponentProps<typeof Table.ColumnResizer>;
 export type TenoraTableContentProps = ComponentProps<typeof Table.Content>;
 export type TenoraTableFooterProps = ComponentProps<typeof Table.Footer>;
+export type TenoraTableHeaderProps = ComponentProps<typeof Table.Header>;
+export type TenoraTableRowProps = ComponentProps<typeof Table.Row>;
+export type TenoraTableScrollContainerProps = ComponentProps<typeof Table.ScrollContainer>;

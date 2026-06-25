@@ -89,6 +89,10 @@
       "types": "./dist/components/TenoraTable/index.d.ts",
       "import": "./dist/components/TenoraTable/index.js"
     },
+    "./components/TenoraDataTable": {
+      "types": "./dist/components/TenoraDataTable/index.d.ts",
+      "import": "./dist/components/TenoraDataTable/index.js"
+    },
     "./components/TenoraLayout": {
       "types": "./dist/components/TenoraLayout/index.d.ts",
       "import": "./dist/components/TenoraLayout/index.js"
@@ -122,6 +126,7 @@
     "@react-router/dev": "^8.0.1",
     "@react-router/node": "^8.0.1",
     "@react-router/serve": "^8.0.1",
+    "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.14.3",
     "dayjs": "^1.11.21",
     "lodash": "^4.18.1",
