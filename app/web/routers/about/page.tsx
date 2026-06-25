@@ -31,6 +31,9 @@ export default function AboutPage() {
       <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-mono text-sm text-slate-200">
         API health: {health}
       </p>
+      <Link href="/datatable" className="text-cyan-200 hover:text-white">
+        DataTable demo →
+      </Link>
       <Link href="/" className="text-cyan-200 hover:text-white">
         ← Back home
       </Link>

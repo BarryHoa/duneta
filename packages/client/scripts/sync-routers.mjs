@@ -4,6 +4,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const ROUTE_FILES = new Set(['layout.tsx', 'page.tsx', 'entry.server.tsx', 'loading.tsx', 'error.tsx']);
+const RESERVED_ROUTE_FILES = new Set([...ROUTE_FILES, 'root.tsx', 'routes.ts']);
 
 /**
  * Merge app/web/routers (overrides) with packages/client/routers (defaults)
@@ -164,8 +165,31 @@ function emitRouteNodes(nodes, indent) {
   return lines;
 }
 
+function resourceRoutePath(fileName) {
+  return fileName.replace(/\.tsx$/, '').replace(/\[\.\]/g, '.');
+}
+
+function collectResourceRoutes(outDir) {
+  if (!fs.existsSync(outDir)) return [];
+
+  return fs
+    .readdirSync(outDir, { withFileTypes: true })
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        entry.name.endsWith('.tsx') &&
+        !RESERVED_ROUTE_FILES.has(entry.name),
+    )
+    .map((entry) => ({ path: resourceRoutePath(entry.name), file: entry.name }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+}
+
 function generateRoutesTs(outDir) {
   const routes = [];
+
+  for (const resource of collectResourceRoutes(outDir)) {
+    routes.push({ type: 'route', path: resource.path, file: resource.file });
+  }
 
   if (fs.existsSync(path.join(outDir, 'page.tsx'))) {
     routes.push({ type: 'index', file: 'page.tsx' });

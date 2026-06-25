@@ -156,10 +156,6 @@ export type { TenoraSimpleTableProps, TenoraSimpleTableColumn } from './TenoraSi
 export {
   TenoraDataTable,
   useTenoraDataTable,
-  useTenoraDataTableFavoriteFilters,
-  createTenoraDataTableSelectionColumn,
-  TENORA_DATA_TABLE_CONTENT_MAX_HEIGHT,
-  TENORA_DATA_TABLE_SELECTION_COLUMN_ID,
 } from './TenoraDataTable';
 export type * from './TenoraDataTable';
 export { TenoraUpload, TenoraUploadFile, TenoraUploadImage, TenoraViewImage } from './TenoraUpload';

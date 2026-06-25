@@ -17,6 +17,7 @@ export function createTenoraViteConfig(
 
   return defineConfig({
     envDir: path.resolve(webRoot),
+    publicDir: path.resolve(webRoot, 'public'),
     plugins: [tailwindcss(), reactRouter()],
     define: {
       'import.meta.env.VITE_API_URL': JSON.stringify(webConfig.api.baseUrl),

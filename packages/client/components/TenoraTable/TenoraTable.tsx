@@ -12,6 +12,7 @@ import type {
   TenoraTableHeaderProps,
   TenoraTableRowProps,
   TenoraTableScrollContainerProps,
+  TenoraTableResizableContainerProps,
 } from './types';
 
 function TenoraTableRoot(props: TenoraTableProps) {
@@ -58,6 +59,10 @@ function TenoraTableScrollContainer(props: TenoraTableScrollContainerProps) {
   return <Table.ScrollContainer {...props} />;
 }
 
+function TenoraTableResizableContainer(props: TenoraTableResizableContainerProps) {
+  return <Table.ResizableContainer {...props} />;
+}
+
 export const TenoraTable = Object.assign(TenoraTableRoot, {
   Root: TenoraTableRoot,
   Body: TenoraTableBody,
@@ -70,4 +75,5 @@ export const TenoraTable = Object.assign(TenoraTableRoot, {
   Header: TenoraTableHeader,
   Row: TenoraTableRow,
   ScrollContainer: TenoraTableScrollContainer,
+  ResizableContainer: TenoraTableResizableContainer,
 });
