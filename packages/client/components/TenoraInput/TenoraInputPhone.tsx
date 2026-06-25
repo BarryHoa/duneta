@@ -1,5 +1,5 @@
 import { TenoraInput } from './TenoraInput';
-import type { TenoraInputProps } from './TenoraInput';
+import type { TenoraInputProps } from './types';
 
 // Phone-specialized input.
 

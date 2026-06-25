@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { TenoraButton } from '../TenoraButton';
 import { TenoraInput } from './TenoraInput';
-import type { TenoraInputProps } from './TenoraInput';
+import type { TenoraInputProps } from './types';
 
 // Password input with accessible visibility toggle.
 export type TenoraInputPasswordProps = Omit<TenoraInputProps, 'type'> & { showLabel?: string; hideLabel?: string };

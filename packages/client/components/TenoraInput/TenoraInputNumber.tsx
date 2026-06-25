@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { TenoraInput } from './TenoraInput';
-import type { TenoraInputProps } from './TenoraInput';
+import type { TenoraInputProps } from './types';
 
 // Numeric input with display formatting.
 

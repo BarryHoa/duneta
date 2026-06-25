@@ -43,4 +43,11 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
     },
   },
+  {
+    files: ['**/*.{ts,tsx}'],
+    ignores: ['packages/client/components/Tenora*/**'],
+    rules: {
+      'no-restricted-imports': ['error', heroUiImports],
+    },
+  },
 );

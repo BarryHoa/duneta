@@ -1,6 +1,6 @@
 import dayjs, { type ConfigType } from 'dayjs';
 import { TenoraInput } from './TenoraInput';
-import type { TenoraInputProps } from './TenoraInput';
+import type { TenoraInputProps } from './types';
 
 // Native date input normalized with dayjs.
 

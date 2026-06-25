@@ -2,58 +2,49 @@
 
 Framework React Router web — config, default routes, UI components, `tenora-web` CLI.
 
-## Cấu trúc package
+## UI components (HeroUI v3)
+
+Toàn bộ [HeroUI v3 components](https://heroui.com/en/docs/react/components) được wrap thành `Tenora*`:
 
 ```text
-packages/client/
-├── configs/           # defineTenoraConfig, vite, react-router
-├── routers/           # default routes + layout
-├── components/        # Tenora* UI wrappers
-├── providers/         # ThemeProvider
-├── hooks/             # use-api, link helpers
-├── themes/            # default CSS tokens
-└── scripts/
-    ├── tenora-web.mjs
-    └── sync-routers.mjs
+packages/client/components/
+  TenoraButton/
+    types.ts              # TenoraButtonProps
+    TenoraButton.tsx      # wrap HeroUI Button
+    index.ts
+  TenoraCard/
+  TenoraModal/
+  ... (70 components)
+  index.ts                # export * all
 ```
 
-## Public exports (chọn lọc)
+Regenerate sau khi upgrade `@heroui/react` không còn cần — wrappers là source thủ công trong repo.
+
+## Usage
+
+```tsx
+import { TenoraButton, TenoraCard, TenoraModal } from '@tenora/client/components';
+import { TenoraTabs } from '@tenora/client/components/TenoraTabs';
+```
+
+## Extensions (app-level)
+
+| Export | Mô tả |
+|--------|--------|
+| `TenoraLink` | React Router link |
+| `TenoraHrefLink` | HeroUI Link |
+| `TenoraAlertDialog` + `showTenora*` | Alert dialog helpers |
+| `TenoraInput*` variants | Email, password, search, … |
+| `TenoraSelectSingle` | Select + uFuzzy + virtual |
+| `TenoraSimpleTable` | HTML table (≠ HeroUI `TenoraTable`) |
+| `TenoraLoadError` | Load error state |
+| `TenoraLayout*` | Page section layout |
+
+## Package exports
 
 | Path | Nội dung |
 |------|----------|
-| `@tenora/client/configs` | Web config types, `defineTenoraConfig` |
+| `@tenora/client/components` | Barrel (wrappers + extensions) |
+| `@tenora/client/components/TenoraButton` | Single component module |
+| `@tenora/client/configs` | Web config |
 | `@tenora/client/configs/vite` | `createTenoraViteConfig` |
-| `@tenora/client/configs/react-router` | `createReactRouterConfig` |
-| `@tenora/client/routers` | Default route modules |
-| `@tenora/client/providers` | `ThemeProvider` |
-| `@tenora/client/hooks/use-api` | `apiFetch` helper |
-| `@tenora/client/components/*` | UI components |
-
-## Router sync
-
-`sync-routers.mjs` copy/merge:
-
-1. `packages/client/routers/**`
-2. `app/web/routers/**` (override)
-
-→ `app/web/.router-runtime/`
-
-Chạy tự động qua `tenora-web dev|build|typegen`.
-
-## Build
-
-```bash
-pnpm --filter @tenora/client build
-pnpm --filter @tenora/client typecheck
-```
-
-## Phát triển framework
-
-- Thêm default page: `routers/` trong package
-- Thêm component: `components/` + export trong `package.json` exports
-- Thêm config field: `configs/types.ts` + `defaults.ts`
-
-## Tài liệu app
-
-- [Web overview](../web/overview.md)
-- [Web routes](../web/routes.md)

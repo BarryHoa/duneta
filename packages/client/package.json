@@ -53,6 +53,22 @@
       "types": "./dist/components/TenoraAlertDialog/index.d.ts",
       "import": "./dist/components/TenoraAlertDialog/index.js"
     },
+    "./components/TenoraButton": {
+      "types": "./dist/components/TenoraButton/index.d.ts",
+      "import": "./dist/components/TenoraButton/index.js"
+    },
+    "./components/TenoraLink": {
+      "types": "./dist/components/TenoraLink/index.d.ts",
+      "import": "./dist/components/TenoraLink/index.js"
+    },
+    "./components/TenoraLoadError": {
+      "types": "./dist/components/TenoraLoadError/index.d.ts",
+      "import": "./dist/components/TenoraLoadError/index.js"
+    },
+    "./components/TenoraSimpleTable": {
+      "types": "./dist/components/TenoraSimpleTable/index.d.ts",
+      "import": "./dist/components/TenoraSimpleTable/index.js"
+    },
     "./components/TenoraInput": {
       "types": "./dist/components/TenoraInput/index.d.ts",
       "import": "./dist/components/TenoraInput/index.js"
@@ -73,10 +89,6 @@
       "types": "./dist/components/TenoraTable/index.d.ts",
       "import": "./dist/components/TenoraTable/index.js"
     },
-    "./components/TenoraError": {
-      "types": "./dist/components/TenoraError/index.d.ts",
-      "import": "./dist/components/TenoraError/index.js"
-    },
     "./components/TenoraLayout": {
       "types": "./dist/components/TenoraLayout/index.d.ts",
       "import": "./dist/components/TenoraLayout/index.js"
@@ -92,7 +104,7 @@
     "./themes/globals.css": "./themes/globals.css"
   },
   "scripts": {
-    "build": "node ./scripts/build.mjs",
+    "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
     "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
     "prepublishOnly": "pnpm run build"
   },

@@ -1,0 +1,352 @@
+[
+  {
+    "folder": "TenoraAccordion",
+    "heroName": "Accordion",
+    "tenoraName": "TenoraAccordion"
+  },
+  {
+    "folder": "TenoraAlert",
+    "heroName": "Alert",
+    "tenoraName": "TenoraAlert"
+  },
+  {
+    "folder": "TenoraAutocomplete",
+    "heroName": "Autocomplete",
+    "tenoraName": "TenoraAutocomplete"
+  },
+  {
+    "folder": "TenoraAvatar",
+    "heroName": "Avatar",
+    "tenoraName": "TenoraAvatar"
+  },
+  {
+    "folder": "TenoraBadge",
+    "heroName": "Badge",
+    "tenoraName": "TenoraBadge"
+  },
+  {
+    "folder": "TenoraBreadcrumbs",
+    "heroName": "Breadcrumbs",
+    "tenoraName": "TenoraBreadcrumbs"
+  },
+  {
+    "folder": "TenoraButton",
+    "heroName": "Button",
+    "tenoraName": "TenoraButton"
+  },
+  {
+    "folder": "TenoraButtonGroup",
+    "heroName": "ButtonGroup",
+    "tenoraName": "TenoraButtonGroup"
+  },
+  {
+    "folder": "TenoraCalendar",
+    "heroName": "Calendar",
+    "tenoraName": "TenoraCalendar"
+  },
+  {
+    "folder": "TenoraCard",
+    "heroName": "Card",
+    "tenoraName": "TenoraCard"
+  },
+  {
+    "folder": "TenoraCheckbox",
+    "heroName": "Checkbox",
+    "tenoraName": "TenoraCheckbox"
+  },
+  {
+    "folder": "TenoraChip",
+    "heroName": "Chip",
+    "tenoraName": "TenoraChip"
+  },
+  {
+    "folder": "TenoraCloseButton",
+    "heroName": "CloseButton",
+    "tenoraName": "TenoraCloseButton"
+  },
+  {
+    "folder": "TenoraColorArea",
+    "heroName": "ColorArea",
+    "tenoraName": "TenoraColorArea"
+  },
+  {
+    "folder": "TenoraColorField",
+    "heroName": "ColorField",
+    "tenoraName": "TenoraColorField"
+  },
+  {
+    "folder": "TenoraColorPicker",
+    "heroName": "ColorPicker",
+    "tenoraName": "TenoraColorPicker"
+  },
+  {
+    "folder": "TenoraColorSlider",
+    "heroName": "ColorSlider",
+    "tenoraName": "TenoraColorSlider"
+  },
+  {
+    "folder": "TenoraColorSwatch",
+    "heroName": "ColorSwatch",
+    "tenoraName": "TenoraColorSwatch"
+  },
+  {
+    "folder": "TenoraColorSwatchPicker",
+    "heroName": "ColorSwatchPicker",
+    "tenoraName": "TenoraColorSwatchPicker"
+  },
+  {
+    "folder": "TenoraComboBox",
+    "heroName": "ComboBox",
+    "tenoraName": "TenoraComboBox"
+  },
+  {
+    "folder": "TenoraDateField",
+    "heroName": "DateField",
+    "tenoraName": "TenoraDateField"
+  },
+  {
+    "folder": "TenoraDateRangePicker",
+    "heroName": "DateRangePicker",
+    "tenoraName": "TenoraDateRangePicker"
+  },
+  {
+    "folder": "TenoraDescription",
+    "heroName": "Description",
+    "tenoraName": "TenoraDescription"
+  },
+  {
+    "folder": "TenoraDisclosure",
+    "heroName": "Disclosure",
+    "tenoraName": "TenoraDisclosure"
+  },
+  {
+    "folder": "TenoraDisclosureGroup",
+    "heroName": "DisclosureGroup",
+    "tenoraName": "TenoraDisclosureGroup"
+  },
+  {
+    "folder": "TenoraDrawer",
+    "heroName": "Drawer",
+    "tenoraName": "TenoraDrawer"
+  },
+  {
+    "folder": "TenoraDropdown",
+    "heroName": "Dropdown",
+    "tenoraName": "TenoraDropdown"
+  },
+  {
+    "folder": "TenoraEmptyState",
+    "heroName": "EmptyState",
+    "tenoraName": "TenoraEmptyState"
+  },
+  {
+    "folder": "TenoraErrorMessage",
+    "heroName": "ErrorMessage",
+    "tenoraName": "TenoraErrorMessage"
+  },
+  {
+    "folder": "TenoraFieldError",
+    "heroName": "FieldError",
+    "tenoraName": "TenoraFieldError"
+  },
+  {
+    "folder": "TenoraFieldset",
+    "heroName": "Fieldset",
+    "tenoraName": "TenoraFieldset"
+  },
+  {
+    "folder": "TenoraForm",
+    "heroName": "Form",
+    "tenoraName": "TenoraForm"
+  },
+  {
+    "folder": "TenoraInput",
+    "heroName": "Input",
+    "tenoraName": "TenoraInput"
+  },
+  {
+    "folder": "TenoraInputGroup",
+    "heroName": "InputGroup",
+    "tenoraName": "TenoraInputGroup"
+  },
+  {
+    "folder": "TenoraInputOTP",
+    "heroName": "InputOTP",
+    "tenoraName": "TenoraInputOTP"
+  },
+  {
+    "folder": "TenoraKbd",
+    "heroName": "Kbd",
+    "tenoraName": "TenoraKbd"
+  },
+  {
+    "folder": "TenoraLabel",
+    "heroName": "Label",
+    "tenoraName": "TenoraLabel"
+  },
+  {
+    "folder": "TenoraHrefLink",
+    "heroName": "Link",
+    "tenoraName": "TenoraHrefLink"
+  },
+  {
+    "folder": "TenoraListBox",
+    "heroName": "ListBox",
+    "tenoraName": "TenoraListBox"
+  },
+  {
+    "folder": "TenoraMenu",
+    "heroName": "Menu",
+    "tenoraName": "TenoraMenu"
+  },
+  {
+    "folder": "TenoraMeter",
+    "heroName": "Meter",
+    "tenoraName": "TenoraMeter"
+  },
+  {
+    "folder": "TenoraModal",
+    "heroName": "Modal",
+    "tenoraName": "TenoraModal"
+  },
+  {
+    "folder": "TenoraNumberField",
+    "heroName": "NumberField",
+    "tenoraName": "TenoraNumberField"
+  },
+  {
+    "folder": "TenoraPagination",
+    "heroName": "Pagination",
+    "tenoraName": "TenoraPagination"
+  },
+  {
+    "folder": "TenoraPopover",
+    "heroName": "Popover",
+    "tenoraName": "TenoraPopover"
+  },
+  {
+    "folder": "TenoraProgressBar",
+    "heroName": "ProgressBar",
+    "tenoraName": "TenoraProgressBar"
+  },
+  {
+    "folder": "TenoraProgressCircle",
+    "heroName": "ProgressCircle",
+    "tenoraName": "TenoraProgressCircle"
+  },
+  {
+    "folder": "TenoraRadioGroup",
+    "heroName": "RadioGroup",
+    "tenoraName": "TenoraRadioGroup"
+  },
+  {
+    "folder": "TenoraRangeCalendar",
+    "heroName": "RangeCalendar",
+    "tenoraName": "TenoraRangeCalendar"
+  },
+  {
+    "folder": "TenoraScrollShadow",
+    "heroName": "ScrollShadow",
+    "tenoraName": "TenoraScrollShadow"
+  },
+  {
+    "folder": "TenoraSearchField",
+    "heroName": "SearchField",
+    "tenoraName": "TenoraSearchField"
+  },
+  {
+    "folder": "TenoraSelect",
+    "heroName": "Select",
+    "tenoraName": "TenoraSelect"
+  },
+  {
+    "folder": "TenoraSeparator",
+    "heroName": "Separator",
+    "tenoraName": "TenoraSeparator"
+  },
+  {
+    "folder": "TenoraSkeleton",
+    "heroName": "Skeleton",
+    "tenoraName": "TenoraSkeleton"
+  },
+  {
+    "folder": "TenoraSlider",
+    "heroName": "Slider",
+    "tenoraName": "TenoraSlider"
+  },
+  {
+    "folder": "TenoraSpinner",
+    "heroName": "Spinner",
+    "tenoraName": "TenoraSpinner"
+  },
+  {
+    "folder": "TenoraSurface",
+    "heroName": "Surface",
+    "tenoraName": "TenoraSurface"
+  },
+  {
+    "folder": "TenoraSwitch",
+    "heroName": "Switch",
+    "tenoraName": "TenoraSwitch"
+  },
+  {
+    "folder": "TenoraSwitchGroup",
+    "heroName": "SwitchGroup",
+    "tenoraName": "TenoraSwitchGroup"
+  },
+  {
+    "folder": "TenoraTable",
+    "heroName": "Table",
+    "tenoraName": "TenoraTable"
+  },
+  {
+    "folder": "TenoraTabs",
+    "heroName": "Tabs",
+    "tenoraName": "TenoraTabs"
+  },
+  {
+    "folder": "TenoraTagGroup",
+    "heroName": "TagGroup",
+    "tenoraName": "TenoraTagGroup"
+  },
+  {
+    "folder": "TenoraTextField",
+    "heroName": "TextField",
+    "tenoraName": "TenoraTextField"
+  },
+  {
+    "folder": "TenoraTimeField",
+    "heroName": "TimeField",
+    "tenoraName": "TenoraTimeField"
+  },
+  {
+    "folder": "TenoraToast",
+    "heroName": "Toast",
+    "tenoraName": "TenoraToast"
+  },
+  {
+    "folder": "TenoraToggleButton",
+    "heroName": "ToggleButton",
+    "tenoraName": "TenoraToggleButton"
+  },
+  {
+    "folder": "TenoraToggleButtonGroup",
+    "heroName": "ToggleButtonGroup",
+    "tenoraName": "TenoraToggleButtonGroup"
+  },
+  {
+    "folder": "TenoraToolbar",
+    "heroName": "Toolbar",
+    "tenoraName": "TenoraToolbar"
+  },
+  {
+    "folder": "TenoraTooltip",
+    "heroName": "Tooltip",
+    "tenoraName": "TenoraTooltip"
+  },
+  {
+    "folder": "TenoraTypography",
+    "heroName": "Typography",
+    "tenoraName": "TenoraTypography"
+  }
+]
