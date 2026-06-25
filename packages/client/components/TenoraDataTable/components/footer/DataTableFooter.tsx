@@ -8,7 +8,7 @@ import type { TenoraDataTablePaginationConfig } from '../../types';
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30];
 
 type DataTableFooterProps = {
-  pagination: TenoraDataTablePaginationConfig;
+  pagination: TenoraDataTablePaginationConfig & { total: number };
 };
 
 export function DataTableFooter({ pagination }: DataTableFooterProps) {

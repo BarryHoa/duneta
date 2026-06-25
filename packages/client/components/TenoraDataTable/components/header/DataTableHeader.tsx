@@ -24,6 +24,7 @@ import {
   type ColumnDragConfig,
   type ColumnResizeConfig,
 } from '../../core/columns';
+import { isSelectionColumnId } from '../../core/row-selection';
 import { TABLE_STICKY_HEADER_CELL_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import { useColumnDragState } from './column-drag-context';
@@ -56,6 +57,32 @@ type HeaderColumnShellProps = {
   leading?: ReactNode;
   dropIndicators?: ReactNode;
 };
+
+function SelectionHeaderColumn({
+  id,
+  pinClassName,
+  style,
+  label,
+}: {
+  id: string;
+  pinClassName?: string;
+  style?: React.CSSProperties;
+  label: ReactNode;
+}) {
+  return (
+    <TenoraTable.Column
+      className={cn(
+        TABLE_STICKY_HEADER_CELL_CLASS,
+        'w-11 bg-surface-secondary pr-0',
+        pinClassName,
+      )}
+      id={id}
+      style={style}
+    >
+      <div className="flex items-center justify-center">{label}</div>
+    </TenoraTable.Column>
+  );
+}
 
 function ColumnDropIndicator({ side }: { side: 'left' | 'right' }) {
   return (
@@ -244,12 +271,17 @@ export function DataTableHeader<TData>({
           header.getContext(),
         );
         const columnId = header.column.id;
-        const isRowHeader = index === 0;
+        const firstDataHeaderIndex = headers.findIndex(
+          (item) => !isSelectionColumnId(item.column.id),
+        );
+        const isRowHeader = index === firstDataHeaderIndex;
         const allowsSorting = header.column.getCanSort();
         const widthProps = resizeEnabled
           ? resolveColumnWidthProps(header.column.columnDef.meta)
           : {};
-        const resizable = isColumnResizable(columnResize, columnId);
+        const resizable =
+          !isSelectionColumnId(columnId) &&
+          isColumnResizable(columnResize, columnId);
         const pinnedSide = header.column.getIsPinned();
         const draggable =
           dragEnabled &&
@@ -257,6 +289,18 @@ export function DataTableHeader<TData>({
         const pin = pinEnabled
           ? getColumnPinPresentation(header.column, table, 'header')
           : { className: '', style: {} };
+
+        if (isSelectionColumnId(columnId)) {
+          return (
+            <SelectionHeaderColumn
+              key={header.id}
+              id={columnId}
+              label={label}
+              pinClassName={pin.className}
+              style={pin.style}
+            />
+          );
+        }
 
         if (draggable) {
           return (
@@ -285,7 +329,7 @@ export function DataTableHeader<TData>({
             isRowHeader={isRowHeader}
             label={label}
             leading={
-              dragEnabled && pinnedSide ? (
+              dragEnabled && pinnedSide && !isSelectionColumnId(columnId) ? (
                 <ColumnPinHandle columnId={columnId} side={pinnedSide} />
               ) : null
             }

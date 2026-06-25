@@ -12,6 +12,7 @@ import type {
   ColumnWidthValue,
   TenoraDataTableColumnMeta,
 } from '../types/column-meta';
+import { isSelectionColumnId } from './row-selection';
 
 // --- feature toggles (drag / resize) ---
 
@@ -52,7 +53,7 @@ export function isColumnDraggable(
   columnId: string,
   isPinned = false,
 ): boolean {
-  if (isPinned) return false;
+  if (isSelectionColumnId(columnId) || isPinned) return false;
   return isFeatureAllowed(config, columnId);
 }
 

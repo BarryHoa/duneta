@@ -1,9 +1,14 @@
 import './types/column-meta';
 export { TenoraDataTable } from './TenoraDataTable';
 export { useTenoraDataTable } from './hooks/use-tenora-data-table';
+export { SELECTION_COLUMN_ID } from './constants';
+export { createSelectionColumn, isSelectionColumnId } from './core/row-selection';
 export type {
   TenoraDataTableProps,
   TenoraDataTablePaginationConfig,
+  TenoraDataTableRowSelectionConfig,
+  TenoraDataTableSortConfig,
+  TenoraDataTableDataType,
   ColumnDef,
   ColumnDragConfig,
   ColumnPinningState,

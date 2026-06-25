@@ -1,10 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import type { SortDescriptor } from '@heroui/react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   TenoraDataTable,
   TenoraLink as Link,
   type ColumnDef,
+  type TenoraDataTableDataType,
 } from '@tenora/client/components';
 import {
   createDemoProductRows,
@@ -106,24 +108,71 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
   },
 ];
 
+function compareRows(
+  a: DemoProductRow,
+  b: DemoProductRow,
+  descriptor: SortDescriptor | undefined,
+): number {
+  if (!descriptor?.column) return 0;
+
+  const key = String(descriptor.column) as keyof DemoProductRow;
+  const left = a[key];
+  const right = b[key];
+  const direction = descriptor.direction === 'descending' ? -1 : 1;
+
+  if (typeof left === 'number' && typeof right === 'number') {
+    return (left - right) * direction;
+  }
+
+  return String(left ?? '').localeCompare(String(right ?? '')) * direction;
+}
+
+function fetchServerPage(
+  rows: DemoProductRow[],
+  page: number,
+  pageSize: number,
+  sort: SortDescriptor | undefined,
+): DemoProductRow[] {
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, sort));
+  const start = (page - 1) * pageSize;
+  return sorted.slice(start, start + pageSize);
+}
+
 export function meta() {
   return [
     { title: 'DataTable demo — Tenora' },
     {
       name: 'description',
-      content: 'TenoraDataTable test: 50 rows, 15 columns, 20 rows per page.',
+      content: 'TenoraDataTable test: static vs dynamic data modes.',
     },
   ];
 }
 
 export default function DataTableDemoPage() {
-  const rows = useMemo(() => createDemoProductRows(ROW_COUNT), []);
+  const allRows = useMemo(() => createDemoProductRows(ROW_COUNT), []);
+  const [dataType, setDataType] = useState<TenoraDataTableDataType>('dynamic');
   const [page, setPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [sortDescriptor, setSortDescriptor] = useState<
+    SortDescriptor | undefined
+  >();
 
-  const pagedRows = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return rows.slice(start, start + PAGE_SIZE);
-  }, [page, rows]);
+  const dynamicRows = useMemo(
+    () => fetchServerPage(allRows, page, PAGE_SIZE, sortDescriptor),
+    [allRows, page, sortDescriptor],
+  );
+
+  const tableData = dataType === 'static' ? allRows : dynamicRows;
+
+  const handleDataTypeChange = useCallback(
+    (next: TenoraDataTableDataType) => {
+      setDataType(next);
+      setPage(1);
+      setSortDescriptor(undefined);
+      setSelectedIds([]);
+    },
+    [],
+  );
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-[1400px] flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -136,8 +185,8 @@ export default function DataTableDemoPage() {
             TenoraDataTable
           </h1>
           <p className="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            Test: {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE}{' '}
-            rows/page (3 pages) · drag · resize · pin columns · sort. Route:{' '}
+            {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page ·
+            drag · resize · pin · row selection · sort. Route:{' '}
             <code className="text-cyan-700 dark:text-cyan-200">/datatable</code>
           </p>
         </div>
@@ -149,15 +198,54 @@ export default function DataTableDemoPage() {
         </Link>
       </header>
 
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm text-zinc-600 dark:text-zinc-400">dataType</span>
+        {(['static', 'dynamic'] as const).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            onClick={() => handleDataTypeChange(mode)}
+            className={
+              dataType === mode
+                ? 'rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-medium text-white'
+                : 'rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800'
+            }
+          >
+            {mode}
+          </button>
+        ))}
+        <span className="text-xs text-zinc-500 dark:text-zinc-500">
+          {dataType === 'static'
+            ? 'Full dataset in table — client sort & pagination'
+            : 'Simulated server page — server sort & pagination'}
+        </span>
+      </div>
+
       <TenoraDataTable<DemoProductRow>
         ariaLabel="Product catalog test"
         columnDrag
         columnResize
-        data={pagedRows}
+        dataType={dataType}
+        data={tableData}
         columns={columns}
         getRowId={(row) => row.id}
+        rowSelection={{
+          selectedIds,
+          onChange: setSelectedIds,
+        }}
+        sort={
+          dataType === 'dynamic'
+            ? {
+                descriptor: sortDescriptor,
+                onChange: (descriptor) => {
+                  setSortDescriptor(descriptor);
+                  setPage(1);
+                },
+              }
+            : undefined
+        }
         pagination={{
-          total: rows.length,
+          total: dataType === 'dynamic' ? allRows.length : undefined,
           page,
           pageSize: PAGE_SIZE,
           pageSizeOptions: PAGE_SIZE_OPTIONS,
@@ -165,6 +253,15 @@ export default function DataTableDemoPage() {
         }}
         height="300px"
       />
+
+      {selectedIds.length > 0 ? (
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          Selected {selectedIds.length} row{selectedIds.length === 1 ? '' : 's'}:{' '}
+          <code className="text-cyan-700 dark:text-cyan-200">
+            {selectedIds.join(', ')}
+          </code>
+        </p>
+      ) : null}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import type { SortDescriptor } from '@heroui/react';
+import type { Selection, SortDescriptor } from '@heroui/react';
 import type { ReactNode } from 'react';
 import { cn } from '../../../helpers';
 import { TenoraTable } from '../../TenoraTable';
@@ -12,6 +12,9 @@ type DataTableContentProps = {
   tableMinWidth?: number;
   sortDescriptor: SortDescriptor | undefined;
   onSortChange: (descriptor: SortDescriptor) => void;
+  rowSelectionEnabled?: boolean;
+  selectedKeys?: Selection;
+  onSelectionChange?: (keys: Selection) => void;
   children: ReactNode;
 };
 
@@ -22,6 +25,9 @@ export function DataTableContent({
   tableMinWidth,
   sortDescriptor,
   onSortChange,
+  rowSelectionEnabled = false,
+  selectedKeys,
+  onSelectionChange,
   children,
 }: DataTableContentProps) {
   return (
@@ -34,6 +40,9 @@ export function DataTableContent({
       style={pinEnabled && tableMinWidth ? { minWidth: tableMinWidth } : undefined}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
+      selectionMode={rowSelectionEnabled ? 'multiple' : undefined}
+      selectedKeys={rowSelectionEnabled ? selectedKeys : undefined}
+      onSelectionChange={rowSelectionEnabled ? onSelectionChange : undefined}
     >
       {children}
     </TenoraTable.Content>

@@ -21,6 +21,7 @@ import {
   isColumnResizeEnabled,
 } from './core/columns';
 import { toSortingState } from './core/sort';
+import { isDynamicDataType, resolveFooterPagination } from './core/data-mode';
 import { getDataTableEngineState, getHeaderLabel } from './core/table';
 import { useClientMounted } from './hooks/use-client-mounted';
 import { useTenoraDataTable } from './hooks/use-tenora-data-table';
@@ -29,7 +30,9 @@ import type { TenoraDataTableProps } from './types';
 function TenoraDataTableImpl<TData extends object>({
   columns,
   data,
+  dataType,
   pagination = false,
+  sort,
   getRowId,
   ariaLabel = 'Data table',
   className,
@@ -37,14 +40,38 @@ function TenoraDataTableImpl<TData extends object>({
   virtual = false,
   columnDrag,
   columnResize,
+  rowSelection,
   height = DEFAULT_TABLE_HEIGHT,
 }: TenoraDataTableProps<TData>) {
-  const { table, setSorting, columnOrder, setColumnOrder, sortDescriptor } =
-    useTenoraDataTable({ columns, data, getRowId });
+  const rowSelectionConfig =
+    rowSelection === false || rowSelection == null ? undefined : rowSelection;
+
+  const {
+    table,
+    setSorting,
+    columnOrder,
+    setColumnOrder,
+    sortDescriptor,
+    rowSelectionEnabled,
+    selectedKeys,
+    onSelectionChange,
+  } = useTenoraDataTable({
+    columns,
+    data,
+    dataType,
+    pagination,
+    sort,
+    getRowId,
+    rowSelection: rowSelectionConfig,
+  });
+
+  const footerPagination = useMemo(() => {
+    if (pagination === false) return null;
+    return resolveFooterPagination(dataType, data.length, pagination);
+  }, [data.length, dataType, pagination]);
 
   const { headers, columnCount } = getDataTableEngineState(table);
   const virtualEnabled = virtual && pagination === false;
-  const showPagination = pagination !== false;
   const columnDragEnabled = isColumnDragEnabled(columnDrag);
   const columnResizeEnabled = isColumnResizeEnabled(columnResize);
   const pinEnabled = table.getIsSomeColumnsPinned();
@@ -74,9 +101,13 @@ function TenoraDataTableImpl<TData extends object>({
 
   const handleSortChange = useCallback(
     (descriptor: Parameters<typeof toSortingState>[0]) => {
+      if (isDynamicDataType(dataType)) {
+        sort?.onChange(descriptor);
+        return;
+      }
       setSorting(toSortingState(descriptor));
     },
-    [setSorting],
+    [dataType, setSorting, sort],
   );
 
   return (
@@ -96,8 +127,8 @@ function TenoraDataTableImpl<TData extends object>({
           virtualEnabled={virtualEnabled}
           resizeEnabled={columnResizeEnabled}
           footer={
-            showPagination ? (
-              <DataTableFooter pagination={pagination} />
+            footerPagination ? (
+              <DataTableFooter pagination={footerPagination} />
             ) : undefined
           }
         >
@@ -108,6 +139,9 @@ function TenoraDataTableImpl<TData extends object>({
             tableMinWidth={pinEnabled ? table.getTotalSize() : undefined}
             sortDescriptor={sortDescriptor}
             onSortChange={handleSortChange}
+            rowSelectionEnabled={rowSelectionEnabled}
+            selectedKeys={selectedKeys}
+            onSelectionChange={onSelectionChange}
           >
             <DataTableHeader
               headers={headers}

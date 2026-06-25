@@ -24,7 +24,7 @@ export function createDefaultConfig(): TenoraWebConfig {
       },
     },
     theme: {
-      default: 'dark',
+      default: 'light',
     },
   };
 }

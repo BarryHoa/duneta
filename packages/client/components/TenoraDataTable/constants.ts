@@ -2,6 +2,9 @@ export const DEFAULT_TABLE_HEIGHT = 480;
 export const TABLE_ROW_HEIGHT = 42;
 export const TABLE_HEADER_HEIGHT = 42;
 
+/** TanStack column id for the auto-injected selection column. */
+export const SELECTION_COLUMN_ID = '__tenora_select';
+
 export const TABLE_STICKY_HEADER_CELL_CLASS =
   'sticky top-0 z-10 bg-surface-secondary';
 

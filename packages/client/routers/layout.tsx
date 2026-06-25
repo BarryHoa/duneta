@@ -14,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-background text-foreground">
-        <ThemeProvider defaultTheme="dark">
+        <ThemeProvider defaultTheme="light">
           {children}
           <ScrollRestoration />
           <Scripts />
