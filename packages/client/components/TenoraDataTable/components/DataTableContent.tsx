@@ -8,8 +8,6 @@ import { TenoraTable } from '../../TenoraTable';
 type DataTableContentProps = {
   ariaLabel: string;
   resizeEnabled: boolean;
-  pinEnabled: boolean;
-  tableMinWidth?: number;
   sortDescriptor: SortDescriptor | undefined;
   onSortChange: (descriptor: SortDescriptor) => void;
   rowSelectionEnabled?: boolean;
@@ -21,8 +19,6 @@ type DataTableContentProps = {
 export function DataTableContent({
   ariaLabel,
   resizeEnabled,
-  pinEnabled,
-  tableMinWidth,
   sortDescriptor,
   onSortChange,
   rowSelectionEnabled = false,
@@ -34,10 +30,10 @@ export function DataTableContent({
     <TenoraTable.Content
       aria-label={ariaLabel}
       className={cn(
-        'min-w-full !overflow-visible',
+        resizeEnabled ? 'w-max min-w-full' : 'min-w-full',
+        '!overflow-visible',
         resizeEnabled && '[table-layout:fixed]',
       )}
-      style={pinEnabled && tableMinWidth ? { minWidth: tableMinWidth } : undefined}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
       selectionMode={rowSelectionEnabled ? 'multiple' : undefined}

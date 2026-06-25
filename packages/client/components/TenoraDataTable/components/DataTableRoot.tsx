@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { cn } from '../../../helpers';
 import {
+  TABLE_RESIZABLE_CONTAINER_CLASS,
   TABLE_ROOT_OVERFLOW_CLASS,
   TABLE_SCROLL_CONTAINER_CLASS,
   TABLE_SHELL_RADIUS_CLASS,
@@ -17,6 +18,7 @@ type DataTableRootProps = {
   bodyMaxHeight: number | string;
   virtualEnabled: boolean;
   resizeEnabled: boolean;
+  shrinkWrapColumns?: boolean;
   children: ReactNode;
   toolbar?: ReactNode;
   footer?: ReactNode;
@@ -28,6 +30,7 @@ export function DataTableRoot({
   bodyMaxHeight,
   virtualEnabled,
   resizeEnabled,
+  shrinkWrapColumns,
   children,
   toolbar,
   footer,
@@ -36,18 +39,30 @@ export function DataTableRoot({
     ? bodyMaxHeight
     : resolveTableScrollMaxHeight(bodyMaxHeight);
 
-  const tableContent = (
-    <TenoraTable.ScrollContainer
-      className={TABLE_SCROLL_CONTAINER_CLASS}
-      style={{ maxHeight: scrollMaxHeight }}
+  const scrollShellProps = {
+    style: { maxHeight: scrollMaxHeight },
+  };
+
+  const scrollBody =
+    shrinkWrapColumns ? (
+      <div className="w-max min-w-full">{children}</div>
+    ) : (
+      children
+    );
+
+  const tableContent = resizeEnabled ? (
+    <TenoraTable.ResizableContainer
+      {...scrollShellProps}
+      className={TABLE_RESIZABLE_CONTAINER_CLASS}
     >
-      {resizeEnabled ? (
-        <TenoraTable.ResizableContainer className="min-w-full !overflow-visible">
-          {children}
-        </TenoraTable.ResizableContainer>
-      ) : (
-        children
-      )}
+      {scrollBody}
+    </TenoraTable.ResizableContainer>
+  ) : (
+    <TenoraTable.ScrollContainer
+      {...scrollShellProps}
+      className={TABLE_SCROLL_CONTAINER_CLASS}
+    >
+      {scrollBody}
     </TenoraTable.ScrollContainer>
   );
 

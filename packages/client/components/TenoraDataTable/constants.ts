@@ -11,7 +11,10 @@ export const SELECTION_COLUMN_ID = '__tenora_select';
 export const TABLE_STICKY_HEADER_CELL_CLASS =
   'sticky top-0 z-10 bg-surface-secondary';
 
-export const TABLE_SCROLL_CONTAINER_CLASS = 'overflow-auto';
+export const TABLE_SCROLL_CONTAINER_CLASS = 'min-w-0 overflow-auto';
+
+/** Sole scroll host when resize is on — keep HeroUI `overflow-auto`, no `!overflow-visible`. */
+export const TABLE_RESIZABLE_CONTAINER_CLASS = 'min-w-0 w-full';
 
 /** Let scrollbars render outside HeroUI `.table-root { overflow: clip }`. */
 export const TABLE_ROOT_OVERFLOW_CLASS = '!overflow-visible';

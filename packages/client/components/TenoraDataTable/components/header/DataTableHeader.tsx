@@ -20,9 +20,10 @@ import {
   isColumnDraggable,
   isColumnPinned,
   isColumnResizable,
-  resolveColumnWidthProps,
+  resolveHeaderColumnWidthProps,
   type ColumnDragConfig,
   type ColumnResizeConfig,
+  type ResolvedColumnWidthProps,
 } from '../../core/columns';
 import { isSelectionColumnId } from '../../core/row-selection';
 import { SELECTION_COLUMN_CLASS, TABLE_STICKY_HEADER_CELL_CLASS } from '../../constants';
@@ -50,7 +51,7 @@ type HeaderColumnShellProps = {
   isRowHeader: boolean;
   resizeEnabled: boolean;
   resizable: boolean;
-  widthProps?: ReturnType<typeof resolveColumnWidthProps>;
+  widthProps?: ResolvedColumnWidthProps;
   pinClassName?: string;
   style?: React.CSSProperties;
   label: ReactNode;
@@ -63,11 +64,13 @@ function SelectionHeaderColumn({
   pinClassName,
   style,
   label,
+  widthProps,
 }: {
   id: string;
   pinClassName?: string;
   style?: React.CSSProperties;
   label: ReactNode;
+  widthProps?: ResolvedColumnWidthProps;
 }) {
   return (
     <TenoraTable.Column
@@ -79,6 +82,7 @@ function SelectionHeaderColumn({
       )}
       id={id}
       style={style}
+      {...widthProps}
     >
       {label}
     </TenoraTable.Column>
@@ -187,7 +191,7 @@ function SortableHeaderColumn({
   isRowHeader: boolean;
   resizeEnabled: boolean;
   resizable: boolean;
-  widthProps: ReturnType<typeof resolveColumnWidthProps>;
+  widthProps: ResolvedColumnWidthProps;
   pinClassName?: string;
   columnStyle?: React.CSSProperties;
   label: ReactNode;
@@ -277,9 +281,7 @@ export function DataTableHeader<TData>({
         );
         const isRowHeader = index === firstDataHeaderIndex;
         const allowsSorting = header.column.getCanSort();
-        const widthProps = resizeEnabled
-          ? resolveColumnWidthProps(header.column.columnDef.meta)
-          : {};
+        const widthProps = resolveHeaderColumnWidthProps(header, resizeEnabled);
         const resizable =
           !isSelectionColumnId(columnId) &&
           isColumnResizable(columnResize, columnId);
@@ -299,6 +301,7 @@ export function DataTableHeader<TData>({
               label={label}
               pinClassName={pin.className}
               style={pin.style}
+              widthProps={widthProps}
             />
           );
         }

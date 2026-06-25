@@ -93,6 +93,7 @@ function TenoraDataTableImpl<TData extends object>({
   const columnResizeEnabled = isColumnResizeEnabled(columnResize);
   const pinEnabled = table.getIsSomeColumnsPinned();
   const pinnedColumnIds = getTablePinnedColumnIds(table);
+  const shrinkWrapColumns = pinEnabled || columnResizeEnabled;
 
   const sortableColumnIds = useMemo(
     () =>
@@ -143,6 +144,7 @@ function TenoraDataTableImpl<TData extends object>({
           bodyMaxHeight={height}
           virtualEnabled={virtualEnabled}
           resizeEnabled={columnResizeEnabled}
+          shrinkWrapColumns={shrinkWrapColumns}
           toolbar={
             toolbarEnabled && resolvedToolbar ? (
               <DataTableToolbar
@@ -167,8 +169,6 @@ function TenoraDataTableImpl<TData extends object>({
           <DataTableContent
             ariaLabel={ariaLabel}
             resizeEnabled={columnResizeEnabled}
-            pinEnabled={pinEnabled}
-            tableMinWidth={pinEnabled ? table.getTotalSize() : undefined}
             sortDescriptor={sortDescriptor}
             onSortChange={handleSortChange}
             rowSelectionEnabled={rowSelectionEnabled}

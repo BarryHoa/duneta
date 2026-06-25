@@ -4,6 +4,7 @@ import type {
   ColumnOrderState,
   ColumnPinningState,
   ColumnSizingState,
+  Header,
   Table as ReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
@@ -153,7 +154,7 @@ export function getColumnPinPresentation<TData>(
 export const DEFAULT_COLUMN_MIN_WIDTH_PX = 80;
 const DEFAULT_COLUMN_SIZE_PX = 150;
 
-type ResolvedColumnWidthProps = Pick<
+export type ResolvedColumnWidthProps = Pick<
   TenoraTableColumnProps,
   'defaultWidth' | 'minWidth' | 'maxWidth'
 >;
@@ -220,6 +221,18 @@ export function resolveColumnWidthProps(
     defaultWidth,
     minWidth,
     ...(maxWidth !== undefined ? { maxWidth } : {}),
+  };
+}
+
+export function resolveHeaderColumnWidthProps<TData>(
+  header: Header<TData, unknown>,
+  resizeEnabled: boolean,
+): ResolvedColumnWidthProps {
+  if (!resizeEnabled) return {};
+
+  return {
+    ...resolveColumnWidthProps(header.column.columnDef.meta),
+    defaultWidth: header.column.getSize(),
   };
 }
 
