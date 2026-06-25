@@ -23,7 +23,10 @@ export function DataTableContent({
   return (
     <TenoraTable.Content
       aria-label={ariaLabel}
-      className={cn('min-w-full', resizeEnabled && '[table-layout:fixed]')}
+      className={cn(
+        'min-w-full !overflow-visible',
+        resizeEnabled && '[table-layout:fixed]',
+      )}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
     >

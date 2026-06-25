@@ -29,6 +29,7 @@ function TenoraDataTableImpl<TData extends object>({
   getRowId,
   ariaLabel = 'Data table',
   className,
+  variant,
   virtual = false,
   columnDrag,
   columnResize,
@@ -74,8 +75,9 @@ function TenoraDataTableImpl<TData extends object>({
       >
         <DataTableRoot
           className={className}
+          variant={variant}
+          bodyMaxHeight={height}
           virtualEnabled={virtualEnabled}
-          height={height}
           resizeEnabled={columnResizeEnabled}
           footer={
             showPagination ? (

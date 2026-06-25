@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
+import type { TenoraTableProps } from '../TenoraTable/types';
 import type { ColumnDragConfig } from './core/column-drag';
 import type { ColumnResizeConfig } from './core/column-resize';
 
@@ -19,6 +20,11 @@ export type TenoraDataTableProps<TData extends object> = {
   getRowId?: (row: TData, index: number) => string;
   ariaLabel?: string;
   className?: string;
+  /**
+   * HeroUI table shell variant. `primary` uses large ~32px card radius;
+   * `secondary` is flatter. Default: `secondary`.
+   */
+  variant?: TenoraTableProps['variant'];
   /** Enable row virtualization when pagination is disabled. Default: false */
   virtual?: boolean;
   /**
@@ -37,7 +43,7 @@ export type TenoraDataTableProps<TData extends object> = {
    * Per-column `meta.defaultWidth`, `meta.minWidth`, `meta.maxWidth` control sizing.
    */
   columnResize?: ColumnResizeConfig;
-  /** Scroll container height when virtual rows are enabled */
+  /** Max height of the scrollable table body (`tbody`). Header and pagination footer stay fixed. */
   height?: number | string;
 };
 

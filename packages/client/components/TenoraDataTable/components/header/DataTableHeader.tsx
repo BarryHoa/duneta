@@ -20,6 +20,7 @@ import {
   type ColumnResizeConfig,
 } from '../../core/column-resize';
 import { resolveColumnWidthProps } from '../../core/column-width';
+import { TABLE_STICKY_HEADER_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import { useColumnDragState } from './column-drag-context';
 import { ColumnDragHandle } from './ColumnDragHandle';
@@ -76,6 +77,7 @@ function HeaderColumnShell({
       ref={columnRef}
       allowsSorting={allowsSorting}
       className={cn(
+        'bg-surface-secondary',
         resizable &&
           'group/column relative data-[resizing]:bg-cyan-500/10 data-[resizing]:text-foreground',
       )}
@@ -220,7 +222,7 @@ export function DataTableHeader<TData>({
   const dragEnabled = isColumnDragEnabled(columnDrag);
 
   return (
-    <TenoraTable.Header>
+    <TenoraTable.Header className={TABLE_STICKY_HEADER_CLASS}>
       {headers.map((header, index) => {
         const label = flexRender(
           header.column.columnDef.header,
