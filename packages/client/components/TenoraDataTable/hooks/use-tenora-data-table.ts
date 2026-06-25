@@ -2,15 +2,21 @@
 
 import {
   getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getGroupedRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
   type ColumnOrderState,
   type ColumnPinningState,
+  type GroupingState,
   type PaginationState,
+  type ColumnSizingState,
   type SortingState,
   type Table as ReactTable,
+  type VisibilityState,
 } from '@tanstack/react-table';
 import {
   useCallback,
@@ -25,9 +31,17 @@ import type { Selection } from '@heroui/react';
 import {
   createInitialColumnOrder,
   createInitialColumnPinning,
+  createInitialColumnSizing,
+  createInitialColumnVisibility,
+  resolveColumnId,
   withTanStackColumnSizing,
 } from '../core/columns';
+import { createColumnResetHandlers } from '../core/column-reset';
 import { isDynamicDataType } from '../core/data-mode';
+import {
+  isColumnGroupable,
+  resolveGroupableColumnIds,
+} from '../core/group';
 import {
   areSelectedIdsEqual,
   createSelectionColumn,
@@ -41,6 +55,10 @@ import type {
   TenoraDataTableRowSelectionConfig,
   TenoraDataTableSortConfig,
 } from '../types';
+import type {
+  DataTableColumnResetHandlers,
+  ResolvedTenoraDataTableToolbarConfig,
+} from '../types/toolbar';
 
 export type UseTenoraDataTableOptions<TData extends object> = {
   columns: Array<ColumnDef<TData, unknown>>;
@@ -52,6 +70,7 @@ export type UseTenoraDataTableOptions<TData extends object> = {
   rowSelection?: TenoraDataTableRowSelectionConfig;
   columnOrder?: ColumnOrderState;
   onColumnOrderChange?: (order: ColumnOrderState) => void;
+  toolbar?: ResolvedTenoraDataTableToolbarConfig | null;
 };
 
 export function useTenoraDataTable<TData extends object>({
@@ -64,6 +83,7 @@ export function useTenoraDataTable<TData extends object>({
   rowSelection: rowSelectionConfig,
   columnOrder: controlledColumnOrder,
   onColumnOrderChange,
+  toolbar,
 }: UseTenoraDataTableOptions<TData>): {
   table: ReactTable<TData>;
   sorting: SortingState;
@@ -75,6 +95,10 @@ export function useTenoraDataTable<TData extends object>({
   selectedRowCount: number;
   selectedKeys: Selection;
   onSelectionChange: (keys: Selection) => void;
+  groupingColumnId: string | null;
+  setGroupingColumnId: (columnId: string | null) => void;
+  handleToolbarSearchChange: (query: string) => void;
+  columnReset: DataTableColumnResetHandlers;
 } {
   const isDynamic = isDynamicDataType(dataType);
   const paginationEnabled = pagination !== false;
@@ -109,15 +133,40 @@ export function useTenoraDataTable<TData extends object>({
     [columns],
   );
 
+  const groupableColumnIds = useMemo(
+    () =>
+      toolbar?.group
+        ? resolveGroupableColumnIds(
+            sizedColumns.map((column, index) => ({
+              id: resolveColumnId(column, index),
+              meta: column.meta,
+            })),
+            toolbar.group,
+          )
+        : null,
+    [sizedColumns, toolbar?.group],
+  );
+
+  const sizedColumnsWithGrouping = useMemo(() => {
+    if (!toolbar?.group) return sizedColumns;
+    return sizedColumns.map((column, index) => ({
+      ...column,
+      enableGrouping: isColumnGroupable(
+        resolveColumnId(column, index),
+        groupableColumnIds,
+      ),
+    }));
+  }, [groupableColumnIds, sizedColumns, toolbar?.group]);
+
   const groupSelection = rowSelectionConfig?.groupSelection ?? false;
 
   const tableColumns = useMemo(() => {
-    if (!rowSelectionEnabled) return sizedColumns;
+    if (!rowSelectionEnabled) return sizedColumnsWithGrouping;
     return [
       createSelectionColumn<TData>({ groupSelection }),
-      ...sizedColumns,
+      ...sizedColumnsWithGrouping,
     ];
-  }, [groupSelection, rowSelectionEnabled, sizedColumns]);
+  }, [groupSelection, rowSelectionEnabled, sizedColumnsWithGrouping]);
 
   const columnPinningFromMeta = useMemo(
     () => createInitialColumnPinning(tableColumns),
@@ -127,6 +176,19 @@ export function useTenoraDataTable<TData extends object>({
   const columnOrderFromMeta = useMemo(
     () => createInitialColumnOrder(tableColumns, columnPinningFromMeta),
     [tableColumns, columnPinningFromMeta],
+  );
+
+  const initialColumnSizing = useMemo(
+    () => createInitialColumnSizing(tableColumns),
+    [tableColumns],
+  );
+
+  const initialColumnVisibility = useMemo(
+    () =>
+      createInitialColumnVisibility(tableColumns, {
+        hiddenByDefault: toolbar?.column?.hiddenByDefault,
+      }),
+    [tableColumns, toolbar?.column?.hiddenByDefault],
   );
 
   const selectedIds = rowSelectionConfig?.selectedIds ?? [];
@@ -148,11 +210,82 @@ export function useTenoraDataTable<TData extends object>({
     useState<ColumnPinningState>(columnPinningFromMeta);
   const [internalColumnOrder, setInternalColumnOrder] =
     useState<ColumnOrderState>(columnOrderFromMeta);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    initialColumnVisibility,
+  );
+  const [columnSizing, setColumnSizing] =
+    useState<ColumnSizingState>(initialColumnSizing);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [internalGroupingColumnId, setInternalGroupingColumnId] = useState<
+    string | null
+  >(null);
+
+  // --- Toolbar: search (client global filter vs controlled onChange) ---
+  const toolbarSearch = toolbar?.search ?? null;
+  const toolbarGroup = toolbar?.group ?? null;
+  const usesInternalSearch =
+    toolbarSearch != null && toolbarSearch.onChange == null && !isDynamic;
+  const usesInternalGrouping =
+    toolbarGroup != null && toolbarGroup.onChange == null && !isDynamic;
+
+  // --- Toolbar: grouping (client row model vs controlled onChange) ---
+  const groupingColumnId =
+    toolbarGroup?.value !== undefined
+      ? toolbarGroup.value
+      : internalGroupingColumnId;
+
+  const grouping = useMemo(
+    (): GroupingState =>
+      groupingColumnId ? [groupingColumnId] : [],
+    [groupingColumnId],
+  );
+
+  const setGroupingColumnId = useCallback(
+    (columnId: string | null) => {
+      if (columnId && !isColumnGroupable(columnId, groupableColumnIds)) return;
+
+      if (toolbarGroup?.onChange) {
+        toolbarGroup.onChange(columnId);
+        return;
+      }
+      setInternalGroupingColumnId(columnId);
+    },
+    [groupableColumnIds, toolbarGroup],
+  );
+
+  useEffect(() => {
+    if (
+      groupingColumnId &&
+      !isColumnGroupable(groupingColumnId, groupableColumnIds)
+    ) {
+      setGroupingColumnId(null);
+    }
+  }, [groupableColumnIds, groupingColumnId, setGroupingColumnId]);
+
+  const handleToolbarSearchChange = useCallback(
+    (query: string) => {
+      if (toolbarSearch?.onChange) {
+        toolbarSearch.onChange(query);
+        return;
+      }
+      if (usesInternalSearch) {
+        setGlobalFilter(query);
+      }
+    },
+    [toolbarSearch, usesInternalSearch],
+  );
 
   useEffect(() => {
     setColumnPinning(columnPinningFromMeta);
     setInternalColumnOrder(columnOrderFromMeta);
-  }, [columnPinningFromMeta, columnOrderFromMeta]);
+    setColumnVisibility(initialColumnVisibility);
+    setColumnSizing(initialColumnSizing);
+  }, [
+    columnOrderFromMeta,
+    columnPinningFromMeta,
+    initialColumnSizing,
+    initialColumnVisibility,
+  ]);
 
   const skipPageSelectionResetRef = useRef(true);
   useEffect(() => {
@@ -178,6 +311,34 @@ export function useTenoraDataTable<TData extends object>({
     }
     setInternalColumnOrder(next);
   };
+
+  // --- Column layout reset (widths, order, visibility, pinning) ---
+  const columnReset = useMemo(
+    () =>
+      createColumnResetHandlers(
+        {
+          columnPinning: columnPinningFromMeta,
+          columnOrder: columnOrderFromMeta,
+          columnSizing: initialColumnSizing,
+          columnVisibility: initialColumnVisibility,
+          sizedColumns,
+        },
+        {
+          setColumnPinning,
+          setColumnOrder,
+          setColumnSizing,
+          setColumnVisibility,
+        },
+      ),
+    [
+      columnOrderFromMeta,
+      columnPinningFromMeta,
+      initialColumnSizing,
+      initialColumnVisibility,
+      setColumnOrder,
+      sizedColumns,
+    ],
+  );
 
   const handleSortingChange = (
     updater: SortingState | ((old: SortingState) => SortingState),
@@ -217,6 +378,7 @@ export function useTenoraDataTable<TData extends object>({
     data,
     getRowId,
     enableColumnPinning: true,
+    enableGrouping: usesInternalGrouping,
     enableRowSelection: rowSelectionEnabled,
     enableMultiRowSelection: true,
     manualPagination: isDynamic,
@@ -229,12 +391,18 @@ export function useTenoraDataTable<TData extends object>({
     initialState: {
       columnPinning: columnPinningFromMeta,
       columnOrder: columnOrderFromMeta,
+      columnSizing: initialColumnSizing,
+      columnVisibility: initialColumnVisibility,
       rowSelection,
     },
     state: {
       sorting,
       columnOrder,
       columnPinning,
+      columnVisibility,
+      columnSizing,
+      ...(usesInternalSearch ? { globalFilter } : {}),
+      ...(usesInternalGrouping ? { grouping, expanded: true } : {}),
       ...(paginationEnabled ? { pagination: paginationState } : {}),
       ...(rowSelectionEnabled ? { rowSelection } : {}),
     },
@@ -245,6 +413,17 @@ export function useTenoraDataTable<TData extends object>({
       setColumnOrder(next);
     },
     onColumnPinningChange: setColumnPinning,
+    onColumnVisibilityChange: setColumnVisibility,
+    onColumnSizingChange: setColumnSizing,
+    onGlobalFilterChange: usesInternalSearch ? setGlobalFilter : undefined,
+    onGroupingChange: usesInternalGrouping
+      ? (updater) => {
+          const current = grouping;
+          const next =
+            typeof updater === 'function' ? updater(current) : updater;
+          setGroupingColumnId(next[0] ?? null);
+        }
+      : undefined,
     onPaginationChange: paginationEnabled ? handlePaginationChange : undefined,
     onRowSelectionChange: rowSelectionEnabled
       ? (updater) => {
@@ -262,6 +441,13 @@ export function useTenoraDataTable<TData extends object>({
     ...(!isDynamic
       ? {
           getSortedRowModel: getSortedRowModel(),
+          ...(usesInternalSearch ? { getFilteredRowModel: getFilteredRowModel() } : {}),
+          ...(usesInternalGrouping && grouping.length > 0
+            ? {
+                getGroupedRowModel: getGroupedRowModel(),
+                getExpandedRowModel: getExpandedRowModel(),
+              }
+            : {}),
           ...(paginationEnabled
             ? { getPaginationRowModel: getPaginationRowModel() }
             : {}),
@@ -306,5 +492,9 @@ export function useTenoraDataTable<TData extends object>({
     selectedRowCount,
     selectedKeys,
     onSelectionChange: handleSelectionChange,
+    groupingColumnId: toolbarGroup ? groupingColumnId : null,
+    setGroupingColumnId,
+    handleToolbarSearchChange,
+    columnReset,
   };
 }

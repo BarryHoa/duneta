@@ -49,16 +49,21 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     id: 'category',
     accessorKey: 'category',
     header: 'Category',
-    meta: { defaultWidth: 140 },
+    meta: { defaultWidth: 140, groupable: true },
   },
   {
     id: 'status',
     accessorKey: 'status',
     header: 'Status',
+    meta: { groupable: true },
     cell: ({ getValue }) => {
       const value = String(getValue() ?? '');
       const color =
-        value === 'active' ? 'success' : value === 'draft' ? 'warning' : 'default';
+        value === 'active'
+          ? 'success'
+          : value === 'draft'
+            ? 'warning'
+            : 'default';
 
       return (
         <TenoraChip color={color} size="sm" variant="soft">
@@ -81,7 +86,12 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     header: 'Margin %',
     cell: ({ getValue }) => `${getValue()}%`,
   },
-  { id: 'supplier', accessorKey: 'supplier', header: 'Supplier' },
+  {
+    id: 'supplier',
+    accessorKey: 'supplier',
+    header: 'Supplier',
+    meta: { groupable: true },
+  },
   { id: 'warehouse', accessorKey: 'warehouse', header: 'WH' },
   { id: 'updatedAt', accessorKey: 'updatedAt', header: 'Updated' },
   {
@@ -135,8 +145,20 @@ function fetchServerPage(
   page: number,
   pageSize: number,
   sort: SortDescriptor | undefined,
+  query: string,
 ): DemoProductRow[] {
-  const sorted = [...rows].sort((a, b) => compareRows(a, b, sort));
+  const normalizedQuery = query.trim().toLowerCase();
+  const filtered =
+    normalizedQuery.length === 0
+      ? rows
+      : rows.filter((row) =>
+          Object.values(row).some((value) =>
+            String(value ?? '')
+              .toLowerCase()
+              .includes(normalizedQuery),
+          ),
+        );
+  const sorted = [...filtered].sort((a, b) => compareRows(a, b, sort));
   const start = (page - 1) * pageSize;
   return sorted.slice(start, start + pageSize);
 }
@@ -156,26 +178,27 @@ export default function DataTableDemoPage() {
   const [dataType, setDataType] = useState<TenoraDataTableDataType>('dynamic');
   const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [refreshNonce, setRefreshNonce] = useState(0);
   const [sortDescriptor, setSortDescriptor] = useState<
     SortDescriptor | undefined
   >();
 
   const dynamicRows = useMemo(
-    () => fetchServerPage(allRows, page, PAGE_SIZE, sortDescriptor),
-    [allRows, page, sortDescriptor],
+    () =>
+      fetchServerPage(allRows, page, PAGE_SIZE, sortDescriptor, searchQuery),
+    [allRows, page, refreshNonce, searchQuery, sortDescriptor],
   );
 
   const tableData = dataType === 'static' ? allRows : dynamicRows;
 
-  const handleDataTypeChange = useCallback(
-    (next: TenoraDataTableDataType) => {
-      setDataType(next);
-      setPage(1);
-      setSortDescriptor(undefined);
-      setSelectedIds([]);
-    },
-    [],
-  );
+  const handleDataTypeChange = useCallback((next: TenoraDataTableDataType) => {
+    setDataType(next);
+    setPage(1);
+    setSortDescriptor(undefined);
+    setSelectedIds([]);
+    setSearchQuery('');
+  }, []);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-[1400px] flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -184,12 +207,15 @@ export default function DataTableDemoPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300">
             Playground
           </p>
-          <TenoraTypography.Heading level={1} className="text-3xl font-semibold">
+          <TenoraTypography.Heading
+            level={1}
+            className="text-3xl font-semibold"
+          >
             TenoraDataTable
           </TenoraTypography.Heading>
           <TenoraTypography.Paragraph className="max-w-2xl text-sm leading-6 text-muted">
-            {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page ·
-            drag · resize · pin · row selection · sort. Route:{' '}
+            {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page
+            · drag · resize · pin · row selection · sort · toolbar. Route:{' '}
             <TenoraTypography.Code>/datatable</TenoraTypography.Code>
           </TenoraTypography.Paragraph>
         </div>
@@ -230,10 +256,10 @@ export default function DataTableDemoPage() {
         data={tableData}
         columns={columns}
         getRowId={(row) => row.id}
-        rowSelection={{
-          selectedIds,
-          onChange: setSelectedIds,
-        }}
+        // rowSelection={{
+        //   selectedIds,
+        //   onChange: setSelectedIds,
+        // }}
         sort={
           dataType === 'dynamic'
             ? {
@@ -252,13 +278,34 @@ export default function DataTableDemoPage() {
           pageSizeOptions: PAGE_SIZE_OPTIONS,
           onPageChange: setPage,
         }}
+        toolbar={{
+          search:
+            dataType === 'dynamic'
+              ? {
+                  onChange: (query) => {
+                    setSearchQuery(query);
+                    setPage(1);
+                  },
+                }
+              : true,
+          filter: { activeCount: 0 },
+          group: true,
+          column: {
+            lockedColumnIds: ['name', 'actions'],
+            hiddenByDefault: ['notes', 'batch'],
+          },
+        }}
+        onRefresh={() => setRefreshNonce((nonce) => nonce + 1)}
         height="300px"
       />
 
       {selectedIds.length > 0 ? (
         <TenoraTypography.Paragraph className="text-sm text-muted">
-          Selected {selectedIds.length} row{selectedIds.length === 1 ? '' : 's'}:{' '}
-          <TenoraTypography.Code>{selectedIds.join(', ')}</TenoraTypography.Code>
+          Selected {selectedIds.length} row{selectedIds.length === 1 ? '' : 's'}
+          :{' '}
+          <TenoraTypography.Code>
+            {selectedIds.join(', ')}
+          </TenoraTypography.Code>
         </TenoraTypography.Paragraph>
       ) : null}
     </main>

@@ -12,6 +12,10 @@ export type TenoraDataTableColumnMeta = {
   maxWidth?: ColumnMaxWidth;
   /** Freeze column on horizontal scroll. Synced to TanStack `columnPinning` state. */
   pin?: 'left' | 'right';
+  /** Hidden until user toggles visibility in the column panel. */
+  defaultHidden?: boolean;
+  /** When `true`, column appears in the group picker. When `false`, excluded from grouping. */
+  groupable?: boolean;
 };
 
 declare module '@tanstack/react-table' {

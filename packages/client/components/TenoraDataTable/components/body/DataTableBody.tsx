@@ -1,6 +1,6 @@
 'use client';
 
-import { flexRender, type Table as ReactTable } from '@tanstack/react-table';
+import { flexRender, type Row, type Table as ReactTable } from '@tanstack/react-table';
 import { cn } from '../../../../helpers';
 import { getColumnPinPresentation } from '../../core/columns';
 import { isSelectionColumnId } from '../../core/row-selection';
@@ -8,6 +8,60 @@ import { SELECTION_COLUMN_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import type { TenoraDataTableProps } from '../../types';
 import { DataTableEmptyState } from './DataTableEmptyState';
+
+type DataTableRowProps<TData> = {
+  row: Row<TData>;
+  table: ReactTable<TData>;
+  columnCount: number;
+  pinEnabled: boolean;
+};
+
+function DataTableRow<TData>({
+  row,
+  table,
+  columnCount,
+  pinEnabled,
+}: DataTableRowProps<TData>) {
+  if (row.getIsGrouped()) {
+    const groupValue = row.getValue(row.groupingColumnId ?? '');
+    return (
+      <TenoraTable.Row key={row.id} id={row.id}>
+        <TenoraTable.Cell
+          className="bg-surface-tertiary font-medium text-foreground"
+          colSpan={columnCount}
+        >
+          {String(groupValue ?? '')}
+          <span className="ml-2 text-xs font-normal text-muted">
+            ({row.subRows.length})
+          </span>
+        </TenoraTable.Cell>
+      </TenoraTable.Row>
+    );
+  }
+
+  return (
+    <TenoraTable.Row key={row.id} id={row.id}>
+      {row.getVisibleCells().map((cell) => {
+        const pin = pinEnabled
+          ? getColumnPinPresentation(cell.column, table, 'body')
+          : { className: '', style: {} };
+
+        return (
+          <TenoraTable.Cell
+            key={cell.id}
+            className={cn(
+              isSelectionColumnId(cell.column.id) && SELECTION_COLUMN_CLASS,
+              pin.className,
+            )}
+            style={pin.style}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TenoraTable.Cell>
+        );
+      })}
+    </TenoraTable.Row>
+  );
+}
 
 type DataTableStaticBodyProps<TData> = {
   table: ReactTable<TData>;
@@ -27,26 +81,13 @@ export function DataTableStaticBody<TData>({
       renderEmptyState={() => <DataTableEmptyState columnCount={columnCount} />}
     >
       {rows.map((row) => (
-        <TenoraTable.Row key={row.id} id={row.id}>
-          {row.getVisibleCells().map((cell) => {
-            const pin = pinEnabled
-              ? getColumnPinPresentation(cell.column, table, 'body')
-              : { className: '', style: {} };
-
-            return (
-              <TenoraTable.Cell
-                key={cell.id}
-                className={cn(
-                  isSelectionColumnId(cell.column.id) && SELECTION_COLUMN_CLASS,
-                  pin.className,
-                )}
-                style={pin.style}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TenoraTable.Cell>
-            );
-          })}
-        </TenoraTable.Row>
+        <DataTableRow
+          key={row.id}
+          columnCount={columnCount}
+          pinEnabled={pinEnabled}
+          row={row}
+          table={table}
+        />
       ))}
     </TenoraTable.Body>
   );

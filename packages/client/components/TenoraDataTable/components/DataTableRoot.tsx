@@ -18,6 +18,7 @@ type DataTableRootProps = {
   virtualEnabled: boolean;
   resizeEnabled: boolean;
   children: ReactNode;
+  toolbar?: ReactNode;
   footer?: ReactNode;
 };
 
@@ -28,6 +29,7 @@ export function DataTableRoot({
   virtualEnabled,
   resizeEnabled,
   children,
+  toolbar,
   footer,
 }: DataTableRootProps) {
   const scrollMaxHeight = virtualEnabled
@@ -53,11 +55,13 @@ export function DataTableRoot({
     <TenoraTable
       variant={variant}
       className={cn(
+        'border border-border',
         TABLE_SHELL_RADIUS_CLASS,
         TABLE_ROOT_OVERFLOW_CLASS,
         className,
       )}
     >
+      {toolbar}
       {tableContent}
       {footer}
     </TenoraTable>

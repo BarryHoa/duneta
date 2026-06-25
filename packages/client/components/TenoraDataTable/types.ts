@@ -2,6 +2,7 @@ import type { ColumnDef, ColumnPinningState } from '@tanstack/react-table';
 import type { SortDescriptor } from '@heroui/react';
 import type { TenoraTableProps } from '../TenoraTable/types';
 import type { ColumnDragConfig, ColumnResizeConfig } from './core/columns';
+import type { TenoraDataTableToolbarConfig } from './types/toolbar';
 
 export type TenoraDataTableDataType = 'static' | 'dynamic';
 
@@ -78,6 +79,17 @@ export type TenoraDataTableProps<TData extends object> = {
   rowSelection?: false | null | TenoraDataTableRowSelectionConfig;
   /** Max height of the scrollable table body (`tbody`). Header and pagination footer stay fixed. */
   height?: number | string;
+  /**
+   * Header toolbar with search, filter, group, and column controls.
+   * `true` enables all features with defaults.
+   */
+  toolbar?: boolean | TenoraDataTableToolbarConfig | false | null;
+  /**
+   * Refetch handler for `dataType="dynamic"`. Shows an icon-only refresh button in the toolbar.
+   */
+  onRefresh?: () => void;
+  /** Disables the refresh button and shows a spinner while a refetch is in flight. */
+  isRefreshing?: boolean;
 };
 
 export type { ColumnDef };
@@ -88,3 +100,11 @@ export type {
   ColumnWidthValue,
   TenoraDataTableColumnMeta,
 } from './types/column-meta';
+export type {
+  TenoraDataTableToolbarConfig,
+  TenoraDataTableToolbarSearchConfig,
+  TenoraDataTableToolbarFilterConfig,
+  TenoraDataTableToolbarGroupConfig,
+  TenoraDataTableToolbarColumnConfig,
+  DataTableColumnResetHandlers,
+} from './types/toolbar';

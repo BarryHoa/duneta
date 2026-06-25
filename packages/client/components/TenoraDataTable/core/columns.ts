@@ -3,7 +3,9 @@ import type {
   ColumnDef,
   ColumnOrderState,
   ColumnPinningState,
+  ColumnSizingState,
   Table as ReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 import type { CSSProperties } from 'react';
 import type { TenoraTableColumnProps } from '../../TenoraTable';
@@ -239,4 +241,33 @@ export function withTanStackColumnSizing<TData>(
     size: column.size ?? resolveTanStackColumnSize(column.meta),
     minSize: column.minSize ?? DEFAULT_COLUMN_MIN_WIDTH_PX,
   }));
+}
+
+/** TanStack `columnSizing` baseline from column defs (used for width reset). */
+export function createInitialColumnSizing<TData>(
+  columns: Array<ColumnDef<TData, unknown>>,
+): ColumnSizingState {
+  const sizing: ColumnSizingState = {};
+  columns.forEach((column, index) => {
+    const id = resolveColumnId(column, index);
+    sizing[id] = column.size ?? resolveTanStackColumnSize(column.meta);
+  });
+  return sizing;
+}
+
+export function createInitialColumnVisibility<TData>(
+  columns: Array<ColumnDef<TData, unknown>>,
+  options?: { hiddenByDefault?: string[] },
+): VisibilityState {
+  const hiddenIds = new Set(options?.hiddenByDefault ?? []);
+  const visibility: VisibilityState = {};
+
+  columns.forEach((column, index) => {
+    const id = resolveColumnId(column, index);
+    if (column.meta?.defaultHidden || hiddenIds.has(id)) {
+      visibility[id] = false;
+    }
+  });
+
+  return visibility;
 }

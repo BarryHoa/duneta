@@ -1,5 +1,6 @@
 'use client';
 
+import isObject from 'lodash/isObject';
 import { useCallback, useMemo } from 'react';
 import { DataTableContent } from './components/DataTableContent';
 import { DataTablePlaceholder } from './components/DataTablePlaceholder';
@@ -12,6 +13,7 @@ import {
 import { DataTableColumnDnD } from './components/header/DataTableColumnDnD';
 import { DataTableHeader } from './components/header/DataTableHeader';
 import { DataTableFooter } from './components/footer/DataTableFooter';
+import { DataTableToolbar } from './components/toolbar/DataTableToolbar';
 import { DEFAULT_TABLE_HEIGHT } from './constants';
 import {
   getTablePinnedColumnIds,
@@ -22,6 +24,7 @@ import {
 } from './core/columns';
 import { toSortingState } from './core/sort';
 import { isDynamicDataType, resolveFooterPagination } from './core/data-mode';
+import { resolveToolbarConfig, isToolbarEnabled } from './core/toolbar';
 import { getDataTableEngineState, getHeaderLabel } from './core/table';
 import { useClientMounted } from './hooks/use-client-mounted';
 import { useTenoraDataTable } from './hooks/use-tenora-data-table';
@@ -42,9 +45,18 @@ function TenoraDataTableImpl<TData extends object>({
   columnResize,
   rowSelection,
   height = DEFAULT_TABLE_HEIGHT,
+  toolbar,
+  onRefresh,
+  isRefreshing,
 }: TenoraDataTableProps<TData>) {
-  const rowSelectionConfig =
-    rowSelection === false || rowSelection == null ? undefined : rowSelection;
+  const rowSelectionConfig = isObject(rowSelection) ? rowSelection : undefined;
+
+  const resolvedToolbar = useMemo(
+    () => resolveToolbarConfig(toolbar),
+    [toolbar],
+  );
+  const toolbarEnabled = isToolbarEnabled(resolvedToolbar);
+  const showRefresh = isDynamicDataType(dataType) && onRefresh != null;
 
   const {
     table,
@@ -55,6 +67,10 @@ function TenoraDataTableImpl<TData extends object>({
     rowSelectionEnabled,
     selectedKeys,
     onSelectionChange,
+    groupingColumnId,
+    setGroupingColumnId,
+    handleToolbarSearchChange,
+    columnReset,
   } = useTenoraDataTable({
     columns,
     data,
@@ -63,6 +79,7 @@ function TenoraDataTableImpl<TData extends object>({
     sort,
     getRowId,
     rowSelection: rowSelectionConfig,
+    toolbar: resolvedToolbar,
   });
 
   const footerPagination = useMemo(() => {
@@ -126,6 +143,21 @@ function TenoraDataTableImpl<TData extends object>({
           bodyMaxHeight={height}
           virtualEnabled={virtualEnabled}
           resizeEnabled={columnResizeEnabled}
+          toolbar={
+            toolbarEnabled && resolvedToolbar ? (
+              <DataTableToolbar
+                table={table}
+                config={resolvedToolbar}
+                groupingColumnId={groupingColumnId}
+                onGroupingChange={setGroupingColumnId}
+                onSearchChange={handleToolbarSearchChange}
+                columnReset={columnReset}
+                showRefresh={showRefresh}
+                onRefresh={onRefresh}
+                isRefreshing={isRefreshing}
+              />
+            ) : undefined
+          }
           footer={
             footerPagination ? (
               <DataTableFooter pagination={footerPagination} />
