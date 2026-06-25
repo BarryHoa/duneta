@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo } from 'react';
 import { useClientMounted } from './state/use-client-mounted';
+import { isColumnDragEnabled } from './core/column-drag';
+import { isColumnResizeEnabled } from './core/column-resize';
 import { getDataTableEngineState } from './core/get-engine-state';
 import { toSortingState } from './core/sort-bridge';
 import { useTenoraDataTable } from './core/useTenoraDataTable';
@@ -28,7 +30,8 @@ function TenoraDataTableImpl<TData extends object>({
   ariaLabel = 'Data table',
   className,
   virtual = false,
-  columnDrag = true,
+  columnDrag,
+  columnResize,
   height = DEFAULT_TABLE_HEIGHT,
 }: TenoraDataTableProps<TData>) {
   const { table, setSorting, columnOrder, setColumnOrder, sortDescriptor } =
@@ -37,6 +40,8 @@ function TenoraDataTableImpl<TData extends object>({
   const { headers, columnCount } = getDataTableEngineState(table);
   const virtualEnabled = virtual && pagination === false;
   const showPagination = pagination !== false;
+  const columnDragEnabled = isColumnDragEnabled(columnDrag);
+  const columnResizeEnabled = isColumnResizeEnabled(columnResize);
 
   const sortableColumnIds = useMemo(
     () => headers.map((header) => header.column.id),
@@ -61,7 +66,7 @@ function TenoraDataTableImpl<TData extends object>({
   return (
     <DataTableVirtualizer enabled={virtualEnabled}>
       <DataTableColumnDnD
-        enabled={columnDrag}
+        enabled={columnDragEnabled}
         columnIds={sortableColumnIds}
         columnOrder={columnOrder}
         columnLabels={columnLabels}
@@ -71,6 +76,7 @@ function TenoraDataTableImpl<TData extends object>({
           className={className}
           virtualEnabled={virtualEnabled}
           height={height}
+          resizeEnabled={columnResizeEnabled}
           footer={
             showPagination ? (
               <DataTableFooter pagination={pagination} />
@@ -79,10 +85,16 @@ function TenoraDataTableImpl<TData extends object>({
         >
           <DataTableContent
             ariaLabel={ariaLabel}
+            resizeEnabled={columnResizeEnabled}
             sortDescriptor={sortDescriptor}
             onSortChange={handleSortChange}
           >
-            <DataTableHeader headers={headers} columnDrag={columnDrag} />
+            <DataTableHeader
+              headers={headers}
+              columnDrag={columnDrag}
+              columnResize={columnResize}
+              resizeEnabled={columnResizeEnabled}
+            />
             {virtualEnabled ? (
               <DataTableVirtualBody
                 table={table}

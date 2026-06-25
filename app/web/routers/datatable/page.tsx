@@ -26,9 +26,24 @@ function formatVnd(amount: number): string {
 }
 
 const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
-  { id: 'sku', accessorKey: 'sku', header: 'SKU' },
-  { id: 'name', accessorKey: 'name', header: 'Product' },
-  { id: 'category', accessorKey: 'category', header: 'Category' },
+  {
+    id: 'sku',
+    accessorKey: 'sku',
+    header: 'SKU',
+    meta: { defaultWidth: 120, minWidth: 80 },
+  },
+  {
+    id: 'name',
+    accessorKey: 'name',
+    header: 'Product',
+    meta: { defaultWidth: 'auto', minWidth: 160 },
+  },
+  {
+    id: 'category',
+    accessorKey: 'category',
+    header: 'Category',
+    meta: { defaultWidth: 140 },
+  },
   {
     id: 'status',
     accessorKey: 'status',
@@ -48,6 +63,7 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     id: 'price',
     accessorKey: 'price',
     header: 'Price',
+    meta: { defaultWidth: 130, maxWidth: 200 },
     cell: ({ getValue }) => formatVnd(Number(getValue() ?? 0)),
   },
   { id: 'stock', accessorKey: 'stock', header: 'Stock' },
@@ -60,7 +76,12 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
   { id: 'supplier', accessorKey: 'supplier', header: 'Supplier' },
   { id: 'warehouse', accessorKey: 'warehouse', header: 'WH' },
   { id: 'updatedAt', accessorKey: 'updatedAt', header: 'Updated' },
-  { id: 'notes', accessorKey: 'notes', header: 'Notes' },
+  {
+    id: 'notes',
+    accessorKey: 'notes',
+    header: 'Notes',
+    meta: { defaultWidth: 220 },
+  },
   {
     id: 'weight',
     accessorKey: 'weight',
@@ -114,8 +135,8 @@ export default function DataTableDemoPage() {
             TenoraDataTable
           </h1>
           <p className="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            Test: {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page
-            (3 pages) · drag columns · sort. Route:{' '}
+            Test: {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE}{' '}
+            rows/page (3 pages) · drag columns · resize columns · sort. Route:{' '}
             <code className="text-cyan-700 dark:text-cyan-200">/datatable</code>
           </p>
         </div>
@@ -129,6 +150,8 @@ export default function DataTableDemoPage() {
 
       <TenoraDataTable<DemoProductRow>
         ariaLabel="Product catalog test"
+        columnDrag
+        columnResize
         data={pagedRows}
         columns={columns}
         getRowId={(row) => row.id}
@@ -139,12 +162,8 @@ export default function DataTableDemoPage() {
           pageSizeOptions: PAGE_SIZE_OPTIONS,
           onPageChange: setPage,
         }}
+        height="300px"
       />
-
-      <p className="text-xs text-zinc-500 dark:text-zinc-500">
-        Showing page {page} of {Math.ceil(rows.length / PAGE_SIZE)} ·{' '}
-        {pagedRows.length} rows on screen
-      </p>
     </main>
   );
 }

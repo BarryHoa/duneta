@@ -2,10 +2,12 @@
 
 import type { SortDescriptor } from '@heroui/react';
 import type { ReactNode } from 'react';
+import { cn } from '../../../helpers';
 import { TenoraTable } from '../../TenoraTable';
 
 type DataTableContentProps = {
   ariaLabel: string;
+  resizeEnabled: boolean;
   sortDescriptor: SortDescriptor | undefined;
   onSortChange: (descriptor: SortDescriptor) => void;
   children: ReactNode;
@@ -13,6 +15,7 @@ type DataTableContentProps = {
 
 export function DataTableContent({
   ariaLabel,
+  resizeEnabled,
   sortDescriptor,
   onSortChange,
   children,
@@ -20,7 +23,7 @@ export function DataTableContent({
   return (
     <TenoraTable.Content
       aria-label={ariaLabel}
-      className="min-w-full"
+      className={cn('min-w-full', resizeEnabled && '[table-layout:fixed]')}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
     >
