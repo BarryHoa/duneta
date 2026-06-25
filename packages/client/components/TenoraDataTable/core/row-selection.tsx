@@ -1,8 +1,17 @@
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import { Checkbox } from '@heroui/react';
+import { cn } from '../../../helpers';
 import { TenoraCheckbox, type TenoraCheckboxProps } from '../../TenoraCheckbox';
 import { SELECTION_COLUMN_ID } from '../constants';
 import type { TenoraDataTableRowSelectionConfig } from '../types';
+
+/** Visible on both `bg-surface-secondary` header cells and default row cells. */
+const SELECTION_CHECKBOX_CONTROL_CLASS = cn(
+  'border-accent bg-white shadow-sm',
+  'dark:bg-zinc-900',
+  'data-[selected=true]:border-transparent data-[selected=true]:bg-transparent',
+  'data-[indeterminate=true]:border-transparent',
+);
 
 type TableSelectionCheckboxProps = Omit<
   TenoraCheckboxProps,
@@ -18,14 +27,13 @@ export function TableSelectionCheckbox({
   return (
     <TenoraCheckbox
       slot="selection"
-      variant="secondary"
       {...props}
       onChange={(isSelected) => {
         onSelectedChange?.(isSelected);
       }}
     >
       <Checkbox.Content>
-        <Checkbox.Control>
+        <Checkbox.Control className={SELECTION_CHECKBOX_CONTROL_CLASS}>
           <Checkbox.Indicator />
         </Checkbox.Control>
       </Checkbox.Content>

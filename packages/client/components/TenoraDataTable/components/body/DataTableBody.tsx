@@ -3,6 +3,8 @@
 import { flexRender, type Table as ReactTable } from '@tanstack/react-table';
 import { cn } from '../../../../helpers';
 import { getColumnPinPresentation } from '../../core/columns';
+import { isSelectionColumnId } from '../../core/row-selection';
+import { SELECTION_COLUMN_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import type { TenoraDataTableProps } from '../../types';
 import { DataTableEmptyState } from './DataTableEmptyState';
@@ -34,7 +36,10 @@ export function DataTableStaticBody<TData>({
             return (
               <TenoraTable.Cell
                 key={cell.id}
-                className={cn(pin.className)}
+                className={cn(
+                  isSelectionColumnId(cell.column.id) && SELECTION_COLUMN_CLASS,
+                  pin.className,
+                )}
                 style={pin.style}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -89,7 +94,10 @@ export function DataTableVirtualBody<TData extends object>({
               return (
                 <TenoraTable.Cell
                   key={cell.id}
-                  className={cn(pin.className)}
+                  className={cn(
+                    isSelectionColumnId(cell.column.id) && SELECTION_COLUMN_CLASS,
+                    pin.className,
+                  )}
                   style={pin.style}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -25,7 +25,7 @@ import {
   type ColumnResizeConfig,
 } from '../../core/columns';
 import { isSelectionColumnId } from '../../core/row-selection';
-import { TABLE_STICKY_HEADER_CELL_CLASS } from '../../constants';
+import { SELECTION_COLUMN_CLASS, TABLE_STICKY_HEADER_CELL_CLASS } from '../../constants';
 import { TenoraTable } from '../../../TenoraTable';
 import { useColumnDragState } from './column-drag-context';
 import {
@@ -73,13 +73,14 @@ function SelectionHeaderColumn({
     <TenoraTable.Column
       className={cn(
         TABLE_STICKY_HEADER_CELL_CLASS,
-        'w-11 bg-surface-secondary pr-0',
+        'bg-surface-secondary',
+        SELECTION_COLUMN_CLASS,
         pinClassName,
       )}
       id={id}
       style={style}
     >
-      <div className="flex items-center justify-center">{label}</div>
+      {label}
     </TenoraTable.Column>
   );
 }
