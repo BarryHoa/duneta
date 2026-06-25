@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { Auth } from '../auth/types.js';
-import { bindCached } from '../cached/index.js';
+import { setGlobalCache } from '../cached/index.js';
 import type { Cache } from '../cache/index.js';
 import { isCsrfEnabled, isCacheEnabled, isRateLimitEnabled } from '../configs/features.js';
 import type { TenoraServerConfig } from '../configs/types.js';
@@ -14,12 +14,12 @@ import {
   createCsrfMiddleware,
   createErrorHandler,
   createRateLimitMiddleware,
-  type BackendEnv,
+  type RequestContext,
 } from '../middlewares/index.js';
 import { attachRequestServices } from './attach-request-services.js';
 
 export type CreateHttpAppOptions = {
-  router: Hono<BackendEnv>;
+  router: Hono<RequestContext>;
   config: TenoraServerConfig;
   db: Database | null;
   auth: Auth | null;
@@ -37,7 +37,7 @@ export function createHttpApp({
   controllers,
   repositories,
 }: CreateHttpAppOptions) {
-  const app = new Hono<BackendEnv>().basePath('/api');
+  const app = new Hono<RequestContext>().basePath('/api');
 
   app.use('*', createCorsMiddleware());
   app.use('*', createContextDefaultsMiddleware(config));
@@ -53,7 +53,7 @@ export function createHttpApp({
 
   app.onError(createErrorHandler(config.app.debug || config.debug.enabled));
 
-  bindCached(cache);
+  setGlobalCache(cache);
 
   attachRequestServices(app, config, { db, auth, cache, controllers, repositories });
 

@@ -27,10 +27,10 @@
     "./http": { "types": "./dist/http/index.d.ts", "import": "./dist/http/index.js" },
     "./cache": { "types": "./dist/cache/index.d.ts", "import": "./dist/cache/index.js" },
     "./cached": { "types": "./dist/cached/index.d.ts", "import": "./dist/cached/index.js" },
-    "./runtime/cloud": {
-      "types": "./runtime/cloud/index.ts",
-      "import": "./runtime/cloud/index.ts",
-      "default": "./runtime/cloud/index.ts"
+    "./runtime/worker": {
+      "types": "./runtime/worker/index.ts",
+      "import": "./runtime/worker/index.ts",
+      "default": "./runtime/worker/index.ts"
     },
     "./runtime/node": {
       "types": "./runtime/node/index.ts",

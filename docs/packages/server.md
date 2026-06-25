@@ -20,10 +20,10 @@ packages/server/
 
 | Path | Symbols |
 |------|---------|
-| `@tenora/server/runtime/cloud` | `defineServer`, `ServerOptions` |
+| `@tenora/server/runtime/worker` | `defineServer`, `ServerOptions` |
 | `@tenora/server/container` | `RegisterServices`, `ServiceRegistryContext` |
 | `@tenora/server/routers` | `composeRouter`, `defineGroup`, `RouteGroup` |
 | `@tenora/server/http` | `resolveController`, `BaseController` |
-| `@tenora/server/middlewares` | `requireSession`, `BackendEnv` |
+| `@tenora/server/middlewares` | `requireSession`, `RequestContext` |
 | `@tenora/server/permissions` | `UserPolicy`, `PermissionResolver` |
 | `@tenora/server/assembly` | `createHttpApp` |

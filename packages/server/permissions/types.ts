@@ -1,5 +1,5 @@
 import type { Context } from 'hono';
-import type { BackendEnv } from '../middlewares/env.js';
+import type { RequestContext } from '../middlewares/request-context.js';
 
 /** e.g. `users.read`, `users.read:self`, `posts.*`, `*` */
 export type Permission = string;
@@ -26,7 +26,7 @@ export type PermissionCheck = {
 };
 
 export type PermissionResolverInput = {
-  c: Context<BackendEnv>;
+  c: Context<RequestContext>;
   userId: string;
 };
 

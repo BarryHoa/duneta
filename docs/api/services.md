@@ -1,9 +1,10 @@
 # Services (DI)
 
-Đăng ký **controller** và **repository** qua `registerServices`.
+Đăng ký **controller** và **repository** qua `registerServices` trong `services/index.ts`.
 
 ```ts
-import { createAppRouter, registerServices } from './.api-runtime';
+import { createAppRouter } from './routers';
+import { registerServices } from './services';
 
 export default defineServer({
   config,
@@ -29,9 +30,9 @@ export const registerServices: RegisterServices = (ctx) => {
 
 ## Convention + sync
 
-Thêm `*-controller.ts`, `*-repository.ts` → `tenora-api sync` tự wire.
+Thêm `*-controller.ts`, `*-repository.ts` → `tenora-api sync` tự sinh `services/index.ts` nếu chưa có.
 
-Override thủ công: `services/index.ts` — sync re-export từ đó.
+Override thủ công: giữ `services/index.ts` — sync bỏ qua.
 
 ## Resolve trong handler
 

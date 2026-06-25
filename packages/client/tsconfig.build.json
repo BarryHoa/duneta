@@ -7,7 +7,6 @@
   },
   "include": [
     "configs",
-    "config/index.ts",
     "validators",
     "helpers",
     "hooks",

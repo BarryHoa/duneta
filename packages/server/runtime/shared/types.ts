@@ -3,11 +3,11 @@ import type { Hono as HonoType } from 'hono';
 import type { PermissionResolver } from '../../permissions/types.js';
 import type { DeepPartial, Runtime, TenoraServerConfig } from '../../configs/index.js';
 import type { RegisterServices } from '../../container/index.js';
-import type { BackendEnv } from '../../middlewares/env.js';
+import type { RequestContext } from '../../middlewares/request-context.js';
 
 export type ServerOptions = {
   config: DeepPartial<TenoraServerConfig>;
-  createAppRouter?: (config: TenoraServerConfig) => HonoType<BackendEnv>;
+  createAppRouter?: (config: TenoraServerConfig) => HonoType<RequestContext>;
   registerServices?: RegisterServices;
   /** Role → grants; loaded by `requireSession()` on protected routes. */
   resolvePermissions?: PermissionResolver;
@@ -16,15 +16,15 @@ export type ServerOptions = {
 export type ServerBoot = {
   target: Runtime;
   config: DeepPartial<TenoraServerConfig>;
-  createAppRouter: (config: TenoraServerConfig) => HonoType<BackendEnv>;
+  createAppRouter: (config: TenoraServerConfig) => HonoType<RequestContext>;
   registerServices: RegisterServices;
   resolvePermissions?: PermissionResolver;
 };
 
 const noopRegisterServices: RegisterServices = () => {};
 
-function emptyAppRouter(): HonoType<BackendEnv> {
-  return new Hono<BackendEnv>();
+function emptyAppRouter(): HonoType<RequestContext> {
+  return new Hono<RequestContext>();
 }
 
 export function createServerBoot(options: ServerOptions, target: Runtime): ServerBoot {

@@ -62,7 +62,7 @@ export async function loader() {
 ## `react-router.config.ts`
 
 ```ts
-import { createReactRouterConfig } from '@tenora/client/config/react-router';
+import { createReactRouterConfig } from '@tenora/client/configs/react-router';
 import { loadConfig } from '@tenora/client/configs/load';
 
 const config = await loadConfig(webRoot);
@@ -72,7 +72,7 @@ export default createReactRouterConfig(config);
 ## `vite.config.ts`
 
 ```ts
-import { createViteConfig } from '@tenora/client/config/vite';
+import { createTenoraViteConfig } from '@tenora/client/configs/vite';
 // merge với config app
 ```
 
@@ -80,10 +80,10 @@ Xem file thực tế trong `app/web/` để biết options đang dùng.
 
 ## Components
 
-UI components ship trong `@tenora/client/components` (Ibase* wrappers quanh HeroUI).
+UI components ship trong `@tenora/client/components` (Tenora* wrappers quanh HeroUI).
 
 ```tsx
-import { IbaseButton } from '@tenora/client/components/IbaseButton';
+import { TenoraButton } from '@tenora/client/components';
 ```
 
 Không copy component vào app trừ khi cần customize sâu.

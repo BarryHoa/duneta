@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Context } from 'hono';
 import { BaseController } from '../base-controller.js';
-import type { BackendEnv } from '../../middlewares/env.js';
+import type { RequestContext } from '../../middlewares/request-context.js';
 
 const healthResponseSchema = z.object({
   ok: z.literal(true),
@@ -12,7 +12,7 @@ const healthResponseSchema = z.object({
 });
 
 export class HealthController extends BaseController {
-  show = (c: Context<BackendEnv>) =>
+  show = (c: Context<RequestContext>) =>
     this.json(
       c,
       healthResponseSchema.parse({

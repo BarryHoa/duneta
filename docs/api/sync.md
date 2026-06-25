@@ -1,19 +1,25 @@
-# Sync & `.api-runtime`
+# Sync convention
 
-Codegen trước `dev` / `deploy` / `typecheck`.
+Codegen trước `dev` / `deploy` / `typecheck` khi chưa có `services/index.ts` hoặc `routers/index.ts`.
 
-## Output
+## Manual (khuyến nghị)
 
 ```text
-app/api/.api-runtime/
-  services.generated.ts   → registerServices
-  router.generated.ts       → createAppRouter
-  index.ts
+app/api/
+  services/index.ts   → registerServices
+  routers/index.ts    → createAppRouter
 ```
 
-Manual override: `services/index.ts`, `routers/index.ts` → sync chỉ re-export.
+`server.ts` import trực tiếp:
 
-## Convention
+```ts
+import { createAppRouter } from './routers';
+import { registerServices } from './services';
+```
+
+## Convention-only (sync tự sinh)
+
+Thêm file theo pattern — sync ghi `services/index.ts` / `routers/index.ts` nếu chưa có:
 
 | File | Export |
 |------|--------|
@@ -21,10 +27,14 @@ Manual override: `services/index.ts`, `routers/index.ts` → sync chỉ re-expor
 | `post-repository.ts` | `PostRepository` |
 | `posts.routes.ts` | `postsRoutes` |
 
-## `server.ts`
+## `defineServer`
 
 ```ts
-import { createAppRouter, registerServices } from './.api-runtime';
+import { defineServer } from '@tenora/server/runtime/worker';
+import { resolvePermissions } from './permissions';
+import config from './tenora.config';
+import { createAppRouter } from './routers';
+import { registerServices } from './services';
 
 export default defineServer({
   config,

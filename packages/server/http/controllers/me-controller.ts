@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Context } from 'hono';
 import { BaseController } from '../base-controller.js';
-import type { BackendEnv } from '../../middlewares/env.js';
+import type { RequestContext } from '../../middlewares/request-context.js';
 
 const meResponseSchema = z.object({
   data: z.object({
@@ -16,7 +16,7 @@ const meResponseSchema = z.object({
 });
 
 export class MeController extends BaseController {
-  show = async (c: Context<BackendEnv>) => {
+  show = async (c: Context<RequestContext>) => {
     const session = await this.resolveSession(c);
     if (!session?.user) return this.unauthorized(c);
 

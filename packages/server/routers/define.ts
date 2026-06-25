@@ -1,16 +1,16 @@
 import { Hono } from 'hono';
 import type { Handler, MiddlewareHandler } from 'hono';
-import type { BackendEnv } from '../middlewares/env.js';
+import type { RequestContext } from '../middlewares/request-context.js';
 
 type Endpoint = {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path?: string;
-  handler: Handler<BackendEnv>;
+  handler: Handler<RequestContext>;
 };
 
 export type RouteGroup = {
   path: string;
-  middleware?: MiddlewareHandler<BackendEnv>[];
+  middleware?: MiddlewareHandler<RequestContext>[];
   endpoints?: Endpoint[];
   children?: RouteGroup[];
 };
@@ -24,7 +24,7 @@ function normalizePath(path: string) {
 }
 
 function mountGroup(group: RouteGroup) {
-  const router = new Hono<BackendEnv>();
+  const router = new Hono<RequestContext>();
 
   if (group.middleware?.length) router.use('*', ...group.middleware);
 
@@ -40,7 +40,7 @@ function mountGroup(group: RouteGroup) {
 }
 
 export function composeRouter(groups: RouteGroup[]) {
-  const router = new Hono<BackendEnv>();
+  const router = new Hono<RequestContext>();
   for (const group of groups) router.route(normalizePath(group.path), mountGroup(group));
   return router;
 }

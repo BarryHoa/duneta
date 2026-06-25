@@ -75,7 +75,7 @@ const SYNC_COMMANDS = new Set(['dev', 'deploy', 'dev:node', 'start:node', 'sync'
 if (SYNC_COMMANDS.has(command)) {
   syncApi(cwd);
   if (command === 'sync') {
-    console.log('[tenora-api] synced .api-runtime/');
+    console.log('[tenora-api] sync complete');
     process.exit(0);
   }
 }

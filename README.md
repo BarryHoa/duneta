@@ -5,10 +5,11 @@ Monorepo: `app/api` (backend), `app/web` (frontend), `packages/server`, `package
 ## API entry
 
 ```ts
-import { defineServer } from '@tenora/server/runtime/cloud';
+import { defineServer } from '@tenora/server/runtime/worker';
 import { resolvePermissions } from './permissions';
 import config from './tenora.config';
-import { createAppRouter, registerServices } from './.api-runtime';
+import { createAppRouter } from './routers';
+import { registerServices } from './services';
 
 export default defineServer({
   config,

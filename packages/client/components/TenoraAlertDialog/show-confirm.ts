@@ -1,0 +1,3 @@
+import { mountTenoraAlert } from './mount';
+import type { TenoraAlertDialogController, TenoraConfirmOptions, TenoraConfirmResult } from './types';
+export function showTenoraConfirm(options: TenoraConfirmOptions): Promise<TenoraConfirmResult> { return new Promise((resolve) => { let isOk = false; let controller!: TenoraAlertDialogController; const finish = () => resolve({ isOk, close: controller.close }); controller = mountTenoraAlert({ ...options, status: options.confirmVariant === 'danger' ? 'danger' : 'default', isOpen: true, onOpenChange: (isOpen) => { if (!isOpen) finish(); }, onConfirm: async () => { await options.onConfirm?.(); isOk = true; }, onCancel: async () => { await options.onCancel?.(); } }); }); }

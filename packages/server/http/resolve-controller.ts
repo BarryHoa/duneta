@@ -1,10 +1,10 @@
 import type { Context, Handler } from 'hono';
 import type { BaseController } from './base-controller.js';
-import type { BackendEnv } from '../middlewares/env.js';
+import type { RequestContext } from '../middlewares/request-context.js';
 
-type ControllerHandler = (c: Context<BackendEnv>) => Response | Promise<Response>;
+type ControllerHandler = (c: Context<RequestContext>) => Response | Promise<Response>;
 
-export function resolveController(key: string, method: string): Handler<BackendEnv> {
+export function resolveController(key: string, method: string): Handler<RequestContext> {
   return (c) => {
     const controller = c.get('controllers').resolve<BaseController>(key);
     const handler = (controller as unknown as Record<string, ControllerHandler>)[method];

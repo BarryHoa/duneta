@@ -9,7 +9,6 @@
     "dist",
     "configs",
     "routers",
-    "config",
     "providers",
     "themes",
     "scripts"
@@ -27,12 +26,9 @@
       "import": "./configs/index.ts",
       "default": "./configs/index.ts"
     },
-    "./config": {
-      "types": "./dist/config/index.d.ts",
-      "import": "./dist/config/index.js"
-    },
-    "./config/vite": "./config/vite.ts",
-    "./config/react-router": "./config/react-router.ts",
+    "./configs/vite": "./configs/vite.ts",
+    "./configs/react-router": "./configs/react-router.ts",
+    "./configs/client": "./configs/client.ts",
     "./validators": {
       "types": "./dist/validators/index.d.ts",
       "import": "./dist/validators/index.js"
@@ -53,33 +49,37 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
-    "./components/IbaseInput": {
-      "types": "./dist/components/IbaseInput/index.d.ts",
-      "import": "./dist/components/IbaseInput/index.js"
+    "./components/TenoraAlertDialog": {
+      "types": "./dist/components/TenoraAlertDialog/index.d.ts",
+      "import": "./dist/components/TenoraAlertDialog/index.js"
     },
-    "./components/IbaseSelect": {
-      "types": "./dist/components/IbaseSelect/index.d.ts",
-      "import": "./dist/components/IbaseSelect/index.js"
+    "./components/TenoraInput": {
+      "types": "./dist/components/TenoraInput/index.d.ts",
+      "import": "./dist/components/TenoraInput/index.js"
     },
-    "./components/IbaseForm": {
-      "types": "./dist/components/IbaseForm/index.d.ts",
-      "import": "./dist/components/IbaseForm/index.js"
+    "./components/TenoraSelect": {
+      "types": "./dist/components/TenoraSelect/index.d.ts",
+      "import": "./dist/components/TenoraSelect/index.js"
     },
-    "./components/IbaseUpload": {
-      "types": "./dist/components/IbaseUpload/index.d.ts",
-      "import": "./dist/components/IbaseUpload/index.js"
+    "./components/TenoraForm": {
+      "types": "./dist/components/TenoraForm/index.d.ts",
+      "import": "./dist/components/TenoraForm/index.js"
     },
-    "./components/IbaseTable": {
-      "types": "./dist/components/IbaseTable/index.d.ts",
-      "import": "./dist/components/IbaseTable/index.js"
+    "./components/TenoraUpload": {
+      "types": "./dist/components/TenoraUpload/index.d.ts",
+      "import": "./dist/components/TenoraUpload/index.js"
     },
-    "./components/IbaseError": {
-      "types": "./dist/components/IbaseError/index.d.ts",
-      "import": "./dist/components/IbaseError/index.js"
+    "./components/TenoraTable": {
+      "types": "./dist/components/TenoraTable/index.d.ts",
+      "import": "./dist/components/TenoraTable/index.js"
     },
-    "./components/IbaseLayout": {
-      "types": "./dist/components/IbaseLayout/index.d.ts",
-      "import": "./dist/components/IbaseLayout/index.js"
+    "./components/TenoraError": {
+      "types": "./dist/components/TenoraError/index.d.ts",
+      "import": "./dist/components/TenoraError/index.js"
+    },
+    "./components/TenoraLayout": {
+      "types": "./dist/components/TenoraLayout/index.d.ts",
+      "import": "./dist/components/TenoraLayout/index.js"
     },
     "./layouts": {
       "types": "./dist/layouts/index.d.ts",

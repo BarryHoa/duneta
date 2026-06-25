@@ -6,7 +6,7 @@ const disabled = new Cache(new NullCacheStore(), 'none', false, false);
 let active: Cache = disabled;
 
 /** Wire the global cache instance (called on boot). */
-export function bindCached(cache: Cache): void {
+export function setGlobalCache(cache: Cache): void {
   active = cache;
 }
 

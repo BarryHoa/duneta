@@ -1,6 +1,6 @@
 import { createMiddleware } from 'hono/factory';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 import { createLocaleMiddleware } from './locale.js';
 import { createRequestIdMiddleware } from './request-id.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
@@ -12,7 +12,7 @@ export function createCoreMiddleware(config: TenoraServerConfig) {
   const localeMw = createLocaleMiddleware(config);
   const timezoneMw = createTimezoneMiddleware(config);
 
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     await requestIdMw(c, async () => {
       await securityHeadersMw(c, async () => {
         await localeMw(c, async () => {

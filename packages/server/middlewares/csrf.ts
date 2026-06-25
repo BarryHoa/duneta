@@ -2,14 +2,14 @@ import { getCookie, setCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 import { createSignedRequestToken, isMutatingMethod, timingSafeEqual } from './utils.js';
 
 function isExcludedPath(path: string, excludePaths: string[]) {
   return excludePaths.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
 }
 
-function issueCsrfCookie(c: Context<BackendEnv>, config: TenoraServerConfig) {
+function issueCsrfCookie(c: Context<RequestContext>, config: TenoraServerConfig) {
   const { csrf } = config.security;
   const token = createSignedRequestToken(csrf.secret, csrf.tokenLength);
 
@@ -27,7 +27,7 @@ function issueCsrfCookie(c: Context<BackendEnv>, config: TenoraServerConfig) {
 export function createCsrfMiddleware(config: TenoraServerConfig) {
   const { csrf } = config.security;
 
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     const path = c.req.path;
     const isExcluded = isExcludedPath(path, csrf.excludePaths);
     const usesBearer = Boolean(c.req.header('Authorization')?.startsWith('Bearer '));

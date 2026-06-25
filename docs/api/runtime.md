@@ -10,7 +10,7 @@ Hai entry file = hai runtime. Framework tự set `runtime.target` — **không c
 | Bun local / VPS | `server.node.ts` | `pnpm --filter api dev:node` |
 
 ```text
-server.ts       →  import runtime/cloud  →  target = worker
+server.ts       →  import runtime/worker  →  target = worker
 server.node.ts  →  import runtime/node   →  target = node
 ```
 
@@ -42,7 +42,7 @@ runtime: { target: 'worker' | 'node' }  // từ entry, luôn thắng
 
 ```ts
 // app/api/server.ts
-import { defineServer } from '@tenora/server/runtime/cloud';
+import { defineServer } from '@tenora/server/runtime/worker';
 export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
 ```
 

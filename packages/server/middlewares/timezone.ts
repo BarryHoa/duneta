@@ -1,7 +1,7 @@
 import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 
 function isValidTimezone(value: string) {
   try {
@@ -27,7 +27,7 @@ export function createTimezoneMiddleware(config: TenoraServerConfig) {
   const { timezone } = config;
   const { resolve } = timezone;
 
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     const fromQuery = resolve.query ? c.req.query(resolve.query) : undefined;
     const fromHeader = c.req.header(resolve.header);
     const fromCookie = resolve.cookie ? getCookie(c, resolve.cookie) : undefined;

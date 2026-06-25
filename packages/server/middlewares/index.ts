@@ -4,14 +4,14 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { TenoraServerConfig } from '../configs/types.js';
 import { HttpError } from '../permissions/errors.js';
 import { createCsrfMiddleware } from './csrf.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 import { createLocaleMiddleware } from './locale.js';
 import { createRateLimitMiddleware } from './rate-limit.js';
 import { createRequestIdMiddleware } from './request-id.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { createTimezoneMiddleware } from './timezone.js';
 
-export type { BackendEnv } from './env.js';
+export type { RequestContext } from './request-context.js';
 
 export { createCoreMiddleware } from './core.js';
 export { requireSession } from './session.js';
@@ -26,7 +26,7 @@ export {
 export type { AuthSession, AuthUser } from './types.js';
 
 export function createContextDefaultsMiddleware(config: TenoraServerConfig) {
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     c.set('requestId', '');
     c.set('locale', config.locale.default);
     c.set('timezone', config.timezone.default);
@@ -35,7 +35,7 @@ export function createContextDefaultsMiddleware(config: TenoraServerConfig) {
 }
 
 export function createCorsMiddleware(origins: string[] = ['*']) {
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     const origin = c.req.header('Origin') ?? '*';
     const allowed = origins.includes('*') || origins.includes(origin);
 
@@ -59,7 +59,7 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
 }
 
 export function createErrorHandler(debug: boolean) {
-  return (error: Error, c: Context<BackendEnv>) => {
+  return (error: Error, c: Context<RequestContext>) => {
     console.error(error);
 
     if (error instanceof HttpError) {

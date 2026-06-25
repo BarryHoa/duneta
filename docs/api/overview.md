@@ -12,17 +12,17 @@ app/api/
 ├── permissions/index.ts   # resolvePermissions
 ├── controllers/           # *-controller.ts (sync)
 ├── repositories/          # *-repository.ts (sync)
-├── routers/*.routes.ts    # route groups (sync)
-└── .api-runtime/          # generated bridge
+└── routers/*.routes.ts    # route groups (sync)
 ```
 
 ## Entry
 
 ```ts
-import { defineServer } from '@tenora/server/runtime/cloud';
+import { defineServer } from '@tenora/server/runtime/worker';
 import { resolvePermissions } from './permissions';
 import config from './tenora.config';
-import { createAppRouter, registerServices } from './.api-runtime';
+import { createAppRouter } from './routers';
+import { registerServices } from './services';
 
 export default defineServer({
   config,
@@ -34,10 +34,10 @@ export default defineServer({
 
 ## Hooks
 
-| Hook | Việc |
-|------|------|
-| `createAppRouter` | Ghép routes theo config |
-| `registerServices` | DI controllers/repositories |
-| `resolvePermissions` | Role → grants (optional) |
+| Hook | File | Vai trò |
+|------|------|---------|
+| `registerServices` | `services/index.ts` | DI controllers + repositories |
+| `createAppRouter` | `routers/index.ts` | Route groups |
+| `resolvePermissions` | `permissions/index.ts` | Grants / roles sau login |
 
-Xem [Sync](./sync.md), [Services](./services.md), [Routes](./routes.md).
+Chi tiết: [services](./services.md), [sync](./sync.md), [runtime](./runtime.md).

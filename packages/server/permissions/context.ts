@@ -1,5 +1,5 @@
 import type { Context } from 'hono';
-import type { BackendEnv } from '../middlewares/env.js';
+import type { RequestContext } from '../middlewares/request-context.js';
 import { createPermissionCheck } from './check.js';
 import type { PermissionCheck, PermissionContext, PermissionResolver } from './types.js';
 
@@ -13,15 +13,15 @@ export function getPermissionResolver() {
   return resolver;
 }
 
-export function getPermissionContext(c: Context<BackendEnv>) {
+export function getPermissionContext(c: Context<RequestContext>) {
   return c.get('permissionContext');
 }
 
-export function getPermissionCheck(c: Context<BackendEnv>) {
+export function getPermissionCheck(c: Context<RequestContext>) {
   return c.get('permissionCheck');
 }
 
-export function requirePermissionCheck(c: Context<BackendEnv>): PermissionCheck {
+export function requirePermissionCheck(c: Context<RequestContext>): PermissionCheck {
   const check = getPermissionCheck(c);
   if (!check) {
     throw new Error('Permissions not loaded. Pass resolvePermissions to defineServer() and use requireSession().');
@@ -29,7 +29,7 @@ export function requirePermissionCheck(c: Context<BackendEnv>): PermissionCheck 
   return check;
 }
 
-export function setPermissions(c: Context<BackendEnv>, context: PermissionContext): PermissionCheck {
+export function setPermissions(c: Context<RequestContext>, context: PermissionContext): PermissionCheck {
   const check = createPermissionCheck(context);
   c.set('permissionContext', context);
   c.set('permissionCheck', check);

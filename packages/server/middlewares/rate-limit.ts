@@ -7,14 +7,14 @@ import {
   type RateLimitConfig,
   type RateLimitRule,
 } from '../configs/rate-limit.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 
 type CounterEntry = { count: number; resetAt: number };
 type CompiledRule = RateLimitRule & { methodsUpper?: string[] };
 
 const memoryStore = new Map<string, CounterEntry>();
 
-function clientIp(c: Context<BackendEnv>) {
+function clientIp(c: Context<RequestContext>) {
   return c.req.header('cf-connecting-ip') ?? c.req.header('x-forwarded-for') ?? 'local';
 }
 
@@ -31,7 +31,7 @@ function isExcluded(path: string, excludePaths: string[] | undefined) {
   return excludePaths?.some((prefix) => pathMatches(path, prefix)) ?? false;
 }
 
-function matchesRule(c: Context<BackendEnv>, rule: CompiledRule) {
+function matchesRule(c: Context<RequestContext>, rule: CompiledRule) {
   const path = apiPath(c.req.path);
   if (isExcluded(path, rule.excludePaths)) return false;
   if (rule.path && !pathMatches(path, rule.path)) return false;
@@ -41,7 +41,7 @@ function matchesRule(c: Context<BackendEnv>, rule: CompiledRule) {
   return true;
 }
 
-function resolveIdentifier(c: Context<BackendEnv>, rule: RateLimitRule) {
+function resolveIdentifier(c: Context<RequestContext>, rule: RateLimitRule) {
   return (
     c.req.header(rule.identifierHeader ?? 'x-identifier') ??
     c.req.query(rule.identifierQuery ?? 'email') ??
@@ -49,7 +49,7 @@ function resolveIdentifier(c: Context<BackendEnv>, rule: RateLimitRule) {
   );
 }
 
-async function resolveRateLimitKey(c: Context<BackendEnv>, rule: RateLimitRule) {
+async function resolveRateLimitKey(c: Context<RequestContext>, rule: RateLimitRule) {
   const ip = clientIp(c);
 
   switch (rule.key) {
@@ -75,7 +75,7 @@ async function resolveRateLimitKey(c: Context<BackendEnv>, rule: RateLimitRule) 
 }
 
 function setRateLimitHeaders(
-  c: Context<BackendEnv>,
+  c: Context<RequestContext>,
   rule: RateLimitRule,
   count: number,
   resetAt: number,
@@ -120,7 +120,7 @@ function compileRule(rule: RateLimitRule): CompiledRule {
 export function createRateLimitMiddleware(config: RateLimitConfig, cache: Cache | null = null) {
   const rules = activeRateLimitRules(config).map(compileRule);
 
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     for (const rule of rules) {
       if (!matchesRule(c, rule)) continue;
 

@@ -12,7 +12,7 @@ import type { TenoraServerConfig } from '../configs/types.js';
 import type { ControllerContainer } from '../container/controller-container.js';
 import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
-import type { BackendEnv } from '../middlewares/env.js';
+import type { RequestContext } from '../middlewares/request-context.js';
 
 export type AttachRequestServicesOptions = {
   db: Database | null;
@@ -24,7 +24,7 @@ export type AttachRequestServicesOptions = {
 
 /** Attach db, auth, cache, and DI containers to each request. */
 export function attachRequestServices(
-  app: Hono<BackendEnv>,
+  app: Hono<RequestContext>,
   config: TenoraServerConfig,
   { db, auth, cache, controllers, repositories }: AttachRequestServicesOptions,
 ) {

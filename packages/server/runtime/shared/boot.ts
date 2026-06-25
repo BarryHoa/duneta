@@ -13,12 +13,12 @@ import {
   type DeepPartial,
 } from '../../configs/index.js';
 import type { TenoraServerConfig } from '../../configs/types.js';
-import type { BackendEnv } from '../../middlewares/env.js';
+import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
 import { isHyperdriveBinding, type PlatformEnv } from './platform-env.js';
 import type { ServerBoot } from './types.js';
 
-let cachedApp: Hono<BackendEnv> | undefined;
+let cachedApp: Hono<RequestContext> | undefined;
 let cachedAppKey: string | undefined;
 let configBootstrapped = false;
 

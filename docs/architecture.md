@@ -36,7 +36,7 @@ flowchart TD
 
 | Entry | Import | Target |
 |-------|--------|--------|
-| `server.ts` | `@tenora/server/runtime/cloud` | `worker` |
+| `server.ts` | `@tenora/server/runtime/worker` | `worker` |
 | `server.node.ts` | `@tenora/server/runtime/node` | `node` |
 
 ## Dependency injection

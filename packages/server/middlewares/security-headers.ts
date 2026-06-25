@@ -1,11 +1,11 @@
 import { createMiddleware } from 'hono/factory';
 import type { TenoraServerConfig } from '../configs/types.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 
 export function createSecurityHeadersMiddleware(config: TenoraServerConfig) {
   const headers = config.headers;
 
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     c.header('X-Frame-Options', headers.frameOptions);
 
     if (headers.contentTypeOptions) {

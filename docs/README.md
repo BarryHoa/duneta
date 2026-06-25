@@ -17,7 +17,7 @@ Monorepo TypeScript: **Hono API** (`@tenora/server`) + **React Router web** (`@t
 ### API (`app/api`)
 
 - [Tổng quan API app](./api/overview.md)
-- [Sync & `.api-runtime`](./api/sync.md)
+- [Sync convention](./api/sync.md)
 - [Runtime: Cloud vs Bun](./api/runtime.md)
 - [Routes & `createAppRouter`](./api/routes.md)
 - [Services & DI](./api/services.md)

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createReactRouterConfig } from '@tenora/client/config/react-router';
+import { createReactRouterConfig } from '@tenora/client/configs/react-router';
 import { loadConfig } from '../../packages/client/configs/load';
 
 const webRoot = path.dirname(fileURLToPath(import.meta.url));

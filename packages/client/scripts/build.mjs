@@ -6,6 +6,6 @@ const result = spawnSync(tsc, ['-p', 'tsconfig.build.json'], { stdio: 'inherit' 
 
 if (result.error || result.status !== 0) process.exit(result.status ?? 1);
 
-for (const directory of ['IbaseAlertDialog', 'IbaseInput', 'IbaseSelect', 'IbaseForm', 'IbaseUpload', 'IbaseTable', 'IbaseError', 'IbaseLayout']) {
+for (const directory of ['TenoraAlertDialog', 'TenoraInput', 'TenoraSelect', 'TenoraForm', 'TenoraUpload', 'TenoraTable', 'TenoraError', 'TenoraLayout']) {
   cpSync(`components/${directory}/types.d.ts`, `dist/components/${directory}/types.d.ts`);
 }

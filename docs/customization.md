@@ -54,7 +54,7 @@ export class PostController extends BaseController {
     super();
   }
 
-  index = async (c: Context<BackendEnv>) => {
+  index = async (c: Context<RequestContext>) => {
     return this.json(c, { data: await this.posts.findAll() });
   };
 }

@@ -35,7 +35,7 @@ Helpers có sẵn:
 // app/api/controllers/post-controller.ts
 import type { Context } from 'hono';
 import { BaseController } from '@tenora/server/http';
-import type { BackendEnv } from '@tenora/server/middlewares';
+import type { RequestContext } from '@tenora/server/middlewares';
 import type { PostRepository } from '../repositories/post-repository';
 
 export class PostController extends BaseController {
@@ -43,11 +43,11 @@ export class PostController extends BaseController {
     super();
   }
 
-  index = async (c: Context<BackendEnv>) => {
+  index = async (c: Context<RequestContext>) => {
     return this.json(c, { data: await this.posts.findAll() });
   };
 
-  show = async (c: Context<BackendEnv>) => {
+  show = async (c: Context<RequestContext>) => {
     const post = await this.posts.findById(c.req.param('id'));
     if (!post) return this.notFound(c);
     return this.json(c, { data: post });
@@ -104,7 +104,7 @@ Schema Drizzle đặt trong `repositories/schemas/` hoặc `packages/server/repo
 ## Auth trong controller
 
 ```ts
-show = async (c: Context<BackendEnv>) => {
+show = async (c: Context<RequestContext>) => {
   const session = await this.resolveSession(c);
   if (!session) return this.unauthorized(c);
   // ...

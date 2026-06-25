@@ -4,11 +4,11 @@ import {
   setPermissions,
 } from '../permissions/context.js';
 import { resolveAuthSession } from '../auth/resolve-session.js';
-import type { BackendEnv } from './env.js';
+import type { RequestContext } from './request-context.js';
 
 /** Require login; loads permission grants when `resolvePermissions` is set on `defineServer`. */
 export function requireSession() {
-  return createMiddleware<BackendEnv>(async (c, next) => {
+  return createMiddleware<RequestContext>(async (c, next) => {
     const session = await resolveAuthSession(c);
     if (!session?.user) {
       return c.json({ error: 'Unauthenticated', code: 'UNAUTHORIZED' }, 401);

@@ -1,7 +1,7 @@
 import type { Context } from 'hono';
 import { UserPolicy } from '../../permissions/policies/user-policy.js';
 import { BaseController } from '../base-controller.js';
-import type { BackendEnv } from '../../middlewares/env.js';
+import type { RequestContext } from '../../middlewares/request-context.js';
 import type { UserRepository } from '../../repositories/user-repository.js';
 
 export class UserController extends BaseController {
@@ -9,12 +9,12 @@ export class UserController extends BaseController {
     super();
   }
 
-  index = async (c: Context<BackendEnv>) => {
+  index = async (c: Context<RequestContext>) => {
     UserPolicy.list(c);
     return this.json(c, { data: await this.users.findAll() });
   };
 
-  show = async (c: Context<BackendEnv>) => {
+  show = async (c: Context<RequestContext>) => {
     const id = c.req.param('id');
     if (!id) return this.notFound(c);
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IbaseLink as Link } from '@tenora/client/components';
+import { TenoraLink as Link } from '@tenora/client/components';
 import { apiFetch } from '@tenora/client/hooks/use-api';
 
 type HealthResponse = {

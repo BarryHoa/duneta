@@ -6,12 +6,9 @@ Framework React Router web — config, default routes, UI components, `tenora-we
 
 ```text
 packages/client/
-├── configs/           # defineTenoraConfig, env, load
-├── config/
-│   ├── vite.ts        # createViteConfig
-│   └── react-router.ts
+├── configs/           # defineTenoraConfig, vite, react-router
 ├── routers/           # default routes + layout
-├── components/        # Ibase* UI wrappers
+├── components/        # Tenora* UI wrappers
 ├── providers/         # ThemeProvider
 ├── hooks/             # use-api, link helpers
 ├── themes/            # default CSS tokens
@@ -25,8 +22,8 @@ packages/client/
 | Path | Nội dung |
 |------|----------|
 | `@tenora/client/configs` | Web config types, `defineTenoraConfig` |
-| `@tenora/client/config/vite` | `createViteConfig` |
-| `@tenora/client/config/react-router` | `createReactRouterConfig` |
+| `@tenora/client/configs/vite` | `createTenoraViteConfig` |
+| `@tenora/client/configs/react-router` | `createReactRouterConfig` |
 | `@tenora/client/routers` | Default route modules |
 | `@tenora/client/providers` | `ThemeProvider` |
 | `@tenora/client/hooks/use-api` | `apiFetch` helper |
