@@ -1,4 +1,3 @@
-'use client';
 
 import { cn } from '../../../helpers';
 import { DEFAULT_TABLE_HEIGHT } from '../constants';

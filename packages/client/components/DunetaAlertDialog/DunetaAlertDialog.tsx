@@ -1,4 +1,3 @@
-'use client';
 import { AlertDialog } from '@heroui/react';
 import { useState } from 'react';
 import { DunetaButton } from '../DunetaButton';

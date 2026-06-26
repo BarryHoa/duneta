@@ -1,4 +1,3 @@
-'use client';
 import { useState } from 'react';
 import { DunetaButton } from '../DunetaButton';
 import { DunetaInput } from './DunetaInput';

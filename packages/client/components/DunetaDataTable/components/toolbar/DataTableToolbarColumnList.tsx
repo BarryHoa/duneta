@@ -1,4 +1,3 @@
-'use client';
 
 import { Checkbox } from '@heroui/react';
 import { cn } from '../../../../helpers';

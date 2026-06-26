@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { DunetaInput } from './DunetaInput';
 import type { DunetaInputProps } from './types';

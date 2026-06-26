@@ -1,4 +1,3 @@
-'use client';
 
 import { Filter } from 'lucide-react';
 import { DunetaTypography } from '../../../DunetaTypography';

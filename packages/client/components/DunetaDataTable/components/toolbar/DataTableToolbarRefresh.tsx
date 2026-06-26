@@ -1,4 +1,3 @@
-'use client';
 
 import { RefreshCw } from 'lucide-react';
 import { cn } from '../../../../helpers';

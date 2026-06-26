@@ -1,18 +1,16 @@
-'use client';
-
 import type { SortDescriptor } from '@heroui/react';
 import { useCallback, useMemo, useState } from 'react';
+import { DunetaButton } from '@duneta/client/components/DunetaButton';
+import { DunetaButtonGroup } from '@duneta/client/components/DunetaButtonGroup';
+import { DunetaChip } from '@duneta/client/components/DunetaChip';
 import {
-  DunetaButton,
-  DunetaButtonGroup,
-  DunetaChip,
   DunetaDataTable,
-  DunetaLabel,
-  DunetaLink as Link,
-  DunetaTypography,
   type ColumnDef,
   type DunetaDataTableDataType,
-} from '@duneta/client/components';
+} from '@duneta/client/components/DunetaDataTable';
+import { DunetaLabel } from '@duneta/client/components/DunetaLabel';
+import { DunetaLink as Link } from '@duneta/client/components/DunetaLink';
+import { DunetaTypography } from '@duneta/client/components/DunetaTypography';
 import {
   createDemoProductRows,
   type DemoProductRow,

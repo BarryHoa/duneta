@@ -1,4 +1,3 @@
-'use client';
 
 import isObject from 'lodash/isObject';
 import { useCallback, useMemo } from 'react';

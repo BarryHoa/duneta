@@ -1,18 +1,15 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { toWebConfig, type DunetaConfig } from './duneta';
 import { createDefaultConfig } from './defaults';
 import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
 import type { DunetaWebConfig } from './types';
 
-/** Like `defineConfig` in Next.js — all sections are optional. */
-export function defineDunetaConfig<const T extends Record<string, unknown>>(
-  config?: DeepPartial<DunetaWebConfig> & T,
-): DeepPartial<DunetaWebConfig> & T {
-  return (config ?? {}) as DeepPartial<DunetaWebConfig> & T;
-}
+export { defineDunetaConfig, toServerConfig, toWebConfig } from './duneta';
+export type { DunetaConfig } from './duneta';
 
-async function loadDunetaConfigFile(cwd: string): Promise<DeepPartial<DunetaWebConfig>> {
+async function loadDunetaConfigFile(cwd: string): Promise<DunetaConfig> {
   try {
     const configModule = await import(
       /* @vite-ignore */ pathToFileURL(join(cwd, 'duneta.config.ts')).href
@@ -23,11 +20,12 @@ async function loadDunetaConfigFile(cwd: string): Promise<DeepPartial<DunetaWebC
   }
 }
 
-/** Merge `duneta.config.ts` overrides onto defaults and cache the result. */
+/** Merge `duneta.config.ts` overrides onto web defaults and cache the result. */
 export async function loadConfig(
   cwd: string,
   overrides?: DeepPartial<DunetaWebConfig>,
 ): Promise<DunetaWebConfig> {
-  const patch = overrides ?? (await loadDunetaConfigFile(cwd));
+  const file = await loadDunetaConfigFile(cwd);
+  const patch = overrides ?? toWebConfig(file);
   return commitConfig(mergeConfig(createDefaultConfig(), patch));
 }

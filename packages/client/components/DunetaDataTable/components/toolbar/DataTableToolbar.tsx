@@ -1,4 +1,3 @@
-'use client';
 
 import { cn } from '../../../../helpers';
 import { DataTableToolbarActions } from './DataTableToolbarActions';

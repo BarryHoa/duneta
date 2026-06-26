@@ -1,4 +1,3 @@
-'use client';
 
 import type { Column } from '@tanstack/react-table';
 import { Columns3 } from 'lucide-react';

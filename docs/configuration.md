@@ -4,7 +4,7 @@
 
 ```text
 1. @duneta/server defaults     → baseline framework (global)
-2. app/duneta.config.ts          → cấu trúc app (bạn chỉnh)
+2. duneta.config.ts              → cấu trúc app (bạn chỉnh)
 3. .dev.vars / wrangler secrets → giá trị (URL, secret)
 ```
 
@@ -12,25 +12,31 @@
 
 ## API + Web config
 
-File: `app/duneta.config.ts` — `export const api` (Worker) + `export default` (web).
+File: `duneta.config.ts` — một `export default` cho web và API.
 
 ```ts
-export const api = defineApi({
+import { defineDunetaConfig } from '@duneta/client/configs';
+import {
+  DEFAULT_DATABASE_POOL,
+  defineConnections,
+  RECOMMENDED_RATE_LIMIT_RULES,
+} from '@duneta/server/configs';
+
+export default defineDunetaConfig({
   app: { name: 'duneta', env: 'production' },
+  theme: { default: 'light' },
+  api: { baseUrl: '/api' },
   database: {
     enabled: true,
     connections: defineConnections({}),
     pool: DEFAULT_DATABASE_POOL,
   },
   auth: { enabled: true, baseUrl: 'http://localhost:8787' },
-});
-
-export default defineWeb({
-  app: { name: 'duneta' },
-  api: { baseUrl: '/api' },
-  theme: { default: 'light' },
+  security: { rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES } },
 });
 ```
+
+`app` dùng chung. Web đọc `theme`, `api.baseUrl`; Worker đọc `database`, `auth`, `security`, …
 
 ### Đọc config lúc runtime
 
@@ -51,7 +57,7 @@ Xem `.dev.vars.example` ở repo root.
 
 ## Web config
 
-File: `app/duneta.config.ts`
+File: `duneta.config.ts`
 
 ```ts
 import { defineDunetaConfig } from '@duneta/client/configs';
