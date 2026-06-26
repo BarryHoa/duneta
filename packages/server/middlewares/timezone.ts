@@ -1,6 +1,6 @@
 import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { RequestContext } from './request-context.js';
 
 function isValidTimezone(value: string) {
@@ -23,7 +23,7 @@ function resolveTimezone(
   return fallback;
 }
 
-export function createTimezoneMiddleware(config: TenoraServerConfig) {
+export function createTimezoneMiddleware(config: DunetaServerConfig) {
   const { timezone } = config;
   const { resolve } = timezone;
 

@@ -5,13 +5,13 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, type UserConfig } from 'vite';
 // @ts-expect-error — runtime .mjs script without types
 import { routerSyncPlugin } from '../scripts/router-sync-plugin.mjs';
-import type { TenoraWebConfig } from './types.js';
+import type { DunetaWebConfig } from './types.js';
 
 const clientRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-export function createTenoraViteConfig(
+export function createDunetaViteConfig(
   webRoot: string,
-  webConfig: TenoraWebConfig,
+  webConfig: DunetaWebConfig,
   overrides: UserConfig = {},
 ): UserConfig {
   const apiProxyTarget =
@@ -30,12 +30,12 @@ export function createTenoraViteConfig(
     },
     resolve: {
       alias: {
-        '@tenora/client': clientRoot,
+        '@duneta/client': clientRoot,
         '~': webRoot,
       },
     },
     ssr: {
-      noExternal: [/^@tenora\/client/, /^@heroui\//],
+      noExternal: [/^@duneta\/client/, /^@heroui\//],
     },
     server: {
       port: webConfig.app.port,

@@ -35,7 +35,7 @@ importers:
 
   app/api:
     dependencies:
-      '@tenora/server':
+      '@duneta/server':
         specifier: workspace:*
         version: link:../../packages/server
     devDependencies:
@@ -54,7 +54,7 @@ importers:
 
   app/web:
     dependencies:
-      '@tenora/client':
+      '@duneta/client':
         specifier: workspace:*
         version: link:../../packages/client
     devDependencies:

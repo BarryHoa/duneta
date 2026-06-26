@@ -8,7 +8,7 @@ import {
   isLoggingEnabled,
   resolveAuthMountPath,
 } from '../configs/features.js';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { ControllerContainer } from '../container/controller-container.js';
 import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
@@ -25,7 +25,7 @@ export type AttachRequestServicesOptions = {
 /** Attach db, auth, cache, and DI containers to each request. */
 export function attachRequestServices(
   app: Hono<RequestContext>,
-  config: TenoraServerConfig,
+  config: DunetaServerConfig,
   { db, auth, cache, controllers, repositories }: AttachRequestServicesOptions,
 ) {
   app.use('*', createMiddleware(async (c, next) => {

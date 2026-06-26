@@ -5,8 +5,8 @@
 @import '@heroui/styles';
 
 /* Scan shared UI kit and this app's routers. */
-@source "../../../packages/client";
-@source "../../../packages/client/routers";
+@source "@duneta/client";
+@source "@duneta/client/routers";
 @source "../routers";
 @source "../components";
 /*

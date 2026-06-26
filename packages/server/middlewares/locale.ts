@@ -1,6 +1,6 @@
 import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { RequestContext } from './request-context.js';
 
 function normalizeLocale(value: string) {
@@ -31,7 +31,7 @@ function parseAcceptLanguage(header: string | undefined, supported: string[], fa
   return fallback;
 }
 
-export function createLocaleMiddleware(config: TenoraServerConfig) {
+export function createLocaleMiddleware(config: DunetaServerConfig) {
   const { locale } = config;
   const { resolve } = locale;
 

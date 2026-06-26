@@ -1,11 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tenora-api",
+  "name": "duneta-api",
   "main": "server.ts",
   "compatibility_date": "2025-06-17",
   "compatibility_flags": ["nodejs_compat"],
-  // Optional: Hyperdrive → any Postgres (Neon, Supabase, RDS…). No tenora.config changes.
-  // npx wrangler hyperdrive create tenora-db --connection-string="postgresql://..."
+  // Optional: Hyperdrive → any Postgres (Neon, Supabase, RDS…). No duneta.config changes.
+  // npx wrangler hyperdrive create duneta-db --connection-string="postgresql://..."
   // "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "<hyperdrive-config-id>" }]
   //
   // Secrets (wrangler secret put):

@@ -3,7 +3,7 @@ import type { Auth } from '../auth/types.js';
 import { setGlobalCache } from '../cached/index.js';
 import type { Cache } from '../cache/index.js';
 import { isCsrfEnabled, isCacheEnabled, isRateLimitEnabled } from '../configs/features.js';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { ControllerContainer } from '../container/controller-container.js';
 import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
@@ -20,7 +20,7 @@ import { attachRequestServices } from './attach-request-services.js';
 
 export type CreateHttpAppOptions = {
   router: Hono<RequestContext>;
-  config: TenoraServerConfig;
+  config: DunetaServerConfig;
   db: Database | null;
   auth: Auth | null;
   cache: Cache;

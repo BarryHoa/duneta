@@ -1,7 +1,7 @@
 import type { Config } from '@react-router/dev/config';
-import type { TenoraWebConfig } from './types.js';
+import type { DunetaWebConfig } from './types.js';
 
-export function createReactRouterConfig(webConfig: TenoraWebConfig): Config {
+export function createReactRouterConfig(webConfig: DunetaWebConfig): Config {
   return {
     appDirectory: webConfig.router.appDirectory,
   };

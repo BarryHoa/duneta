@@ -1,13 +1,13 @@
-# Tenora
+# Duneta
 
 Monorepo: `app/api` (backend), `app/web` (frontend), `packages/server`, `packages/client`.
 
 ## API entry
 
 ```ts
-import { defineServer } from '@tenora/server/runtime/worker';
+import { defineServer } from '@duneta/server/runtime/worker';
 import { resolvePermissions } from './permissions';
-import config from './tenora.config';
+import config from './duneta.config';
 import { createAppRouter } from './routers';
 import { registerServices } from './services';
 

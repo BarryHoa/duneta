@@ -6,13 +6,13 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 
 | Muốn làm                   | File / hook                             | Doc                                  |
 | -------------------------- | --------------------------------------- | ------------------------------------ |
-| Đổi port, DB, auth, cache  | `app/api/tenora.config.ts` + `.env`     | [Configuration](../configuration.md) |
+| Đổi port, DB, auth, cache  | `app/api/duneta.config.ts` + `.env`     | [Configuration](../configuration.md) |
 | Thêm controller/repository | `app/api/controllers/`, `repositories/` | [Sync](./api/sync.md)                |
 | Thêm API route             | `app/api/routers/*.routes.ts`           | [Sync](./api/sync.md)                |
 | Đổi runtime local          | Dùng `server.node.ts` + `dev:node`      | [Runtime](./api/runtime.md)          |
 | Deploy Worker              | `wrangler.jsonc` + `server.ts`          | [Runtime](./api/runtime.md)          |
 | Thêm web page              | `app/web/routers/`                      | [Web routes](../web/routes.md)       |
-| Đổi theme / port web       | `app/web/tenora.config.ts`              | [Web overview](../web/overview.md)   |
+| Đổi theme / port web       | `app/web/duneta.config.ts`              | [Web overview](../web/overview.md)   |
 
 ## Workflow: thêm feature API mới
 
@@ -35,7 +35,7 @@ export const post = pgTable('post', {
 
 ```ts
 // app/api/repositories/post-repository.ts
-import { BaseRepository } from '@tenora/server/http';
+import { BaseRepository } from '@duneta/server/http';
 import { post } from './schemas/post';
 
 export class PostRepository extends BaseRepository<typeof post> {
@@ -64,9 +64,9 @@ export class PostController extends BaseController {
 
 ```ts
 // app/api/routers/posts.routes.ts
-import { defineGroup } from '@tenora/server/routers';
-import { resolveController } from '@tenora/server/http';
-import { requireSession } from '@tenora/server/middlewares';
+import { defineGroup } from '@duneta/server/routers';
+import { resolveController } from '@duneta/server/http';
+import { requireSession } from '@duneta/server/middlewares';
 
 export const postsRoutes = defineGroup({
   path: '/posts',
@@ -77,7 +77,7 @@ export const postsRoutes = defineGroup({
 });
 ```
 
-`tenora-api sync` tự đăng ký DI + merge routes — hoặc thêm vào `services/index.ts` / `routers/index.ts`.
+`duneta-api sync` tự đăng ký DI + merge routes — hoặc thêm vào `services/index.ts` / `routers/index.ts`.
 
 ### 5. Dev
 
@@ -90,7 +90,7 @@ pnpm --filter api dev   # sync → wrangler
 Thêm path vào `app/api/tsconfig.json` nếu tạo thư mục mới:
 
 ```json
-"include": ["server.ts", "server.node.ts", "tenora.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
+"include": ["server.ts", "server.node.ts", "duneta.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
 ```
 
 Override trong `services/index.ts` — đăng ký lại cùng key:
@@ -108,7 +108,7 @@ Default routes trong `routers/index.ts` (`healthRoutes`, `usersRoutes`, …).
 ```tsx
 // app/web/routers/posts/page.tsx
 import { useLoaderData } from 'react-router';
-import { apiFetch } from '@tenora/client/hooks/use-api';
+import { apiFetch } from '@duneta/client/hooks/use-api';
 
 export async function loader() {
   return apiFetch({ path: '/posts' });
@@ -120,7 +120,7 @@ export default function PostsPage() {
 }
 ```
 
-Đảm bảo API chạy và proxy đúng `api.port` trong `app/web/tenora.config.ts`.
+Đảm bảo API chạy và proxy đúng `api.port` trong `app/web/duneta.config.ts`.
 
 ## Nguyên tắc
 

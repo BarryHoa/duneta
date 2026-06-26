@@ -6,8 +6,8 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "@tenora/client": ["."],
-      "@tenora/client/*": ["./*"]
+      "@duneta/client": ["."],
+      "@duneta/client/*": ["./*"]
     },
     "noEmit": true
   },

@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import type { Hono as HonoType } from 'hono';
 import type { PermissionResolver } from '../../permissions/types.js';
-import type { DeepPartial, Runtime, TenoraServerConfig } from '../../configs/index.js';
+import type { DeepPartial, Runtime, DunetaServerConfig } from '../../configs/index.js';
 import type { RegisterServices } from '../../container/index.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 
 export type ServerOptions = {
-  config: DeepPartial<TenoraServerConfig>;
-  createAppRouter?: (config: TenoraServerConfig) => HonoType<RequestContext>;
+  config: DeepPartial<DunetaServerConfig>;
+  createAppRouter?: (config: DunetaServerConfig) => HonoType<RequestContext>;
   registerServices?: RegisterServices;
   /** Role → grants; loaded by `requireSession()` on protected routes. */
   resolvePermissions?: PermissionResolver;
@@ -15,8 +15,8 @@ export type ServerOptions = {
 
 export type ServerBoot = {
   target: Runtime;
-  config: DeepPartial<TenoraServerConfig>;
-  createAppRouter: (config: TenoraServerConfig) => HonoType<RequestContext>;
+  config: DeepPartial<DunetaServerConfig>;
+  createAppRouter: (config: DunetaServerConfig) => HonoType<RequestContext>;
   registerServices: RegisterServices;
   resolvePermissions?: PermissionResolver;
 };

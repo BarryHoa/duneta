@@ -4,21 +4,21 @@ import { createDefaultConfig } from './defaults';
 import { env } from './env';
 import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
-import type { TenoraWebConfig } from './types';
+import type { DunetaWebConfig } from './types';
 
 export { env };
 
 /** Like `defineConfig` in Next.js — all sections are optional. */
-export function defineTenoraConfig<const T extends Record<string, unknown>>(
-  config?: DeepPartial<TenoraWebConfig> & T,
-): DeepPartial<TenoraWebConfig> & T {
-  return (config ?? {}) as DeepPartial<TenoraWebConfig> & T;
+export function defineDunetaConfig<const T extends Record<string, unknown>>(
+  config?: DeepPartial<DunetaWebConfig> & T,
+): DeepPartial<DunetaWebConfig> & T {
+  return (config ?? {}) as DeepPartial<DunetaWebConfig> & T;
 }
 
-async function loadTenoraConfigFile(cwd: string): Promise<DeepPartial<TenoraWebConfig>> {
+async function loadDunetaConfigFile(cwd: string): Promise<DeepPartial<DunetaWebConfig>> {
   try {
     const configModule = await import(
-      /* @vite-ignore */ pathToFileURL(join(cwd, 'tenora.config.ts')).href
+      /* @vite-ignore */ pathToFileURL(join(cwd, 'duneta.config.ts')).href
     );
     return configModule.default ?? {};
   } catch {
@@ -26,11 +26,11 @@ async function loadTenoraConfigFile(cwd: string): Promise<DeepPartial<TenoraWebC
   }
 }
 
-/** Merge `tenora.config.ts` overrides onto defaults and cache the result. */
+/** Merge `duneta.config.ts` overrides onto defaults and cache the result. */
 export async function loadConfig(
   cwd: string,
-  overrides?: DeepPartial<TenoraWebConfig>,
-): Promise<TenoraWebConfig> {
-  const patch = overrides ?? (await loadTenoraConfigFile(cwd));
+  overrides?: DeepPartial<DunetaWebConfig>,
+): Promise<DunetaWebConfig> {
+  const patch = overrides ?? (await loadDunetaConfigFile(cwd));
   return commitConfig(mergeConfig(createDefaultConfig(), patch));
 }

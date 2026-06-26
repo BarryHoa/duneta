@@ -1,9 +1,9 @@
-import type { TenoraServerConfig } from './types';
+import type { DunetaServerConfig } from './types';
 
-let cachedConfig: TenoraServerConfig | undefined;
+let cachedConfig: DunetaServerConfig | undefined;
 
 /** Internal — only imported by `load.ts`, not re-exported from the package barrel. */
-export function commitConfig<T extends TenoraServerConfig>(config: T): T {
+export function commitConfig<T extends DunetaServerConfig>(config: T): T {
   cachedConfig = config;
   return config;
 }
@@ -11,18 +11,18 @@ export function commitConfig<T extends TenoraServerConfig>(config: T): T {
 export function getConfig<
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- default: no app-specific config extensions
   TExtra extends Record<string, unknown> = {},
-  TDatabase extends TenoraServerConfig['database'] = TenoraServerConfig['database'],
->(): TenoraServerConfig<TExtra, TDatabase> {
+  TDatabase extends DunetaServerConfig['database'] = DunetaServerConfig['database'],
+>(): DunetaServerConfig<TExtra, TDatabase> {
   if (!cachedConfig) {
     throw new Error(
-      'Server config is not loaded. Call loadConfig() on boot or add app/api/tenora.config.ts.',
+      'Server config is not loaded. Call loadConfig() on boot or add app/api/duneta.config.ts.',
     );
   }
-  return cachedConfig as unknown as TenoraServerConfig<TExtra, TDatabase>;
+  return cachedConfig as unknown as DunetaServerConfig<TExtra, TDatabase>;
 }
 
-export const config = new Proxy({} as TenoraServerConfig, {
+export const config = new Proxy({} as DunetaServerConfig, {
   get(_target, prop) {
-    return getConfig()[prop as keyof TenoraServerConfig];
+    return getConfig()[prop as keyof DunetaServerConfig];
   },
 });

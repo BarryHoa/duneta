@@ -5,8 +5,8 @@
 `routers/index.ts` export `createAppRouter(config)` — ghép framework + app routes.
 
 ```ts
-import { composeRouter, defineGroup, resolveController } from '@tenora/server/routers';
-import { requireSession } from '@tenora/server/middlewares';
+import { composeRouter, defineGroup, resolveController } from '@duneta/server/routers';
+import { requireSession } from '@duneta/server/middlewares';
 ```
 
 ## `defineGroup`
@@ -35,6 +35,6 @@ Controller method phải là **arrow property** (`index = async (c) =>`).
 | API | Layer | Input |
 |-----|-------|-------|
 | `composeRouter(groups)` | Framework | `RouteGroup[]` |
-| `createAppRouter(config)` | App | `TenoraServerConfig` |
+| `createAppRouter(config)` | App | `DunetaServerConfig` |
 
 Mọi route mount dưới `/api` (`createHttpApp`).

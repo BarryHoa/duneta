@@ -1,12 +1,12 @@
 import { createMiddleware } from 'hono/factory';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { RequestContext } from './request-context.js';
 import { createLocaleMiddleware } from './locale.js';
 import { createRequestIdMiddleware } from './request-id.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { createTimezoneMiddleware } from './timezone.js';
 
-export function createCoreMiddleware(config: TenoraServerConfig) {
+export function createCoreMiddleware(config: DunetaServerConfig) {
   const requestIdMw = createRequestIdMiddleware(config);
   const securityHeadersMw = createSecurityHeadersMiddleware(config);
   const localeMw = createLocaleMiddleware(config);

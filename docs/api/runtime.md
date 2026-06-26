@@ -1,6 +1,6 @@
 # Runtime: Cloud vs Bun
 
-Hai entry file = hai runtime. Framework tự set `runtime.target` — **không cần** `RUNTIME` trong `.env` hay `tenora.config.ts`.
+Hai entry file = hai runtime. Framework tự set `runtime.target` — **không cần** `RUNTIME` trong `.env` hay `duneta.config.ts`.
 
 ## Quy tắc đơn giản
 
@@ -18,7 +18,7 @@ server.node.ts  →  import runtime/node   →  target = node
 
 | | Cloud (`server.ts`) | Bun (`server.node.ts`) |
 |---|---|---|
-| CLI | `tenora-api dev` / `deploy` | `tenora-api dev:node` |
+| CLI | `duneta-api dev` / `deploy` | `duneta-api dev:node` |
 | URL local | http://localhost:8787/api | http://localhost:3001/api |
 | Export | `{ fetch }` | `{ port, fetch }` |
 | DB | Hyperdrive / Neon serverless | `pg` pool |
@@ -42,7 +42,7 @@ runtime: { target: 'worker' | 'node' }  // từ entry, luôn thắng
 
 ```ts
 // app/api/server.ts
-import { defineServer } from '@tenora/server/runtime/worker';
+import { defineServer } from '@duneta/server/runtime/worker';
 export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
 ```
 
@@ -52,7 +52,7 @@ export default defineServer({ config, createAppRouter, registerServices, resolve
 
 ```ts
 // app/api/server.node.ts
-import { defineServer } from '@tenora/server/runtime/node';
+import { defineServer } from '@duneta/server/runtime/node';
 export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
 ```
 
@@ -63,7 +63,7 @@ PORT=3001
 DATABASE_URL=postgresql://...
 ```
 
-## `tenora.config.ts` dùng chung
+## `duneta.config.ts` dùng chung
 
 Một file config cho cả hai entry. Runtime-specific logic do framework lo — bạn chỉ set:
 

@@ -1,10 +1,10 @@
 import { connectionUrl } from '../configs/database.js';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import { isHyperdriveBinding, type PlatformEnv } from '../runtime/shared/platform-env.js';
 
 /** Resolve Postgres URL: Hyperdrive binding → worker env → config. */
 export function resolveDatabaseUrl(
-  config: TenoraServerConfig,
+  config: DunetaServerConfig,
   platform?: PlatformEnv,
 ): string | null {
   const hyperdrive = platform?.HYPERDRIVE;

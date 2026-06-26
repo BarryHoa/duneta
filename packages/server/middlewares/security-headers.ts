@@ -1,8 +1,8 @@
 import { createMiddleware } from 'hono/factory';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { RequestContext } from './request-context.js';
 
-export function createSecurityHeadersMiddleware(config: TenoraServerConfig) {
+export function createSecurityHeadersMiddleware(config: DunetaServerConfig) {
   const headers = config.headers;
 
   return createMiddleware<RequestContext>(async (c, next) => {

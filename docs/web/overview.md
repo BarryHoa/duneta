@@ -1,14 +1,14 @@
 # Web app — Tổng quan
 
-`app/web` là shell React Router mỏng trên `@tenora/client`.
+`app/web` là shell React Router mỏng trên `@duneta/client`.
 
 ## Cấu trúc
 
 ```text
 app/web/
-├── tenora.config.ts       # port, API proxy, theme
+├── duneta.config.ts       # port, API proxy, theme
 ├── react-router.config.ts # load config → createReactRouterConfig
-├── vite.config.ts         # Vite + Tenora plugins
+├── vite.config.ts         # Vite + Duneta plugins
 ├── routers/               # routes của bạn (override/extend)
 │   └── about/page.tsx
 ├── themes/
@@ -16,18 +16,18 @@ app/web/
 └── package.json
 ```
 
-## Không import `@tenora/server`
+## Không import `@duneta/server`
 
-Gọi API từ web qua proxy `/api` hoặc `apiFetch` từ `@tenora/client/hooks/use-api`.
+Gọi API từ web qua proxy `/api` hoặc `apiFetch` từ `@duneta/client/hooks/use-api`.
 
 ## Config
 
 ```ts
-// app/web/tenora.config.ts
-import { defineTenoraConfig, env } from '@tenora/client/configs';
+// app/web/duneta.config.ts
+import { defineDunetaConfig, env } from '@duneta/client/configs';
 
-export default defineTenoraConfig({
-  app: { name: 'tenora-web', port: Number(env('PORT', '3000')) },
+export default defineDunetaConfig({
+  app: { name: 'duneta-web', port: Number(env('PORT', '3000')) },
   api: { port: Number(env('API_PORT', '3001')), baseUrl: '/api' },
   theme: { default: 'dark' },
 });
@@ -40,7 +40,7 @@ export default defineTenoraConfig({
 | `api.baseUrl` | Path proxy (thường `/api`) |
 | `theme.default` | `light` / `dark` / `system` |
 
-## CLI `tenora-web`
+## CLI `duneta-web`
 
 | Command | Hành vi |
 |---------|---------|
@@ -48,7 +48,7 @@ export default defineTenoraConfig({
 | `build` | Sync routers + production build |
 | `typegen` | Generate React Router types |
 
-Trước dev/build, `tenora-web` merge routes từ `packages/client/routers/` và `app/web/routers/` vào `.router-runtime/`.
+Trước dev/build, `duneta-web` merge routes từ `packages/client/routers/` và `app/web/routers/` vào `.router-runtime/`.
 
 ## Dev full stack
 
@@ -74,4 +74,4 @@ pnpm --filter web dev
 ## Tài liệu liên quan
 
 - [Routes & theme](./routes.md)
-- [`@tenora/client`](../packages/client.md)
+- [`@duneta/client`](../packages/client.md)

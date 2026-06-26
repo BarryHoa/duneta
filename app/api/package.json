@@ -8,14 +8,14 @@
     "runtime": "cloudflare-worker"
   },
   "scripts": {
-    "dev": "tenora-api dev",
-    "dev:node": "tenora-api dev:node",
-    "start:node": "tenora-api start:node",
-    "deploy": "tenora-api deploy",
-    "typecheck": "tenora-api sync && node ../../node_modules/typescript/bin/tsc --noEmit"
+    "dev": "duneta-api dev",
+    "dev:node": "duneta-api dev:node",
+    "start:node": "duneta-api start:node",
+    "deploy": "duneta-api deploy",
+    "typecheck": "duneta-api sync && node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {
-    "@tenora/server": "workspace:*"
+    "@duneta/server": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250617.0",

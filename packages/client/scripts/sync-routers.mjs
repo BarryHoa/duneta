@@ -39,7 +39,7 @@ export function syncRouters(webRoot, clientRoot, webConfig) {
       const theme = webConfig?.theme?.default ?? 'dark';
       const content = fs
         .readFileSync(src, 'utf8')
-        .replace(/@tenora\/client\/themes\/globals\.css/g, '~/themes/globals.css')
+        .replace(/@duneta\/client\/themes\/globals\.css/g, '~/themes/globals.css')
         .replace(/defaultTheme="[^"]*"/, `defaultTheme="${theme}"`);
       fs.writeFileSync(dest, content);
       continue;
@@ -210,8 +210,8 @@ ${body}
 if (import.meta.url === pathToFileURL(path.resolve(process.argv[1] ?? '')).href) {
   const webRoot = process.cwd();
   const clientRoot =
-    process.env.TENORA_CLIENT_ROOT ??
-    path.resolve(webRoot, 'node_modules/@tenora/client');
+    process.env.DUNETA_CLIENT_ROOT ??
+    path.resolve(webRoot, 'node_modules/@duneta/client');
 
   syncRouters(webRoot, clientRoot, { theme: { default: 'dark' } });
 }

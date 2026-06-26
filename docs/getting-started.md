@@ -46,18 +46,18 @@ pnpm lint
 ## Cấu trúc repo
 
 ```text
-Tenora/
+Duneta/
 ├── app/
 │   ├── api/          # shell backend — bạn sở hữu config, routes, providers
 │   └── web/          # shell frontend — bạn sở hữu config, routes, theme
 ├── packages/
-│   ├── server/       # @tenora/server — framework API
-│   └── client/       # @tenora/client — framework web
+│   ├── server/       # @duneta/server — framework API
+│   └── client/       # @duneta/client — framework web
 └── docs/             # tài liệu này
 ```
 
 ## Bước tiếp theo
 
 1. Copy `app/api/.env.example` → `app/api/.env`
-2. Chỉnh `app/api/tenora.config.ts` và `app/web/tenora.config.ts`
+2. Chỉnh `app/api/duneta.config.ts` và `app/web/duneta.config.ts`
 3. Đọc [Kiến trúc](./architecture.md) và [Cấu hình](./configuration.md)

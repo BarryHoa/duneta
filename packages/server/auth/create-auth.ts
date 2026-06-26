@@ -8,12 +8,12 @@ import {
   isJwtEnabled,
   resolveAuthBasePath,
 } from '../configs/features.js';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { Database } from '../database/types.js';
 import * as schema from '../repositories/schemas/auth.js';
 import type { Auth } from './types.js';
 
-export function createAuth(config: TenoraServerConfig, db: Database | null): Auth | null {
+export function createAuth(config: DunetaServerConfig, db: Database | null): Auth | null {
   if (!isAuthEnabled(config) || !db) return null;
 
   const { auth: authConfig } = config;

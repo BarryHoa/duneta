@@ -55,7 +55,7 @@ if (command === 'check') {
     );
     process.exit(1);
   }
-  console.log(`All workspaces match tenora@${rootManifest.version}.`);
+  console.log(`All workspaces match duneta@${rootManifest.version}.`);
 } else if (command === 'sync' || command === 'bump') {
   const version =
     command === 'sync' ? argument : bump(rootManifest.version, argument);
@@ -68,7 +68,7 @@ if (command === 'check') {
     manifest.version = version;
     writeJson(path, manifest);
   }
-  console.log(`Synced tenora and all workspaces to ${version}.`);
+  console.log(`Synced duneta and all workspaces to ${version}.`);
 } else {
   console.error(
     'Usage: version.mjs check | sync <version> | bump <major|minor|patch>',

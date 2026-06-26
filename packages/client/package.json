@@ -1,8 +1,8 @@
 {
-  "name": "@tenora/client",
+  "name": "@duneta/client",
   "private": false,
   "version": "0.1.0",
-  "description": "Browser-safe utilities and React Router web kit for Tenora applications.",
+  "description": "Browser-safe utilities and React Router web kit for Duneta applications.",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -14,7 +14,7 @@
     "scripts"
   ],
   "bin": {
-    "tenora-web": "./scripts/tenora-web.mjs"
+    "duneta-web": "./scripts/duneta-web.mjs"
   },
   "forgeStack": {
     "kind": "frontend",
@@ -49,53 +49,53 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
-    "./components/TenoraAlertDialog": {
-      "types": "./dist/components/TenoraAlertDialog/index.d.ts",
-      "import": "./dist/components/TenoraAlertDialog/index.js"
+    "./components/DunetaAlertDialog": {
+      "types": "./dist/components/DunetaAlertDialog/index.d.ts",
+      "import": "./dist/components/DunetaAlertDialog/index.js"
     },
-    "./components/TenoraButton": {
-      "types": "./dist/components/TenoraButton/index.d.ts",
-      "import": "./dist/components/TenoraButton/index.js"
+    "./components/DunetaButton": {
+      "types": "./dist/components/DunetaButton/index.d.ts",
+      "import": "./dist/components/DunetaButton/index.js"
     },
-    "./components/TenoraLink": {
-      "types": "./dist/components/TenoraLink/index.d.ts",
-      "import": "./dist/components/TenoraLink/index.js"
+    "./components/DunetaLink": {
+      "types": "./dist/components/DunetaLink/index.d.ts",
+      "import": "./dist/components/DunetaLink/index.js"
     },
-    "./components/TenoraLoadError": {
-      "types": "./dist/components/TenoraLoadError/index.d.ts",
-      "import": "./dist/components/TenoraLoadError/index.js"
+    "./components/DunetaLoadError": {
+      "types": "./dist/components/DunetaLoadError/index.d.ts",
+      "import": "./dist/components/DunetaLoadError/index.js"
     },
-    "./components/TenoraSimpleTable": {
-      "types": "./dist/components/TenoraSimpleTable/index.d.ts",
-      "import": "./dist/components/TenoraSimpleTable/index.js"
+    "./components/DunetaSimpleTable": {
+      "types": "./dist/components/DunetaSimpleTable/index.d.ts",
+      "import": "./dist/components/DunetaSimpleTable/index.js"
     },
-    "./components/TenoraInput": {
-      "types": "./dist/components/TenoraInput/index.d.ts",
-      "import": "./dist/components/TenoraInput/index.js"
+    "./components/DunetaInput": {
+      "types": "./dist/components/DunetaInput/index.d.ts",
+      "import": "./dist/components/DunetaInput/index.js"
     },
-    "./components/TenoraSelect": {
-      "types": "./dist/components/TenoraSelect/index.d.ts",
-      "import": "./dist/components/TenoraSelect/index.js"
+    "./components/DunetaSelect": {
+      "types": "./dist/components/DunetaSelect/index.d.ts",
+      "import": "./dist/components/DunetaSelect/index.js"
     },
-    "./components/TenoraForm": {
-      "types": "./dist/components/TenoraForm/index.d.ts",
-      "import": "./dist/components/TenoraForm/index.js"
+    "./components/DunetaForm": {
+      "types": "./dist/components/DunetaForm/index.d.ts",
+      "import": "./dist/components/DunetaForm/index.js"
     },
-    "./components/TenoraUpload": {
-      "types": "./dist/components/TenoraUpload/index.d.ts",
-      "import": "./dist/components/TenoraUpload/index.js"
+    "./components/DunetaUpload": {
+      "types": "./dist/components/DunetaUpload/index.d.ts",
+      "import": "./dist/components/DunetaUpload/index.js"
     },
-    "./components/TenoraTable": {
-      "types": "./dist/components/TenoraTable/index.d.ts",
-      "import": "./dist/components/TenoraTable/index.js"
+    "./components/DunetaTable": {
+      "types": "./dist/components/DunetaTable/index.d.ts",
+      "import": "./dist/components/DunetaTable/index.js"
     },
-    "./components/TenoraDataTable": {
-      "types": "./dist/components/TenoraDataTable/index.d.ts",
-      "import": "./dist/components/TenoraDataTable/index.js"
+    "./components/DunetaDataTable": {
+      "types": "./dist/components/DunetaDataTable/index.d.ts",
+      "import": "./dist/components/DunetaDataTable/index.js"
     },
-    "./components/TenoraLayout": {
-      "types": "./dist/components/TenoraLayout/index.d.ts",
-      "import": "./dist/components/TenoraLayout/index.js"
+    "./components/DunetaLayout": {
+      "types": "./dist/components/DunetaLayout/index.d.ts",
+      "import": "./dist/components/DunetaLayout/index.js"
     },
     "./layouts": {
       "types": "./dist/layouts/index.d.ts",

@@ -3,31 +3,31 @@
 ## 3 lớp (Laravel-style)
 
 ```text
-1. @tenora/server defaults     → baseline framework (global)
-2. app/*/tenora.config.ts      → cấu trúc app (bạn chỉnh)
+1. @duneta/server defaults     → baseline framework (global)
+2. app/*/duneta.config.ts      → cấu trúc app (bạn chỉnh)
 3. .env / wrangler secrets     → giá trị (URL, secret)
 ```
 
-`tenora.config.ts` khai báo **cấu trúc** theo TypeScript types. `.env` chỉ cung cấp **giá trị** qua `env()` / `envFirst()`.
+`duneta.config.ts` khai báo **cấu trúc** theo TypeScript types. `.env` chỉ cung cấp **giá trị** qua `env()` / `envFirst()`.
 
 ## API config
 
-File: `app/api/tenora.config.ts`
+File: `app/api/duneta.config.ts`
 
 ```ts
 import {
-  defineTenoraConfig,
+  defineDunetaConfig,
   envFirst,
   defineConnections,
   postgresConnection,
   DEFAULT_DATABASE_POOL,
   RECOMMENDED_RATE_LIMIT_RULES,
-} from '@tenora/server/configs';
+} from '@duneta/server/configs';
 
 const port = Number(envFirst(['PORT'], '3001'));
 
-export default defineTenoraConfig({
-  app: { name: 'tenora-api', env: 'development', port },
+export default defineDunetaConfig({
+  app: { name: 'duneta-api', env: 'development', port },
   database: {
     enabled: true,
     connections: defineConnections({
@@ -41,12 +41,12 @@ export default defineTenoraConfig({
 });
 ```
 
-> **Không set `runtime`** trong `tenora.config.ts` — entry file (`server.ts` / `server.node.ts`) quyết định. Pool DB worker được framework tự điều chỉnh.
+> **Không set `runtime`** trong `duneta.config.ts` — entry file (`server.ts` / `server.node.ts`) quyết định. Pool DB worker được framework tự điều chỉnh.
 
 ### Đọc config lúc runtime
 
 ```ts
-import { config, getConfig } from '@tenora/server/configs';
+import { config, getConfig } from '@duneta/server/configs';
 ```
 
 ### Biến môi trường API
@@ -65,13 +65,13 @@ Xem `app/api/.env.example`.
 
 ## Web config
 
-File: `app/web/tenora.config.ts`
+File: `app/web/duneta.config.ts`
 
 ```ts
-import { defineTenoraConfig, env } from '@tenora/client/configs';
+import { defineDunetaConfig, env } from '@duneta/client/configs';
 
-export default defineTenoraConfig({
-  app: { name: 'tenora-web', port: Number(env('PORT', '3000')) },
+export default defineDunetaConfig({
+  app: { name: 'duneta-web', port: Number(env('PORT', '3000')) },
   api: { port: Number(env('API_PORT', '3001')), baseUrl: '/api' },
   theme: { default: 'dark' },
 });
@@ -81,10 +81,10 @@ export default defineTenoraConfig({
 
 ## Cache
 
-Bật trong `tenora.config.ts`, không phải `.env` alone:
+Bật trong `duneta.config.ts`, không phải `.env` alone:
 
 ```ts
-import { redisCache, memoryCache } from '@tenora/server/configs';
+import { redisCache, memoryCache } from '@duneta/server/configs';
 
 cache: redisCache({ url: env('CACHE_URL'), token: env('CACHE_TOKEN') }),
 // cache: memoryCache(),
@@ -93,7 +93,7 @@ cache: redisCache({ url: env('CACHE_URL'), token: env('CACHE_TOKEN') }),
 Dùng global facade:
 
 ```ts
-import { cached } from '@tenora/server/cached';
+import { cached } from '@duneta/server/cached';
 
 await cached.set('key', 'value', 60_000);
 await cached.get('key');
@@ -116,7 +116,7 @@ Better Auth mount tại `/api/auth/*` (tự wire).
 ## Rate limit
 
 ```ts
-import { defineRateLimitRules, rateLimitRule } from '@tenora/server/configs';
+import { defineRateLimitRules, rateLimitRule } from '@duneta/server/configs';
 
 security: {
   rateLimit: {

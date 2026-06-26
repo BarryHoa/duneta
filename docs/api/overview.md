@@ -6,7 +6,7 @@
 app/api/
 ├── server.ts              # Cloud Worker entry
 ├── server.node.ts         # Bun/Node entry
-├── tenora.config.ts       # Config
+├── duneta.config.ts       # Config
 ├── services/index.ts      # registerServices (DI)
 ├── routers/index.ts       # createAppRouter
 ├── permissions/index.ts   # resolvePermissions
@@ -18,9 +18,9 @@ app/api/
 ## Entry
 
 ```ts
-import { defineServer } from '@tenora/server/runtime/worker';
+import { defineServer } from '@duneta/server/runtime/worker';
 import { resolvePermissions } from './permissions';
-import config from './tenora.config';
+import config from './duneta.config';
 import { createAppRouter } from './routers';
 import { registerServices } from './services';
 

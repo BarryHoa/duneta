@@ -11,14 +11,14 @@ import { navigateShallow } from './shallow-url';
 
 export type RouterHref = To;
 
-export type TenoraNavigateOptions = NavigateOptions & {
+export type DunetaNavigateOptions = NavigateOptions & {
   /** Update URL on the current page without changing the matched route (Next.js shallow). */
   shallow?: boolean;
 };
 
 export type AppRouter = {
-  push: (href: RouterHref, options?: TenoraNavigateOptions) => void;
-  replace: (href: RouterHref, options?: TenoraNavigateOptions) => void;
+  push: (href: RouterHref, options?: DunetaNavigateOptions) => void;
+  replace: (href: RouterHref, options?: DunetaNavigateOptions) => void;
   back: () => void;
   forward: () => void;
   refresh: () => void;
@@ -29,7 +29,7 @@ export type AppRouter = {
   isPending: boolean;
 };
 
-function splitNavigateOptions(options?: TenoraNavigateOptions) {
+function splitNavigateOptions(options?: DunetaNavigateOptions) {
   const { shallow, ...navigateOptions } = options ?? {};
   return { shallow, navigateOptions };
 }
@@ -42,7 +42,7 @@ export function useRouter(): AppRouter {
   const [, setSearchParams] = useSearchParams();
 
   const push = useCallback(
-    (href: RouterHref, options?: TenoraNavigateOptions) => {
+    (href: RouterHref, options?: DunetaNavigateOptions) => {
       const { shallow, navigateOptions } = splitNavigateOptions(options);
 
       if (shallow) {
@@ -59,7 +59,7 @@ export function useRouter(): AppRouter {
   );
 
   const replace = useCallback(
-    (href: RouterHref, options?: TenoraNavigateOptions) => {
+    (href: RouterHref, options?: DunetaNavigateOptions) => {
       const { shallow, navigateOptions } = splitNavigateOptions(options);
 
       if (shallow) {

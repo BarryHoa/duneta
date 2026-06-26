@@ -1,0 +1,3 @@
+import { mountDunetaAlert } from './mount';
+import type { DunetaAlertDialogController, DunetaLoadingOptions } from './types';
+export function showDunetaLoading(options: DunetaLoadingOptions = {}): DunetaAlertDialogController { return mountDunetaAlert({ isOpen: true, onOpenChange: () => undefined, status: 'accent', title: options.title ?? 'Processing', size: options.size ?? 'sm', hideFooter: true, isDismissable: false, isKeyboardDismissDisabled: true, children: <div className="flex items-center gap-3"><span className="size-5 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" aria-hidden />{options.message ? <span>{options.message}</span> : null}</div> }); }

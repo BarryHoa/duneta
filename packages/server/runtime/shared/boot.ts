@@ -12,7 +12,7 @@ import {
   loadConfig,
   type DeepPartial,
 } from '../../configs/index.js';
-import type { TenoraServerConfig } from '../../configs/types.js';
+import type { DunetaServerConfig } from '../../configs/types.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
 import { isHyperdriveBinding, type PlatformEnv } from './platform-env.js';
@@ -22,7 +22,7 @@ let cachedApp: Hono<RequestContext> | undefined;
 let cachedAppKey: string | undefined;
 let configBootstrapped = false;
 
-function appCacheKey(config: TenoraServerConfig, platform?: PlatformEnv): string {
+function appCacheKey(config: DunetaServerConfig, platform?: PlatformEnv): string {
   const dbUrl =
     resolveDatabaseUrl(config, platform) ??
     connectionUrl(config.database) ??
@@ -34,11 +34,11 @@ function appCacheKey(config: TenoraServerConfig, platform?: PlatformEnv): string
 
 export function bootstrapConfig(
   boot: ServerBoot,
-  overrides?: DeepPartial<TenoraServerConfig>,
+  overrides?: DeepPartial<DunetaServerConfig>,
 ): void {
   if (configBootstrapped && !overrides) return;
 
-  const patch: DeepPartial<TenoraServerConfig> = {
+  const patch: DeepPartial<DunetaServerConfig> = {
     ...boot.config,
     ...overrides,
     runtime: { target: boot.target },

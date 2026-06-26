@@ -45,7 +45,7 @@ export function routerSyncPlugin(webRoot, clientRoot, webConfig) {
   };
 
   return {
-    name: 'tenora-router-sync',
+    name: 'duneta-router-sync',
     apply: 'serve',
     configureServer(devServer) {
       server = devServer;

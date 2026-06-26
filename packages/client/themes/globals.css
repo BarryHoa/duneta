@@ -4,7 +4,7 @@
 /* HeroUI v3 styles must follow Tailwind. */
 @import '@heroui/styles';
 
-/* Scan Tenora client sources for Tailwind utilities. */
+/* Scan Duneta client sources for Tailwind utilities. */
 @source "..";
 
 :root {

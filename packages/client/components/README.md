@@ -1,4 +1,4 @@
-# Tenora UI components
+# Duneta UI components
 
 Custom layer on [HeroUI v3](https://heroui.com/en/docs/react/components) (`@heroui/react` + `@heroui/styles`).
 
@@ -6,21 +6,21 @@ Custom layer on [HeroUI v3](https://heroui.com/en/docs/react/components) (`@hero
 
 ```text
 components/
-  TenoraButton/           # HeroUI wrapper
-    types.ts              # TenoraButtonProps (= ComponentProps<typeof Button>)
-    TenoraButton.tsx
+  DunetaButton/           # HeroUI wrapper
+    types.ts              # DunetaButtonProps (= ComponentProps<typeof Button>)
+    DunetaButton.tsx
     index.ts
-  TenoraCard/
-  TenoraModal/
+  DunetaCard/
+  DunetaModal/
   ... (70 HeroUI components)
-  TenoraLink/             # React Router (not HeroUI Link → TenoraHrefLink)
-  TenoraInput/            # input + variants (email, password, search, …)
-  TenoraAlertDialog/      # high-level alert + show* helpers
-  TenoraSelect/           # select + TenoraSelectSingle (search/virtual)
-  TenoraLayout/           # page layout helpers
-  TenoraSimpleTable/      # lightweight HTML table
-  TenoraDataTable/        # TanStack Table + virtual rows + filters
-  TenoraLoadError/
+  DunetaLink/             # React Router (not HeroUI Link → DunetaHrefLink)
+  DunetaInput/            # input + variants (email, password, search, …)
+  DunetaAlertDialog/      # high-level alert + show* helpers
+  DunetaSelect/           # select + DunetaSelectSingle (search/virtual)
+  DunetaLayout/           # page layout helpers
+  DunetaSimpleTable/      # lightweight HTML table
+  DunetaDataTable/        # TanStack Table + virtual rows + filters
+  DunetaLoadError/
   index.ts
 ```
 
@@ -28,42 +28,42 @@ components/
 
 ```tsx
 import {
-  TenoraButton,
-  TenoraCard,
-  TenoraInput,
-  TenoraTable,        // HeroUI Table
-  TenoraSimpleTable,  // lightweight HTML table extension
-  TenoraLink,         // React Router
-  TenoraHrefLink,     // HeroUI Link
-} from '@tenora/client/components';
+  DunetaButton,
+  DunetaCard,
+  DunetaInput,
+  DunetaTable,        // HeroUI Table
+  DunetaSimpleTable,  // lightweight HTML table extension
+  DunetaLink,         // React Router
+  DunetaHrefLink,     // HeroUI Link
+} from '@duneta/client/components';
 
 // Or import one module:
-import { TenoraModal } from '@tenora/client/components/TenoraModal';
+import { DunetaModal } from '@duneta/client/components/DunetaModal';
 ```
 
 ## Naming
 
-| HeroUI | Tenora wrapper | Folder |
+| HeroUI | Duneta wrapper | Folder |
 |--------|----------------|--------|
-| Button | TenoraButton | TenoraButton |
-| Card | TenoraCard | TenoraCard |
-| Link | TenoraHrefLink | TenoraHrefLink |
-| AlertDialog | (skip) | TenoraAlertDialog (custom) |
+| Button | DunetaButton | DunetaButton |
+| Card | DunetaCard | DunetaCard |
+| Link | DunetaHrefLink | DunetaHrefLink |
+| AlertDialog | (skip) | DunetaAlertDialog (custom) |
 
 App extensions override or extend where noted in `components/index.ts`.
 
 ## HeroUI imports
 
-Application code must not import `@heroui/react` or `@heroui/*` directly. ESLint enforces this repo-wide, with an exception only for files under `packages/client/components/Tenora*/` (the wrapper layer).
+Application code must not import `@heroui/react` or `@heroui/*` directly. ESLint enforces this repo-wide, with an exception only for files under `packages/client/components/Duneta*/` (the wrapper layer).
 
 Load HeroUI styles once via `themes/globals.css` (`@import '@heroui/styles'`).
 
-## TenoraDataTable
+## DunetaDataTable
 
 Grouped feature props — `false` | `null` | `undefined` disables a feature.
 
 ```tsx
-<TenoraDataTable
+<DunetaDataTable
   data={rows}
   columns={columns}
   getRowId={(row) => row.id}
@@ -102,15 +102,15 @@ State is split so toolbar and grid re-render independently:
 
 | Region | Subscribes to | Isolated state |
 |--------|---------------|----------------|
-| `TenoraDataTableToolbarSearch` | — | local input (debounced) |
-| `TenoraDataTableToolbarPinnedFilters` | pinned columns list | per-column debounced input |
-| `TenoraDataTableSelectionBadge` | `selectedCount` only | — |
-| `TenoraDataTableColumnPanel` | visibility / pin / grouping | — |
-| `TenoraDataTableToolbarFavorites` | — | favorites localStorage |
-| `TenoraDataTableGrid` | rows, sort, sizing, selection… | — |
-| `TenoraDataTableGridRegion` | — | `editingCell` |
-| `TenoraDataTablePaginationFooterRegion` | — | props only (memo) |
-| `TenoraDataTableEditableCell` | — | memo per cell |
+| `DunetaDataTableToolbarSearch` | — | local input (debounced) |
+| `DunetaDataTableToolbarPinnedFilters` | pinned columns list | per-column debounced input |
+| `DunetaDataTableSelectionBadge` | `selectedCount` only | — |
+| `DunetaDataTableColumnPanel` | visibility / pin / grouping | — |
+| `DunetaDataTableToolbarFavorites` | — | favorites localStorage |
+| `DunetaDataTableGrid` | rows, sort, sizing, selection… | — |
+| `DunetaDataTableGridRegion` | — | `editingCell` |
+| `DunetaDataTablePaginationFooterRegion` | — | props only (memo) |
+| `DunetaDataTableEditableCell` | — | memo per cell |
 
 Context exposes only stable `table` + `onSortChange` (sort descriptor subscribed inside grid).
 
@@ -118,11 +118,11 @@ Avoid controlled `search.value` synced to parent on every keystroke — use `ini
 
 ### Multiple tables on one page
 
-Each `<TenoraDataTable>` is fully isolated: own Engine, Context, TanStack `table` instance, internal state.
+Each `<DunetaDataTable>` is fully isolated: own Engine, Context, TanStack `table` instance, internal state.
 
 ```tsx
-<TenoraDataTable instanceId="orders" ariaLabel="Orders" favorites={{ storageKey: 'orders-list' }} ... />
-<TenoraDataTable instanceId="lines" ariaLabel="Order lines" favorites={{ storageKey: 'lines-list' }} ... />
+<DunetaDataTable instanceId="orders" ariaLabel="Orders" favorites={{ storageKey: 'orders-list' }} ... />
+<DunetaDataTable instanceId="lines" ariaLabel="Order lines" favorites={{ storageKey: 'lines-list' }} ... />
 ```
 
 - Use distinct `instanceId` only when you need a stable id across remounts (optional — auto `useId` per mount).
@@ -148,7 +148,7 @@ To restore UX after back navigation, lift important state to **URL** or **parent
 const [q, setQ] = useSearchParamsState('q')
 const [offset, setOffset] = useSearchParamsState('offset')
 
-<TenoraDataTable
+<DunetaDataTable
   search={{ initialValue: q, onChange: setQ }}
   pagination={{ mode: 'offset', offset, onPageChange: setOffset, ... }}
   sort={{ descriptor, onChange: setSort }}

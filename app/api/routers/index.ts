@@ -1,16 +1,16 @@
 import {
   isAuthEnabled,
   isDatabaseEnabled,
-  type TenoraServerConfig,
-} from '@tenora/server/configs';
+  type DunetaServerConfig,
+} from '@duneta/server/configs';
 import {
   composeRouter,
   createUsersRoutes,
   healthRoutes,
   meRoutes,
-} from '@tenora/server/routers';
+} from '@duneta/server/routers';
 
-export function createAppRouter(config: TenoraServerConfig) {
+export function createAppRouter(config: DunetaServerConfig) {
   const groups = [healthRoutes];
 
   if (isAuthEnabled(config)) {

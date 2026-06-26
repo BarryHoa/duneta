@@ -138,8 +138,8 @@ export type DebugConfig = {
   logLevel: 'debug' | 'info' | 'warn' | 'error';
 };
 
-/** Built-in config sections shipped by `@tenora/server`. */
-export interface TenoraCoreConfig {
+/** Built-in config sections shipped by `@duneta/server`. */
+export interface DunetaCoreConfig {
   runtime: RuntimeConfig;
   app: AppConfig;
   database: DatabaseConfig;
@@ -154,18 +154,18 @@ export interface TenoraCoreConfig {
   debug: DebugConfig;
 }
 
-export type TenoraCoreConfigKey = keyof TenoraCoreConfig;
+export type DunetaCoreConfigKey = keyof DunetaCoreConfig;
 
 /**
  * Full server config = core sections + optional app-specific extensions.
  *
  * @example
- * type HrmConfig = TenoraServerConfig<{ hrm: HrmModuleConfig }>;
+ * type HrmConfig = DunetaServerConfig<{ hrm: HrmModuleConfig }>;
  */
-export type TenoraServerConfig<
+export type DunetaServerConfig<
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- default: no app-specific config extensions
   TExtra extends Record<string, unknown> = {},
   TDatabase extends DatabaseConfig = DatabaseConfig,
-> = Omit<TenoraCoreConfig, 'database'> & {
+> = Omit<DunetaCoreConfig, 'database'> & {
   database: TDatabase;
 } & TExtra;

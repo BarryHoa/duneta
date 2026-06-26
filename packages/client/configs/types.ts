@@ -1,6 +1,6 @@
 export type ThemeMode = 'dark' | 'light' | 'system';
 
-export type TenoraWebConfig = {
+export type DunetaWebConfig = {
   app: {
     name: string;
     port: number;

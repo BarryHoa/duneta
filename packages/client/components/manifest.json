@@ -1,352 +1,352 @@
 [
   {
-    "folder": "TenoraAccordion",
+    "folder": "DunetaAccordion",
     "heroName": "Accordion",
-    "tenoraName": "TenoraAccordion"
+    "dunetaName": "DunetaAccordion"
   },
   {
-    "folder": "TenoraAlert",
+    "folder": "DunetaAlert",
     "heroName": "Alert",
-    "tenoraName": "TenoraAlert"
+    "dunetaName": "DunetaAlert"
   },
   {
-    "folder": "TenoraAutocomplete",
+    "folder": "DunetaAutocomplete",
     "heroName": "Autocomplete",
-    "tenoraName": "TenoraAutocomplete"
+    "dunetaName": "DunetaAutocomplete"
   },
   {
-    "folder": "TenoraAvatar",
+    "folder": "DunetaAvatar",
     "heroName": "Avatar",
-    "tenoraName": "TenoraAvatar"
+    "dunetaName": "DunetaAvatar"
   },
   {
-    "folder": "TenoraBadge",
+    "folder": "DunetaBadge",
     "heroName": "Badge",
-    "tenoraName": "TenoraBadge"
+    "dunetaName": "DunetaBadge"
   },
   {
-    "folder": "TenoraBreadcrumbs",
+    "folder": "DunetaBreadcrumbs",
     "heroName": "Breadcrumbs",
-    "tenoraName": "TenoraBreadcrumbs"
+    "dunetaName": "DunetaBreadcrumbs"
   },
   {
-    "folder": "TenoraButton",
+    "folder": "DunetaButton",
     "heroName": "Button",
-    "tenoraName": "TenoraButton"
+    "dunetaName": "DunetaButton"
   },
   {
-    "folder": "TenoraButtonGroup",
+    "folder": "DunetaButtonGroup",
     "heroName": "ButtonGroup",
-    "tenoraName": "TenoraButtonGroup"
+    "dunetaName": "DunetaButtonGroup"
   },
   {
-    "folder": "TenoraCalendar",
+    "folder": "DunetaCalendar",
     "heroName": "Calendar",
-    "tenoraName": "TenoraCalendar"
+    "dunetaName": "DunetaCalendar"
   },
   {
-    "folder": "TenoraCard",
+    "folder": "DunetaCard",
     "heroName": "Card",
-    "tenoraName": "TenoraCard"
+    "dunetaName": "DunetaCard"
   },
   {
-    "folder": "TenoraCheckbox",
+    "folder": "DunetaCheckbox",
     "heroName": "Checkbox",
-    "tenoraName": "TenoraCheckbox"
+    "dunetaName": "DunetaCheckbox"
   },
   {
-    "folder": "TenoraChip",
+    "folder": "DunetaChip",
     "heroName": "Chip",
-    "tenoraName": "TenoraChip"
+    "dunetaName": "DunetaChip"
   },
   {
-    "folder": "TenoraCloseButton",
+    "folder": "DunetaCloseButton",
     "heroName": "CloseButton",
-    "tenoraName": "TenoraCloseButton"
+    "dunetaName": "DunetaCloseButton"
   },
   {
-    "folder": "TenoraColorArea",
+    "folder": "DunetaColorArea",
     "heroName": "ColorArea",
-    "tenoraName": "TenoraColorArea"
+    "dunetaName": "DunetaColorArea"
   },
   {
-    "folder": "TenoraColorField",
+    "folder": "DunetaColorField",
     "heroName": "ColorField",
-    "tenoraName": "TenoraColorField"
+    "dunetaName": "DunetaColorField"
   },
   {
-    "folder": "TenoraColorPicker",
+    "folder": "DunetaColorPicker",
     "heroName": "ColorPicker",
-    "tenoraName": "TenoraColorPicker"
+    "dunetaName": "DunetaColorPicker"
   },
   {
-    "folder": "TenoraColorSlider",
+    "folder": "DunetaColorSlider",
     "heroName": "ColorSlider",
-    "tenoraName": "TenoraColorSlider"
+    "dunetaName": "DunetaColorSlider"
   },
   {
-    "folder": "TenoraColorSwatch",
+    "folder": "DunetaColorSwatch",
     "heroName": "ColorSwatch",
-    "tenoraName": "TenoraColorSwatch"
+    "dunetaName": "DunetaColorSwatch"
   },
   {
-    "folder": "TenoraColorSwatchPicker",
+    "folder": "DunetaColorSwatchPicker",
     "heroName": "ColorSwatchPicker",
-    "tenoraName": "TenoraColorSwatchPicker"
+    "dunetaName": "DunetaColorSwatchPicker"
   },
   {
-    "folder": "TenoraComboBox",
+    "folder": "DunetaComboBox",
     "heroName": "ComboBox",
-    "tenoraName": "TenoraComboBox"
+    "dunetaName": "DunetaComboBox"
   },
   {
-    "folder": "TenoraDateField",
+    "folder": "DunetaDateField",
     "heroName": "DateField",
-    "tenoraName": "TenoraDateField"
+    "dunetaName": "DunetaDateField"
   },
   {
-    "folder": "TenoraDateRangePicker",
+    "folder": "DunetaDateRangePicker",
     "heroName": "DateRangePicker",
-    "tenoraName": "TenoraDateRangePicker"
+    "dunetaName": "DunetaDateRangePicker"
   },
   {
-    "folder": "TenoraDescription",
+    "folder": "DunetaDescription",
     "heroName": "Description",
-    "tenoraName": "TenoraDescription"
+    "dunetaName": "DunetaDescription"
   },
   {
-    "folder": "TenoraDisclosure",
+    "folder": "DunetaDisclosure",
     "heroName": "Disclosure",
-    "tenoraName": "TenoraDisclosure"
+    "dunetaName": "DunetaDisclosure"
   },
   {
-    "folder": "TenoraDisclosureGroup",
+    "folder": "DunetaDisclosureGroup",
     "heroName": "DisclosureGroup",
-    "tenoraName": "TenoraDisclosureGroup"
+    "dunetaName": "DunetaDisclosureGroup"
   },
   {
-    "folder": "TenoraDrawer",
+    "folder": "DunetaDrawer",
     "heroName": "Drawer",
-    "tenoraName": "TenoraDrawer"
+    "dunetaName": "DunetaDrawer"
   },
   {
-    "folder": "TenoraDropdown",
+    "folder": "DunetaDropdown",
     "heroName": "Dropdown",
-    "tenoraName": "TenoraDropdown"
+    "dunetaName": "DunetaDropdown"
   },
   {
-    "folder": "TenoraEmptyState",
+    "folder": "DunetaEmptyState",
     "heroName": "EmptyState",
-    "tenoraName": "TenoraEmptyState"
+    "dunetaName": "DunetaEmptyState"
   },
   {
-    "folder": "TenoraErrorMessage",
+    "folder": "DunetaErrorMessage",
     "heroName": "ErrorMessage",
-    "tenoraName": "TenoraErrorMessage"
+    "dunetaName": "DunetaErrorMessage"
   },
   {
-    "folder": "TenoraFieldError",
+    "folder": "DunetaFieldError",
     "heroName": "FieldError",
-    "tenoraName": "TenoraFieldError"
+    "dunetaName": "DunetaFieldError"
   },
   {
-    "folder": "TenoraFieldset",
+    "folder": "DunetaFieldset",
     "heroName": "Fieldset",
-    "tenoraName": "TenoraFieldset"
+    "dunetaName": "DunetaFieldset"
   },
   {
-    "folder": "TenoraForm",
+    "folder": "DunetaForm",
     "heroName": "Form",
-    "tenoraName": "TenoraForm"
+    "dunetaName": "DunetaForm"
   },
   {
-    "folder": "TenoraInput",
+    "folder": "DunetaInput",
     "heroName": "Input",
-    "tenoraName": "TenoraInput"
+    "dunetaName": "DunetaInput"
   },
   {
-    "folder": "TenoraInputGroup",
+    "folder": "DunetaInputGroup",
     "heroName": "InputGroup",
-    "tenoraName": "TenoraInputGroup"
+    "dunetaName": "DunetaInputGroup"
   },
   {
-    "folder": "TenoraInputOTP",
+    "folder": "DunetaInputOTP",
     "heroName": "InputOTP",
-    "tenoraName": "TenoraInputOTP"
+    "dunetaName": "DunetaInputOTP"
   },
   {
-    "folder": "TenoraKbd",
+    "folder": "DunetaKbd",
     "heroName": "Kbd",
-    "tenoraName": "TenoraKbd"
+    "dunetaName": "DunetaKbd"
   },
   {
-    "folder": "TenoraLabel",
+    "folder": "DunetaLabel",
     "heroName": "Label",
-    "tenoraName": "TenoraLabel"
+    "dunetaName": "DunetaLabel"
   },
   {
-    "folder": "TenoraHrefLink",
+    "folder": "DunetaHrefLink",
     "heroName": "Link",
-    "tenoraName": "TenoraHrefLink"
+    "dunetaName": "DunetaHrefLink"
   },
   {
-    "folder": "TenoraListBox",
+    "folder": "DunetaListBox",
     "heroName": "ListBox",
-    "tenoraName": "TenoraListBox"
+    "dunetaName": "DunetaListBox"
   },
   {
-    "folder": "TenoraMenu",
+    "folder": "DunetaMenu",
     "heroName": "Menu",
-    "tenoraName": "TenoraMenu"
+    "dunetaName": "DunetaMenu"
   },
   {
-    "folder": "TenoraMeter",
+    "folder": "DunetaMeter",
     "heroName": "Meter",
-    "tenoraName": "TenoraMeter"
+    "dunetaName": "DunetaMeter"
   },
   {
-    "folder": "TenoraModal",
+    "folder": "DunetaModal",
     "heroName": "Modal",
-    "tenoraName": "TenoraModal"
+    "dunetaName": "DunetaModal"
   },
   {
-    "folder": "TenoraNumberField",
+    "folder": "DunetaNumberField",
     "heroName": "NumberField",
-    "tenoraName": "TenoraNumberField"
+    "dunetaName": "DunetaNumberField"
   },
   {
-    "folder": "TenoraPagination",
+    "folder": "DunetaPagination",
     "heroName": "Pagination",
-    "tenoraName": "TenoraPagination"
+    "dunetaName": "DunetaPagination"
   },
   {
-    "folder": "TenoraPopover",
+    "folder": "DunetaPopover",
     "heroName": "Popover",
-    "tenoraName": "TenoraPopover"
+    "dunetaName": "DunetaPopover"
   },
   {
-    "folder": "TenoraProgressBar",
+    "folder": "DunetaProgressBar",
     "heroName": "ProgressBar",
-    "tenoraName": "TenoraProgressBar"
+    "dunetaName": "DunetaProgressBar"
   },
   {
-    "folder": "TenoraProgressCircle",
+    "folder": "DunetaProgressCircle",
     "heroName": "ProgressCircle",
-    "tenoraName": "TenoraProgressCircle"
+    "dunetaName": "DunetaProgressCircle"
   },
   {
-    "folder": "TenoraRadioGroup",
+    "folder": "DunetaRadioGroup",
     "heroName": "RadioGroup",
-    "tenoraName": "TenoraRadioGroup"
+    "dunetaName": "DunetaRadioGroup"
   },
   {
-    "folder": "TenoraRangeCalendar",
+    "folder": "DunetaRangeCalendar",
     "heroName": "RangeCalendar",
-    "tenoraName": "TenoraRangeCalendar"
+    "dunetaName": "DunetaRangeCalendar"
   },
   {
-    "folder": "TenoraScrollShadow",
+    "folder": "DunetaScrollShadow",
     "heroName": "ScrollShadow",
-    "tenoraName": "TenoraScrollShadow"
+    "dunetaName": "DunetaScrollShadow"
   },
   {
-    "folder": "TenoraSearchField",
+    "folder": "DunetaSearchField",
     "heroName": "SearchField",
-    "tenoraName": "TenoraSearchField"
+    "dunetaName": "DunetaSearchField"
   },
   {
-    "folder": "TenoraSelect",
+    "folder": "DunetaSelect",
     "heroName": "Select",
-    "tenoraName": "TenoraSelect"
+    "dunetaName": "DunetaSelect"
   },
   {
-    "folder": "TenoraSeparator",
+    "folder": "DunetaSeparator",
     "heroName": "Separator",
-    "tenoraName": "TenoraSeparator"
+    "dunetaName": "DunetaSeparator"
   },
   {
-    "folder": "TenoraSkeleton",
+    "folder": "DunetaSkeleton",
     "heroName": "Skeleton",
-    "tenoraName": "TenoraSkeleton"
+    "dunetaName": "DunetaSkeleton"
   },
   {
-    "folder": "TenoraSlider",
+    "folder": "DunetaSlider",
     "heroName": "Slider",
-    "tenoraName": "TenoraSlider"
+    "dunetaName": "DunetaSlider"
   },
   {
-    "folder": "TenoraSpinner",
+    "folder": "DunetaSpinner",
     "heroName": "Spinner",
-    "tenoraName": "TenoraSpinner"
+    "dunetaName": "DunetaSpinner"
   },
   {
-    "folder": "TenoraSurface",
+    "folder": "DunetaSurface",
     "heroName": "Surface",
-    "tenoraName": "TenoraSurface"
+    "dunetaName": "DunetaSurface"
   },
   {
-    "folder": "TenoraSwitch",
+    "folder": "DunetaSwitch",
     "heroName": "Switch",
-    "tenoraName": "TenoraSwitch"
+    "dunetaName": "DunetaSwitch"
   },
   {
-    "folder": "TenoraSwitchGroup",
+    "folder": "DunetaSwitchGroup",
     "heroName": "SwitchGroup",
-    "tenoraName": "TenoraSwitchGroup"
+    "dunetaName": "DunetaSwitchGroup"
   },
   {
-    "folder": "TenoraTable",
+    "folder": "DunetaTable",
     "heroName": "Table",
-    "tenoraName": "TenoraTable"
+    "dunetaName": "DunetaTable"
   },
   {
-    "folder": "TenoraTabs",
+    "folder": "DunetaTabs",
     "heroName": "Tabs",
-    "tenoraName": "TenoraTabs"
+    "dunetaName": "DunetaTabs"
   },
   {
-    "folder": "TenoraTagGroup",
+    "folder": "DunetaTagGroup",
     "heroName": "TagGroup",
-    "tenoraName": "TenoraTagGroup"
+    "dunetaName": "DunetaTagGroup"
   },
   {
-    "folder": "TenoraTextField",
+    "folder": "DunetaTextField",
     "heroName": "TextField",
-    "tenoraName": "TenoraTextField"
+    "dunetaName": "DunetaTextField"
   },
   {
-    "folder": "TenoraTimeField",
+    "folder": "DunetaTimeField",
     "heroName": "TimeField",
-    "tenoraName": "TenoraTimeField"
+    "dunetaName": "DunetaTimeField"
   },
   {
-    "folder": "TenoraToast",
+    "folder": "DunetaToast",
     "heroName": "Toast",
-    "tenoraName": "TenoraToast"
+    "dunetaName": "DunetaToast"
   },
   {
-    "folder": "TenoraToggleButton",
+    "folder": "DunetaToggleButton",
     "heroName": "ToggleButton",
-    "tenoraName": "TenoraToggleButton"
+    "dunetaName": "DunetaToggleButton"
   },
   {
-    "folder": "TenoraToggleButtonGroup",
+    "folder": "DunetaToggleButtonGroup",
     "heroName": "ToggleButtonGroup",
-    "tenoraName": "TenoraToggleButtonGroup"
+    "dunetaName": "DunetaToggleButtonGroup"
   },
   {
-    "folder": "TenoraToolbar",
+    "folder": "DunetaToolbar",
     "heroName": "Toolbar",
-    "tenoraName": "TenoraToolbar"
+    "dunetaName": "DunetaToolbar"
   },
   {
-    "folder": "TenoraTooltip",
+    "folder": "DunetaTooltip",
     "heroName": "Tooltip",
-    "tenoraName": "TenoraTooltip"
+    "dunetaName": "DunetaTooltip"
   },
   {
-    "folder": "TenoraTypography",
+    "folder": "DunetaTypography",
     "heroName": "Typography",
-    "tenoraName": "TenoraTypography"
+    "dunetaName": "DunetaTypography"
   }
 ]

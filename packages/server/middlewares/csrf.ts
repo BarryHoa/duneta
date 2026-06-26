@@ -1,7 +1,7 @@
 import { getCookie, setCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import type { RequestContext } from './request-context.js';
 import { createSignedRequestToken, isMutatingMethod, timingSafeEqual } from './utils.js';
 
@@ -9,7 +9,7 @@ function isExcludedPath(path: string, excludePaths: string[]) {
   return excludePaths.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
 }
 
-function issueCsrfCookie(c: Context<RequestContext>, config: TenoraServerConfig) {
+function issueCsrfCookie(c: Context<RequestContext>, config: DunetaServerConfig) {
   const { csrf } = config.security;
   const token = createSignedRequestToken(csrf.secret, csrf.tokenLength);
 
@@ -24,7 +24,7 @@ function issueCsrfCookie(c: Context<RequestContext>, config: TenoraServerConfig)
   return token;
 }
 
-export function createCsrfMiddleware(config: TenoraServerConfig) {
+export function createCsrfMiddleware(config: DunetaServerConfig) {
   const { csrf } = config.security;
 
   return createMiddleware<RequestContext>(async (c, next) => {

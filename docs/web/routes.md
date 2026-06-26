@@ -5,7 +5,7 @@
 ```text
 packages/client/routers/     ← defaults framework
 app/web/routers/             ← routes của bạn
-         ↓ tenora-web sync
+         ↓ duneta-web sync
 app/web/.router-runtime/     ← merged (generated, không edit)
 ```
 
@@ -20,18 +20,18 @@ export default function BlogPage() {
 }
 ```
 
-File-based routing theo React Router v7 conventions. Sau khi thêm file, `tenora-web dev` tự sync.
+File-based routing theo React Router v7 conventions. Sau khi thêm file, `duneta-web dev` tự sync.
 
 ## Layout
 
-Framework ship layout trong `packages/client/routers/layout.tsx` — dùng `ThemeProvider` từ `@tenora/client/providers`.
+Framework ship layout trong `packages/client/routers/layout.tsx` — dùng `ThemeProvider` từ `@duneta/client/providers`.
 
 Override bằng `app/web/routers/layout.tsx` nếu cần.
 
 ## Theme
 
 ```ts
-// tenora.config.ts
+// duneta.config.ts
 theme: { default: 'dark' },
 ```
 
@@ -46,7 +46,7 @@ CSS variables trong `app/web/themes/globals.css` — Tailwind v4 + HeroUI.
 ### `apiFetch`
 
 ```tsx
-import { apiFetch } from '@tenora/client/hooks/use-api';
+import { apiFetch } from '@duneta/client/hooks/use-api';
 
 const data = await apiFetch({ path: '/users' });
 ```
@@ -62,8 +62,8 @@ export async function loader() {
 ## `react-router.config.ts`
 
 ```ts
-import { createReactRouterConfig } from '@tenora/client/configs/react-router';
-import { loadConfig } from '@tenora/client/configs/load';
+import { createReactRouterConfig } from '@duneta/client/configs/react-router';
+import { loadConfig } from '@duneta/client/configs/load';
 
 const config = await loadConfig(webRoot);
 export default createReactRouterConfig(config);
@@ -72,7 +72,7 @@ export default createReactRouterConfig(config);
 ## `vite.config.ts`
 
 ```ts
-import { createTenoraViteConfig } from '@tenora/client/configs/vite';
+import { createDunetaViteConfig } from '@duneta/client/configs/vite';
 // merge với config app
 ```
 
@@ -80,10 +80,10 @@ Xem file thực tế trong `app/web/` để biết options đang dùng.
 
 ## Components
 
-UI components ship trong `@tenora/client/components` (Tenora* wrappers quanh HeroUI).
+UI components ship trong `@duneta/client/components` (Duneta* wrappers quanh HeroUI).
 
 ```tsx
-import { TenoraButton } from '@tenora/client/components';
+import { DunetaButton } from '@duneta/client/components';
 ```
 
 Không copy component vào app trừ khi cần customize sâu.

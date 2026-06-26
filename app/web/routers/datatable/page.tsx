@@ -3,16 +3,16 @@
 import type { SortDescriptor } from '@heroui/react';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  TenoraButton,
-  TenoraButtonGroup,
-  TenoraChip,
-  TenoraDataTable,
-  TenoraLabel,
-  TenoraLink as Link,
-  TenoraTypography,
+  DunetaButton,
+  DunetaButtonGroup,
+  DunetaChip,
+  DunetaDataTable,
+  DunetaLabel,
+  DunetaLink as Link,
+  DunetaTypography,
   type ColumnDef,
-  type TenoraDataTableDataType,
-} from '@tenora/client/components';
+  type DunetaDataTableDataType,
+} from '@duneta/client/components';
 import {
   createDemoProductRows,
   type DemoProductRow,
@@ -66,9 +66,9 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
             : 'default';
 
       return (
-        <TenoraChip color={color} size="sm" variant="soft">
-          <TenoraChip.Label className="capitalize">{value}</TenoraChip.Label>
-        </TenoraChip>
+        <DunetaChip color={color} size="sm" variant="soft">
+          <DunetaChip.Label className="capitalize">{value}</DunetaChip.Label>
+        </DunetaChip>
       );
     },
   },
@@ -112,9 +112,9 @@ const columns: Array<ColumnDef<DemoProductRow, unknown>> = [
     id: 'actions',
     header: 'Actions',
     cell: () => (
-      <TenoraButton size="sm" variant="ghost">
+      <DunetaButton size="sm" variant="ghost">
         View
-      </TenoraButton>
+      </DunetaButton>
     ),
     enableSorting: false,
     meta: { pin: 'right' },
@@ -165,17 +165,17 @@ function fetchServerPage(
 
 export function meta() {
   return [
-    { title: 'DataTable demo — Tenora' },
+    { title: 'DataTable demo — Duneta' },
     {
       name: 'description',
-      content: 'TenoraDataTable test: static vs dynamic data modes.',
+      content: 'DunetaDataTable test: static vs dynamic data modes.',
     },
   ];
 }
 
 export default function DataTableDemoPage() {
   const allRows = useMemo(() => createDemoProductRows(ROW_COUNT), []);
-  const [dataType, setDataType] = useState<TenoraDataTableDataType>('dynamic');
+  const [dataType, setDataType] = useState<DunetaDataTableDataType>('dynamic');
   const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -192,7 +192,7 @@ export default function DataTableDemoPage() {
 
   const tableData = dataType === 'static' ? allRows : dynamicRows;
 
-  const handleDataTypeChange = useCallback((next: TenoraDataTableDataType) => {
+  const handleDataTypeChange = useCallback((next: DunetaDataTableDataType) => {
     setDataType(next);
     setPage(1);
     setSortDescriptor(undefined);
@@ -207,17 +207,17 @@ export default function DataTableDemoPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300">
             Playground
           </p>
-          <TenoraTypography.Heading
+          <DunetaTypography.Heading
             level={1}
             className="text-3xl font-semibold"
           >
-            TenoraDataTable
-          </TenoraTypography.Heading>
-          <TenoraTypography.Paragraph className="max-w-2xl text-sm leading-6 text-muted">
+            DunetaDataTable
+          </DunetaTypography.Heading>
+          <DunetaTypography.Paragraph className="max-w-2xl text-sm leading-6 text-muted">
             {ROW_COUNT} rows · {columns.length} columns · {PAGE_SIZE} rows/page
             · drag · resize · pin · row selection · sort · toolbar. Route:{' '}
-            <TenoraTypography.Code>/datatable</TenoraTypography.Code>
-          </TenoraTypography.Paragraph>
+            <DunetaTypography.Code>/datatable</DunetaTypography.Code>
+          </DunetaTypography.Paragraph>
         </div>
         <Link
           href="/about"
@@ -228,27 +228,27 @@ export default function DataTableDemoPage() {
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
-        <TenoraLabel className="text-sm text-muted">dataType</TenoraLabel>
-        <TenoraButtonGroup>
+        <DunetaLabel className="text-sm text-muted">dataType</DunetaLabel>
+        <DunetaButtonGroup>
           {(['static', 'dynamic'] as const).map((mode) => (
-            <TenoraButton
+            <DunetaButton
               key={mode}
               size="sm"
               variant={dataType === mode ? 'primary' : 'secondary'}
               onPress={() => handleDataTypeChange(mode)}
             >
               {mode}
-            </TenoraButton>
+            </DunetaButton>
           ))}
-        </TenoraButtonGroup>
-        <TenoraTypography.Paragraph className="text-xs text-muted">
+        </DunetaButtonGroup>
+        <DunetaTypography.Paragraph className="text-xs text-muted">
           {dataType === 'static'
             ? 'Full dataset in table — client sort & pagination'
             : 'Simulated server page — server sort & pagination'}
-        </TenoraTypography.Paragraph>
+        </DunetaTypography.Paragraph>
       </div>
 
-      <TenoraDataTable<DemoProductRow>
+      <DunetaDataTable<DemoProductRow>
         ariaLabel="Product catalog test"
         columnDrag
         columnResize
@@ -300,13 +300,13 @@ export default function DataTableDemoPage() {
       />
 
       {selectedIds.length > 0 ? (
-        <TenoraTypography.Paragraph className="text-sm text-muted">
+        <DunetaTypography.Paragraph className="text-sm text-muted">
           Selected {selectedIds.length} row{selectedIds.length === 1 ? '' : 's'}
           :{' '}
-          <TenoraTypography.Code>
+          <DunetaTypography.Code>
             {selectedIds.join(', ')}
-          </TenoraTypography.Code>
-        </TenoraTypography.Paragraph>
+          </DunetaTypography.Code>
+        </DunetaTypography.Paragraph>
       ) : null}
     </main>
   );

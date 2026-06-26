@@ -1,24 +1,24 @@
 # Packages
 
 ```text
-packages/server  →  @tenora/server   (Hono API framework)
-packages/client  →  @tenora/client   (React Router web framework)
+packages/server  →  @duneta/server   (Hono API framework)
+packages/client  →  @duneta/client   (React Router web framework)
 ```
 
 | Package | Dùng trong | Không dùng trong |
 |---------|------------|------------------|
-| `@tenora/server` | `app/api` | `app/web` |
-| `@tenora/client` | `app/web` | `app/api` |
+| `@duneta/server` | `app/api` | `app/web` |
+| `@duneta/client` | `app/web` | `app/api` |
 
 ## Tài liệu
 
-- [`@tenora/server`](../docs/packages/server.md)
-- [`@tenora/client`](../docs/packages/client.md)
+- [`@duneta/server`](../docs/packages/server.md)
+- [`@duneta/client`](../docs/packages/client.md)
 - [Kiến trúc](../docs/architecture.md)
 
 ## Build
 
 ```bash
-pnpm --filter @tenora/server build
-pnpm --filter @tenora/client build
+pnpm --filter @duneta/server build
+pnpm --filter @duneta/client build
 ```

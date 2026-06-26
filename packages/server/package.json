@@ -1,14 +1,14 @@
 {
-  "name": "@tenora/server",
+  "name": "@duneta/server",
   "private": false,
   "version": "0.1.0",
-  "description": "Server utilities for Tenora applications.",
+  "description": "Server utilities for Duneta applications.",
   "license": "MIT",
   "type": "module",
   "files": ["dist", "scripts", "runtime"],
   "forgeStack": { "kind": "backend", "runtime": "cloudflare-worker" },
   "bin": {
-    "tenora-api": "./scripts/tenora-api.mjs"
+    "duneta-api": "./scripts/duneta-api.mjs"
   },
   "exports": {
     "./configs": {

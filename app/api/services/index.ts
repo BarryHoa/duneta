@@ -1,7 +1,7 @@
-import { isAuthEnabled, isDatabaseEnabled } from '@tenora/server/configs';
-import type { RegisterServices } from '@tenora/server/container';
-import { HealthController, MeController, UserController } from '@tenora/server/http';
-import { UserRepository } from '@tenora/server/repositories';
+import { isAuthEnabled, isDatabaseEnabled } from '@duneta/server/configs';
+import type { RegisterServices } from '@duneta/server/container';
+import { HealthController, MeController, UserController } from '@duneta/server/http';
+import { UserRepository } from '@duneta/server/repositories';
 
 export const registerServices: RegisterServices = ({
   controllers,

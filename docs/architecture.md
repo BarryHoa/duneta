@@ -3,10 +3,10 @@
 ## Monorepo
 
 ```text
-app/api   ──depends──▶  @tenora/server
-app/web   ──depends──▶  @tenora/client
+app/api   ──depends──▶  @duneta/server
+app/web   ──depends──▶  @duneta/client
 
-app/web KHÔNG import @tenora/server
+app/web KHÔNG import @duneta/server
 ```
 
 App shell mỏng — framework trong `packages/`, mở rộng qua config + hooks.
@@ -27,7 +27,7 @@ flowchart TD
 
 | Hook | File | Việc |
 |------|------|------|
-| `config` | `tenora.config.ts` | Cấu hình app |
+| `config` | `duneta.config.ts` | Cấu hình app |
 | `createAppRouter` | `routers/index.ts` | Ghép route groups |
 | `registerServices` | `services/index.ts` | Đăng ký controller/repository |
 | `resolvePermissions` | `permissions/index.ts` | Role → grants (optional) |
@@ -36,8 +36,8 @@ flowchart TD
 
 | Entry | Import | Target |
 |-------|--------|--------|
-| `server.ts` | `@tenora/server/runtime/worker` | `worker` |
-| `server.node.ts` | `@tenora/server/runtime/node` | `node` |
+| `server.ts` | `@duneta/server/runtime/worker` | `worker` |
+| `server.node.ts` | `@duneta/server/runtime/node` | `node` |
 
 ## Dependency injection
 

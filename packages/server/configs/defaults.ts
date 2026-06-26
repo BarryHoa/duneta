@@ -1,6 +1,6 @@
 import { DEFAULT_DATABASE_POOL } from './database';
 import { DEFAULT_RATE_LIMIT_RULES } from './rate-limit';
-import type { TenoraServerConfig } from './types';
+import type { DunetaServerConfig } from './types';
 
 export const DEFAULT_CONFIG_APP_PORT = 3001;
 export const DEFAULT_TIMEZONE = 'Asia/Ho_Chi_Minh';
@@ -8,15 +8,15 @@ export const DEFAULT_TIMEZONE = 'Asia/Ho_Chi_Minh';
 const THREE_DAYS = 60 * 60 * 24 * 3;
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
-/** Minimal defaults — opt in to features in `tenora.config.ts`. */
-export function createDefaultConfig(): TenoraServerConfig {
+/** Minimal defaults — opt in to features in `duneta.config.ts`. */
+export function createDefaultConfig(): DunetaServerConfig {
   const port = DEFAULT_CONFIG_APP_PORT;
 
   return {
     runtime: { target: 'worker' },
 
     app: {
-      name: 'tenora-api',
+      name: 'duneta-api',
       env: 'development',
       port,
       debug: false,
@@ -49,7 +49,7 @@ export function createDefaultConfig(): TenoraServerConfig {
         expiresIn: THREE_DAYS,
         rememberMeExpiresIn: THIRTY_DAYS,
         cookie: {
-          name: 'tenora_session',
+          name: 'duneta_session',
           httpOnly: true,
           secure: false,
           sameSite: 'lax',
@@ -64,7 +64,7 @@ export function createDefaultConfig(): TenoraServerConfig {
       supported: ['vi', 'en'],
       resolve: {
         header: 'Accept-Language',
-        cookie: 'tenora_locale',
+        cookie: 'duneta_locale',
         query: 'lang',
       },
     },
@@ -73,8 +73,8 @@ export function createDefaultConfig(): TenoraServerConfig {
       default: DEFAULT_TIMEZONE,
       supported: [DEFAULT_TIMEZONE, 'UTC', 'Asia/Bangkok'],
       resolve: {
-        header: 'X-Tenora-Timezone',
-        cookie: 'tenora_timezone',
+        header: 'X-Duneta-Timezone',
+        cookie: 'duneta_timezone',
         query: 'tz',
       },
     },
@@ -100,7 +100,7 @@ export function createDefaultConfig(): TenoraServerConfig {
       csrf: {
         enabled: false,
         secret: '',
-        cookie: 'tenora_csrf',
+        cookie: 'duneta_csrf',
         header: 'X-CSRF-Token',
         tokenLength: 32,
         expirationMs: 24 * 60 * 60 * 1000,

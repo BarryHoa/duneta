@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-import { ThemeProvider } from '@tenora/client/providers';
-import '@tenora/client/themes/globals.css';
+import { ThemeProvider } from '@duneta/client/providers';
+import '@duneta/client/themes/globals.css';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,7 +1,7 @@
 import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
-import type { TenoraServerConfig } from '../configs/types.js';
+import type { DunetaServerConfig } from '../configs/types.js';
 import { HttpError } from '../permissions/errors.js';
 import { createCsrfMiddleware } from './csrf.js';
 import type { RequestContext } from './request-context.js';
@@ -25,7 +25,7 @@ export {
 };
 export type { AuthSession, AuthUser } from './types.js';
 
-export function createContextDefaultsMiddleware(config: TenoraServerConfig) {
+export function createContextDefaultsMiddleware(config: DunetaServerConfig) {
   return createMiddleware<RequestContext>(async (c, next) => {
     c.set('requestId', '');
     c.set('locale', config.locale.default);
@@ -44,9 +44,9 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
       c.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
       c.header(
         'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, Accept-Language, X-Tenora-Timezone, X-Tenora-Locale, X-Request-Id, X-CSRF-Token',
+        'Content-Type, Authorization, Accept-Language, X-Duneta-Timezone, X-Duneta-Locale, X-Request-Id, X-CSRF-Token',
       );
-      c.header('Access-Control-Expose-Headers', 'X-Request-Id, Content-Language, X-Tenora-Timezone');
+      c.header('Access-Control-Expose-Headers', 'X-Request-Id, Content-Language, X-Duneta-Timezone');
       c.header('Access-Control-Allow-Credentials', 'true');
     }
 

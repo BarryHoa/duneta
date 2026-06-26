@@ -5,8 +5,8 @@ import { delimiter, join } from 'node:path';
 
 const corepack = process.platform === 'win32' ? 'corepack.cmd' : 'corepack';
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
-const corepackHome = process.env.COREPACK_HOME ?? join(tmpdir(), 'tenora-corepack');
-const shimDirectory = join(tmpdir(), 'tenora-bin');
+const corepackHome = process.env.COREPACK_HOME ?? join(tmpdir(), 'duneta-corepack');
+const shimDirectory = join(tmpdir(), 'duneta-bin');
 
 function run(command, args) {
   const result = spawnSync(command, args, {

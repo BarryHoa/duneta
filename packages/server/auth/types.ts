@@ -1,6 +1,6 @@
 import type { AuthSession } from '../middlewares/types.js';
 
-/** Portable auth instance shape used by Tenora runtime. */
+/** Portable auth instance shape used by Duneta runtime. */
 export type Auth = {
   handler: (request: Request) => Response | Promise<Response>;
   api: {

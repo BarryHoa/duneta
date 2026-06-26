@@ -5,14 +5,14 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "@tenora/server/configs": ["../../packages/server/configs/index.ts"],
-      "@tenora/server/*": ["../../packages/server/*"]
+      "@duneta/server/configs": ["../../packages/server/configs/index.ts"],
+      "@duneta/server/*": ["../../packages/server/*"]
     }
   },
   "include": [
     "server.ts",
     "server.node.ts",
-    "tenora.config.ts",
+    "duneta.config.ts",
     "permissions",
     "controllers",
     "repositories",

@@ -58,7 +58,7 @@ export {
   resolveAuthBasePath,
   resolveAuthMountPath,
 } from './features.js';
-export { defineTenoraConfig, loadConfig } from './load.js';
+export { defineDunetaConfig, loadConfig } from './load.js';
 export { mergeConfig, type DeepPartial } from './merge.js';
 export { config, getConfig } from './registry.js';
 export type {
@@ -84,6 +84,6 @@ export type {
   SecurityConfig,
   SecurityHeadersConfig,
   TimezoneConfig,
-  TenoraCoreConfig,
-  TenoraServerConfig,
+  DunetaCoreConfig,
+  DunetaServerConfig,
 } from './types.js';
