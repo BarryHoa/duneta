@@ -28,6 +28,7 @@
     },
     "./configs/vite": "./configs/vite.ts",
     "./configs/react-router": "./configs/react-router.ts",
+    "./configs/load": "./configs/load.ts",
     "./configs/client": "./configs/client.ts",
     "./validators": {
       "types": "./dist/validators/index.d.ts",
