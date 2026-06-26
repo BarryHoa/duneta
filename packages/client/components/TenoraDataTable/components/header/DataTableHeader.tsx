@@ -124,7 +124,7 @@ function HeaderColumnShell({
         'bg-surface-secondary',
         pinClassName,
         resizable &&
-          'group/column relative data-[resizing]:bg-cyan-500/10 data-[resizing]:text-foreground',
+          'group/column relative data-[resizing]:!bg-cyan-100 data-[resizing]:text-foreground dark:data-[resizing]:!bg-cyan-900',
       )}
       id={id}
       isRowHeader={isRowHeader}
