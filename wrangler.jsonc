@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "duneta-api",
+  "name": "duneta",
   "main": "app/api/server.ts",
   "compatibility_date": "2025-06-17",
   "compatibility_flags": ["nodejs_compat"]
