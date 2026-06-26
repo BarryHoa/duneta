@@ -2,10 +2,11 @@ import { DunetaHome } from '@duneta/client/layouts';
 
 export function meta() {
   return [
-    { title: 'Duneta — one Worker, full stack' },
+    { title: 'Duneta — Full-stack React & Hono on Cloudflare Workers' },
     {
       name: 'description',
-      content: 'React Router + Hono on a single Cloudflare Worker. Web and /api on one domain.',
+      content:
+        'Full-stack React with Hono API, deployed on Cloudflare Workers. Server-rendered UI and /api on one edge runtime.',
     },
   ];
 }
