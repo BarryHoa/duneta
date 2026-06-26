@@ -37,6 +37,6 @@ API không deploy riêng — bootstrap inline trong `worker.ts`.
 |------|----------|
 | `pnpm dev` | Sync + `react-router dev` (HMR, :8787) |
 | `pnpm build` | Sync API + build React Router |
-| `pnpm deploy` | Build + `wrangler deploy` (config từ `app/build/server/wrangler.json`) |
+| `pnpm deploy` | Build + `wrangler deploy --config app/build/server/wrangler.json` |
 
 Sync API chạy tự động trong `build` / `deploy` — không cần lệnh riêng.

@@ -18,7 +18,7 @@ const stack = [
     num: '03',
     title: 'Cloudflare Worker',
     desc: 'Single Worker entry at the edge — routes traffic between React SSR and the Hono API.',
-    path: 'app/worker.ts',
+    path: 'worker.ts',
   },
 ] as const;
 
@@ -87,7 +87,7 @@ export function DunetaHome() {
                 <span />
                 <span />
               </div>
-              <span className="home-diagram-file">app/worker.ts</span>
+              <span className="home-diagram-file">worker.ts</span>
             </div>
             <div className="home-diagram-body">
               <div className="home-route-grid">
@@ -124,7 +124,7 @@ export function DunetaHome() {
             <h2>The stack</h2>
             <p>
               React for the frontend, Hono for the API, Cloudflare Workers for runtime — wired together in{' '}
-              <code>app/worker.ts</code>.
+              <code>worker.ts</code>.
             </p>
           </div>
           <div className="home-grid-3">

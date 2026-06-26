@@ -10,7 +10,8 @@ export function createDefaultConfig(): DunetaWebConfig {
       baseUrl: '/api',
     },
     router: {
-      appDirectory: '.router-runtime',
+      appDirectory: 'app/.router-runtime',
+      buildDirectory: 'app/build',
       ssr: {
         streamTimeout: 5_000,
       },

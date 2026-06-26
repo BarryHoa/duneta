@@ -4,11 +4,11 @@
 /* HeroUI v3 styles must follow Tailwind. */
 @import '@heroui/styles';
 
-/* Scan shared UI kit and this app's routers. */
-@source "../packages/client";
-@source "../packages/client/routers";
-@source "../routers";
-@source "../components";
+/* Scan shared UI kit and app source. */
+@source "../../packages/client";
+@source "../../packages/client/routers";
+@source "../pages";
+@source "../.router-runtime";
 /*
  * HeroUI Theme Customization
  * Add this to your global.css after importing @heroui/styles

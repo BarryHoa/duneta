@@ -10,6 +10,7 @@ export type DunetaWebConfig = {
   };
   router: {
     appDirectory: string;
+    buildDirectory: string;
     ssr: {
       streamTimeout: number;
     };

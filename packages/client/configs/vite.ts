@@ -8,16 +8,16 @@ import { defineConfig, type UserConfig } from 'vite';
 const clientRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const serverRoot = path.resolve(clientRoot, '../server');
 
-export function createDunetaViteConfig(webRoot: string, overrides: UserConfig = {}): UserConfig {
+export function createDunetaViteConfig(repoRoot: string, appRoot: string, overrides: UserConfig = {}): UserConfig {
   return defineConfig({
-    envDir: path.resolve(webRoot, '..'),
-    publicDir: path.resolve(webRoot, 'public'),
+    envDir: repoRoot,
+    publicDir: path.resolve(appRoot, 'public'),
     server: {
       port: 8787,
     },
     plugins: [
       cloudflare({
-        configPath: path.resolve(webRoot, '../wrangler.jsonc'),
+        configPath: path.resolve(repoRoot, 'wrangler.jsonc'),
         viteEnvironment: { name: 'ssr' },
       }),
       tailwindcss(),
@@ -27,7 +27,7 @@ export function createDunetaViteConfig(webRoot: string, overrides: UserConfig = 
       alias: {
         '@duneta/client': clientRoot,
         '@duneta/server': serverRoot,
-        '~': webRoot,
+        '~': appRoot,
       },
     },
     ssr: {

@@ -13,7 +13,6 @@
   },
   "include": [
     "configs",
-    "env.d.ts",
     "validators",
     "helpers",
     "hooks",

@@ -51,7 +51,7 @@ function ensureDevVars() {
 function loadWebConfig() {
   const tsx = bin('tsx', 'dist/cli.mjs');
   const script = path.join(clientRoot, 'scripts/load-config.mjs');
-  const r = spawnSync(process.execPath, [tsx, script, appRoot], { encoding: 'utf8', cwd: appRoot });
+  const r = spawnSync(process.execPath, [tsx, script, repoRoot], { encoding: 'utf8', cwd: repoRoot });
   if (r.status !== 0) throw new Error(r.stderr || 'Failed to load duneta.config.ts');
   return JSON.parse(r.stdout);
 }
@@ -63,7 +63,7 @@ function sync() {
 function buildWeb() {
   const webConfig = loadWebConfig();
   syncRouters(appRoot, clientRoot, webConfig);
-  run(process.execPath, [bin('@react-router/dev'), 'build'], appRoot);
+  run(process.execPath, [bin('@react-router/dev'), 'build'], repoRoot);
 }
 
 function buildAll() {
@@ -84,7 +84,7 @@ switch (command) {
     sync();
     syncRouters(appRoot, clientRoot, loadWebConfig());
     console.log('[duneta] http://localhost:8787 (HMR)');
-    run(process.execPath, [bin('@react-router/dev'), 'dev', ...rest], appRoot);
+    run(process.execPath, [bin('@react-router/dev'), 'dev', ...rest], repoRoot);
     break;
   }
   case 'deploy':

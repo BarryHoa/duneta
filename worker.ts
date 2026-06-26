@@ -1,9 +1,12 @@
 import { createRequestHandler, RouterContextProvider } from 'react-router';
 import { defineServer } from '@duneta/server/runtime/worker';
+import type { FetcherBinding, PlatformEnv } from '@duneta/server/runtime/shared/platform-env';
 import { api as apiConfig } from './duneta.config';
-import { createAppRouter } from './api/router';
-import { resolvePermissions } from './api/permissions';
-import { registerServices } from './api/services';
+import { createAppRouter } from './app/api/router';
+import { resolvePermissions } from './app/api/permissions';
+import { registerServices } from './app/api/services';
+
+type AppEnv = PlatformEnv & { ASSETS?: FetcherBinding };
 
 const api = defineServer({
   config: apiConfig,
@@ -18,7 +21,7 @@ const web = createRequestHandler(
 );
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: AppEnv): Promise<Response> {
     const { pathname } = new URL(request.url);
 
     if (pathname === '/api' || pathname.startsWith('/api/')) {
@@ -32,4 +35,4 @@ export default {
 
     return web(request, new RouterContextProvider());
   },
-} satisfies ExportedHandler<Env>;
+} satisfies ExportedHandler<AppEnv>;

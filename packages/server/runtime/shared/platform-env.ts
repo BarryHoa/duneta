@@ -2,8 +2,12 @@ export type HyperdriveBinding = {
   connectionString: string;
 };
 
-/** Cloudflare Worker `env` — secrets, vars, Hyperdrive (optional on Node). */
-export type PlatformEnv = Record<string, string | HyperdriveBinding | undefined>;
+export type FetcherBinding = {
+  fetch: typeof fetch;
+};
+
+/** Cloudflare Worker `env` — secrets, vars, bindings (optional on Node). */
+export type PlatformEnv = Record<string, string | HyperdriveBinding | FetcherBinding | undefined>;
 
 export function isHyperdriveBinding(value: unknown): value is HyperdriveBinding {
   return (
