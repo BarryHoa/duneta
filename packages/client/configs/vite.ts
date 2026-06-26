@@ -1,53 +1,43 @@
 import path from 'node:path';
+import { cloudflare } from '@cloudflare/vite-plugin';
 import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type UserConfig } from 'vite';
-// @ts-expect-error — runtime .mjs script without types
-import { routerSyncPlugin } from '../scripts/router-sync-plugin.mjs';
-import type { DunetaWebConfig } from './types.js';
 
 const clientRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const serverRoot = path.resolve(clientRoot, '../server');
 
-export function createDunetaViteConfig(
-  webRoot: string,
-  webConfig: DunetaWebConfig,
-  overrides: UserConfig = {},
-): UserConfig {
-  const apiProxyTarget =
-    webConfig.api.proxyTarget ?? `http://localhost:${webConfig.api.port}`;
-
+export function createDunetaViteConfig(webRoot: string, overrides: UserConfig = {}): UserConfig {
   return defineConfig({
-    envDir: path.resolve(webRoot),
+    envDir: path.resolve(webRoot, '..'),
     publicDir: path.resolve(webRoot, 'public'),
+    server: {
+      port: 8787,
+    },
     plugins: [
+      cloudflare({
+        configPath: path.resolve(webRoot, '../wrangler.jsonc'),
+        viteEnvironment: { name: 'ssr' },
+      }),
       tailwindcss(),
-      routerSyncPlugin(webRoot, clientRoot, webConfig),
       reactRouter(),
     ],
-    define: {
-      'import.meta.env.VITE_API_URL': JSON.stringify(webConfig.api.baseUrl),
-    },
     resolve: {
       alias: {
         '@duneta/client': clientRoot,
+        '@duneta/server': serverRoot,
         '~': webRoot,
       },
     },
     ssr: {
-      noExternal: [/^@duneta\/client/, /^@heroui\//],
+      noExternal: [/^@duneta\/client/, /^@duneta\/server/, /^@heroui\//],
     },
     css: {
       devSourcemap: false,
     },
     build: {
       sourcemap: false,
-    },
-    server: {
-      port: webConfig.app.port,
-      proxy: {
-        '/api': apiProxyTarget,
-      },
     },
     ...overrides,
   });

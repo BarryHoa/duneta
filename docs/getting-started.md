@@ -1,63 +1,38 @@
-# Cài đặt & chạy dev
+# Cài đặt
 
-## Yêu cầu
-
-- Node.js 20+
-- pnpm 10 (`corepack enable`)
-- Bun (chỉ khi chạy API local với `dev:node`)
-
-## Cài đặt
+## Deploy
 
 ```bash
-pnpm install
+pnpm install && pnpm deploy
 ```
 
-## Chạy full stack
+`pnpm install` tự build framework packages. `pnpm deploy` sync + build app + `wrangler deploy`.
+
+**Một lần:** Cloudflare auth + secrets (nếu dùng DB/auth):
 
 ```bash
-pnpm dev
+wrangler login
+wrangler secret put DATABASE_URL
+wrangler secret put AUTH_SECRET
+wrangler secret put AUTH_BASE_URL   # URL production, ví dụ https://example.com
 ```
 
-Chạy song song:
-
-| Service | URL | Runtime |
-|---------|-----|---------|
-| Web | http://localhost:3000 | React Router (Vite) |
-| API | http://localhost:8787/api | Wrangler (Cloudflare Worker) |
-
-## Chạy riêng từng phần
+## Dev local
 
 ```bash
-pnpm --filter web dev          # web only
-pnpm --filter api dev          # API Wrangler only
-pnpm --filter api dev:node     # API Bun — http://localhost:3001/api
-pnpm --filter api start:node   # Bun production mode
-pnpm --filter api deploy       # wrangler deploy
+pnpm dev    # http://localhost:8787 — HMR (Vite + Workers runtime)
 ```
 
-## Build & kiểm tra
+Tự tạo `.dev.vars` từ `.dev.vars.example` nếu chưa có. Bỏ comment các biến cần dùng (DB, auth). Sửa `pages/` hoặc component → trang tự cập nhật, không cần F5 hay `pnpm build`.
 
-```bash
-pnpm build
-pnpm typecheck
-pnpm lint
-```
+## `app/` — code của bạn
 
-## Cấu trúc repo
+| Path | Việc |
+|------|------|
+| `worker.ts` | Entry Worker |
+| `duneta.config.ts` | Cấu hình cấu trúc (không hardcode secrets) |
+| `api/` | Routes, services API |
+| `pages/` | Pages React Router |
+| `themes/` | CSS |
 
-```text
-Duneta/
-├── app/
-│   ├── api/          # shell backend — bạn sở hữu config, routes, providers
-│   └── web/          # shell frontend — bạn sở hữu config, routes, theme
-├── packages/
-│   ├── server/       # @duneta/server — framework API
-│   └── client/       # @duneta/client — framework web
-└── docs/             # tài liệu này
-```
-
-## Bước tiếp theo
-
-1. Copy `app/api/.env.example` → `app/api/.env`
-2. Chỉnh `app/api/duneta.config.ts` và `app/web/duneta.config.ts`
-3. Đọc [Kiến trúc](./architecture.md) và [Cấu hình](./configuration.md)
+Thêm route mới trong `pages/` → restart `pnpm dev` (sync routers). Sửa file trong route đã có → HMR tự reload.

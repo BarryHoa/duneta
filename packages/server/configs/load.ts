@@ -1,10 +1,7 @@
 import { createDefaultConfig } from './defaults';
-import { env } from './env';
 import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
 import type { DunetaServerConfig } from './types';
-
-export { env };
 
 /** Like `defineConfig` in Next.js — all sections are optional. */
 export function defineDunetaConfig<const T extends Record<string, unknown>>(

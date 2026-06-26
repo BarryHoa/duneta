@@ -4,44 +4,33 @@
 
 ```text
 1. @duneta/server defaults     → baseline framework (global)
-2. app/*/duneta.config.ts      → cấu trúc app (bạn chỉnh)
-3. .env / wrangler secrets     → giá trị (URL, secret)
+2. app/duneta.config.ts          → cấu trúc app (bạn chỉnh)
+3. .dev.vars / wrangler secrets → giá trị (URL, secret)
 ```
 
-`duneta.config.ts` khai báo **cấu trúc** theo TypeScript types. `.env` chỉ cung cấp **giá trị** qua `env()` / `envFirst()`.
+`duneta.config.ts` khai báo **cấu trúc** theo TypeScript types. Secrets (`DATABASE_URL`, `AUTH_SECRET`, …) qua `.dev.vars` / `wrangler secret put` — merge lúc runtime trên Worker.
 
-## API config
+## API + Web config
 
-File: `app/api/duneta.config.ts`
+File: `app/duneta.config.ts` — `export const api` (Worker) + `export default` (web).
 
 ```ts
-import {
-  defineDunetaConfig,
-  envFirst,
-  defineConnections,
-  postgresConnection,
-  DEFAULT_DATABASE_POOL,
-  RECOMMENDED_RATE_LIMIT_RULES,
-} from '@duneta/server/configs';
-
-const port = Number(envFirst(['PORT'], '3001'));
-
-export default defineDunetaConfig({
-  app: { name: 'duneta-api', env: 'development', port },
+export const api = defineApi({
+  app: { name: 'duneta', env: 'production' },
   database: {
     enabled: true,
-    connections: defineConnections({
-      primary: postgresConnection({ url: envFirst(['DATABASE_URL']) }),
-    }),
+    connections: defineConnections({}),
     pool: DEFAULT_DATABASE_POOL,
   },
-  security: {
-    rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES },
-  },
+  auth: { enabled: true, baseUrl: 'http://localhost:8787' },
+});
+
+export default defineWeb({
+  app: { name: 'duneta' },
+  api: { baseUrl: '/api' },
+  theme: { default: 'light' },
 });
 ```
-
-> **Không set `runtime`** trong `duneta.config.ts` — entry file (`server.ts` / `server.node.ts`) quyết định. Pool DB worker được framework tự điều chỉnh.
 
 ### Đọc config lúc runtime
 
@@ -49,35 +38,32 @@ export default defineDunetaConfig({
 import { config, getConfig } from '@duneta/server/configs';
 ```
 
-### Biến môi trường API
+### Secrets (`.dev.vars` / wrangler)
 
 | Biến | Mô tả |
 |------|-------|
-| `PORT` | Bun listen port (mặc định `3001`) |
 | `DATABASE_URL` | Postgres connection string |
 | `AUTH_SECRET` | Bật auth khi có (≥ 32 ký tự) |
-| `AUTH_BASE_URL` | Base URL Better Auth (worker: `http://localhost:8787`) |
+| `AUTH_BASE_URL` | Base URL Better Auth (`http://localhost:8787` khi dev) |
 | `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP |
 
-Runtime **không** qua env — chọn `server.ts` (worker) hoặc `server.node.ts` (node).
-
-Xem `app/api/.env.example`.
+Xem `.dev.vars.example` ở repo root.
 
 ## Web config
 
-File: `app/web/duneta.config.ts`
+File: `app/duneta.config.ts`
 
 ```ts
-import { defineDunetaConfig, env } from '@duneta/client/configs';
+import { defineDunetaConfig } from '@duneta/client/configs';
 
 export default defineDunetaConfig({
-  app: { name: 'duneta-web', port: Number(env('PORT', '3000')) },
-  api: { port: Number(env('API_PORT', '3001')), baseUrl: '/api' },
+  app: { name: 'duneta-web' },
+  api: { baseUrl: '/api' },
   theme: { default: 'dark' },
 });
 ```
 
-`api.port` dùng cho Vite proxy tới backend.
+`api.baseUrl` — path API trên cùng domain Worker (same-origin).
 
 ## Cache
 
@@ -86,7 +72,7 @@ Bật trong `duneta.config.ts`, không phải `.env` alone:
 ```ts
 import { redisCache, memoryCache } from '@duneta/server/configs';
 
-cache: redisCache({ url: env('CACHE_URL'), token: env('CACHE_TOKEN') }),
+cache: redisCache({ url: process.env.CACHE_URL!, token: process.env.CACHE_TOKEN }),
 // cache: memoryCache(),
 ```
 
@@ -106,8 +92,8 @@ Bật khi có `auth.enabled: true` + `auth.secret` + database:
 ```ts
 auth: {
   enabled: true,
-  secret: env('AUTH_SECRET'),
-  baseUrl: env('AUTH_BASE_URL', `http://localhost:${port}`),
+  secret: process.env.AUTH_SECRET!,
+  baseUrl: process.env.AUTH_BASE_URL || 'http://localhost:8787',
 },
 ```
 
@@ -132,4 +118,4 @@ Dùng distributed cache khi `cache.enabled` + Redis HTTP.
 
 ## Worker bindings
 
-`app/api/wrangler.jsonc` — Hyperdrive, secrets, compatibility flags. `DATABASE_URL` có thể đến từ binding lúc request trên Worker.
+`wrangler.jsonc` (repo root) — Hyperdrive, `ASSETS`, secrets, compatibility flags. `DATABASE_URL` có thể đến từ Hyperdrive binding lúc request.

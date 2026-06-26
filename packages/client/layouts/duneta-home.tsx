@@ -1,73 +1,239 @@
-import {
-  DunetaButton as Button,
-  DunetaCard as Card,
-  DunetaLayoutSection,
-  DunetaLink as Link,
-} from '../components';
+import { DunetaButton as Button, DunetaLink as Link } from '../components';
+import './duneta-home.css';
 
-const ArrowUpRight = () => <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17 17 7M8 7h9v9" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-const Check = () => <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m5 12 4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+const ArrowIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M5 10h10M11 6l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
-const foundations = [
-  ['01', 'Web', 'React Router shell with a deliberately thin app layer.', 'app/web'],
-  ['02', 'API', 'Hono API, ESM-first and ready for Node or Workers.', 'app/api'],
-  ['03', 'Packages', 'Published client and server modules with clear boundaries.', '@duneta/*'],
+const pillars = [
+  {
+    step: '01',
+    title: 'Worker',
+    desc: 'Một entry xử lý web, API và static trên cùng domain.',
+    path: 'app/worker.ts',
+    tint: 'bg-cyan-50 text-cyan-700 border-cyan-100',
+  },
+  {
+    step: '02',
+    title: 'Pages',
+    desc: 'UI React Router của bạn — override defaults từ package.',
+    path: 'app/pages',
+    tint: 'bg-violet-50 text-violet-700 border-violet-100',
+  },
+  {
+    step: '03',
+    title: 'API',
+    desc: 'Hono services và route groups dưới /api.',
+    path: 'app/api',
+    tint: 'bg-sky-50 text-sky-700 border-sky-100',
+  },
+] as const;
+
+const modules = ['DunetaInput', 'DunetaDataTable', 'DunetaForm', 'DunetaUpload', 'DunetaSelect', 'DunetaLayout'];
+
+const nav = [
+  ['#stack', 'Stack'],
+  ['#modules', 'Modules'],
+  ['#deploy', 'Deploy'],
+  ['/about', 'About'],
+  ['/datatable', 'DataTable'],
 ] as const;
 
 export function DunetaHome() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#07111f] px-5 pb-12 pt-5 text-slate-100 sm:px-8">
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
-      <div className="relative mx-auto max-w-6xl">
-        <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 backdrop-blur-xl sm:px-5">
-          <Link href="#top" aria-label="Duneta home" className="gap-3 text-white hover:text-white">
-            <span className="grid size-8 place-items-center rounded-xl bg-cyan-300 text-sm font-black text-slate-950">T</span>
-            <span className="text-sm font-semibold tracking-[0.18em]">DUNETA</span>
+    <main className="home">
+      <div className="home-orb home-orb-a" aria-hidden="true" />
+      <div className="home-orb home-orb-b" aria-hidden="true" />
+
+      <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-6 sm:px-8">
+        {/* Nav */}
+        <header className="home-fade-up home-card flex items-center justify-between rounded-2xl px-4 py-3 sm:px-5">
+          <Link href="#top" aria-label="Duneta home" className="gap-2.5 font-semibold text-slate-900 hover:text-slate-900">
+            <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 text-sm font-bold text-white shadow-sm shadow-cyan-500/25">
+              D
+            </span>
+            <span className="text-base tracking-tight">Duneta</span>
           </Link>
-          <nav className="hidden items-center gap-6 text-sm sm:flex" aria-label="Primary navigation">
-            <Link href="#stack" className="text-slate-400 hover:text-white">Stack</Link>
-            <Link href="#modules" className="text-slate-400 hover:text-white">Modules</Link>
-            <Link href="#deploy" className="text-slate-400 hover:text-white">Deploy</Link>
-            <Link href="/about" className="text-slate-400 hover:text-white">About</Link>
+          <nav className="hidden items-center gap-1 sm:flex" aria-label="Primary navigation">
+            {nav.map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                className="rounded-lg px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
-          <Link href="https://github.com/BarryHoa/Duneta" target="_blank" className="text-sm font-medium text-cyan-200 hover:text-white">GitHub <span aria-hidden="true">↗</span></Link>
+          <Link
+            href="https://github.com/BarryHoa/Duneta"
+            target="_blank"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
+          >
+            GitHub ↗
+          </Link>
         </header>
 
-        <section id="top" className="grid gap-12 pb-20 pt-20 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:pt-28">
+        {/* Hero */}
+        <section id="top" className="home-fade-up home-fade-up-delay-1 grid gap-12 pb-16 pt-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:pt-24">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-cyan-100"><span className="size-1.5 rounded-full bg-cyan-300 shadow-[0_0_14px_3px_rgba(103,232,249,.5)]" />MODULAR TOOLKIT · ANY RUNTIME</div>
-            <h1 className="max-w-3xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">Build once.<br /><span className="text-gradient">Ship anywhere.</span></h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-400">A TypeScript starter where the React Router web app, Hono API, and publishable Duneta packages move as one.</p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button variant="primary" onPress={() => document.querySelector('#stack')?.scrollIntoView({ behavior: 'smooth' })}>Explore the stack <ArrowUpRight /></Button>
-              <Button variant="secondary" onPress={() => window.open('https://github.com/BarryHoa/Duneta', '_blank', 'noopener,noreferrer')}>View source</Button>
+            <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-medium text-cyan-800">
+              <span className="size-1.5 rounded-full bg-cyan-500" />
+              One Worker · one deploy
+            </p>
+            <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.25rem]">
+              Full-stack TypeScript
+              <br />
+              <span className="home-gradient-text">on one domain.</span>
+            </h1>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-600">
+              React Router cho pages, Hono cho{' '}
+              <code className="rounded-md bg-slate-100 px-1.5 py-0.5 text-sm font-medium text-cyan-800">/api</code>
+              — cùng origin, một Cloudflare Worker.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button
+                variant="primary"
+                onPress={() => document.querySelector('#stack')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Khám phá stack <ArrowIcon />
+              </Button>
+              <Button
+                variant="secondary"
+                onPress={() => window.open('https://github.com/BarryHoa/Duneta', '_blank', 'noopener,noreferrer')}
+              >
+                Xem source
+              </Button>
             </div>
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-400">{['React Router 8', 'Hono API', 'Cloudflare ready', 'ESM packages'].map((item) => <span key={item} className="flex items-center gap-2"><Check />{item}</span>)}</div>
+            <ul className="mt-10 flex flex-wrap gap-3 text-sm text-slate-600">
+              {['React Router 8', 'Hono', 'Cloudflare Worker', '@duneta/*'].map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1 shadow-sm"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <Card className="hero-console border border-white/10 bg-slate-950/60 shadow-2xl shadow-cyan-950/30">
-            <Card.Header className="flex items-center justify-between border-b border-white/10 px-5 py-4"><div className="flex gap-1.5" aria-hidden="true"><span className="size-2.5 rounded-full bg-rose-400/80" /><span className="size-2.5 rounded-full bg-amber-300/80" /><span className="size-2.5 rounded-full bg-emerald-300/80" /></div><Card.Description className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate-500">duneta / workspace</Card.Description></Card.Header>
-            <Card.Content className="space-y-5 p-5 sm:p-7">
-              <div className="flex items-center justify-between"><div><p className="text-sm text-slate-400">Release status</p><p className="mt-1 text-2xl font-semibold tracking-tight text-white">Ready to compose</p></div><span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-200">All systems go</span></div>
-              <div className="grid grid-cols-3 gap-3">{[['WEB', 'React Router'], ['API', 'Hono'], ['UI', 'HeroUI']].map(([label, item]) => <div key={label} className="rounded-xl border border-white/8 bg-white/[0.035] p-3"><p className="text-[10px] font-semibold tracking-[0.14em] text-slate-500">{label}</p><p className="mt-2 text-sm font-medium text-slate-200">{item}</p></div>)}</div>
-              <div className="rounded-xl border border-cyan-300/10 bg-cyan-300/[0.045] p-4 font-mono text-sm leading-7 text-cyan-100"><span className="text-cyan-300">$</span> pnpm dev<br /><span className="text-emerald-300">✓</span> @duneta/client ready<br /><span className="text-emerald-300">✓</span> @duneta/server ready</div>
-            </Card.Content>
-          </Card>
+          {/* Terminal card */}
+          <div className="home-card home-fade-up home-fade-up-delay-2 overflow-hidden rounded-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-5 py-3">
+              <div className="flex gap-1.5" aria-hidden="true">
+                <span className="size-2.5 rounded-full bg-red-400" />
+                <span className="size-2.5 rounded-full bg-amber-400" />
+                <span className="size-2.5 rounded-full bg-emerald-400" />
+              </div>
+              <span className="home-mono text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                worker.ts
+              </span>
+            </div>
+            <div className="space-y-5 p-5 sm:p-6">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {[
+                  { route: '/*', label: 'SSR pages', color: 'border-violet-100 bg-violet-50 text-violet-800' },
+                  { route: '/api/*', label: 'Hono API', color: 'border-cyan-100 bg-cyan-50 text-cyan-800' },
+                  { route: '/assets', label: 'Static', color: 'border-slate-200 bg-slate-50 text-slate-700' },
+                ].map(({ route, label, color }) => (
+                  <div key={route} className={`rounded-xl border p-3 text-center ${color}`}>
+                    <p className="home-mono text-[10px] font-semibold opacity-70">{route}</p>
+                    <p className="mt-1.5 text-xs font-medium sm:text-sm">{label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="home-terminal home-mono space-y-1 p-4 text-sm leading-7 text-slate-700">
+                <p>
+                  <span className="text-cyan-600">$</span> pnpm install && pnpm deploy
+                </p>
+                <p className="text-emerald-600">✓ build + wrangler deploy</p>
+                <p>
+                  <span className="text-slate-400">$</span> pnpm dev <span className="text-slate-400">→ :8787</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section id="stack" className="scroll-mt-8 border-t border-white/10 py-16">
-          <DunetaLayoutSection>
-            <DunetaLayoutSection.Header><div><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">THE FOUNDATION</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.035em] text-white sm:text-4xl">A stack with clear edges.</h2></div><p className="max-w-sm text-sm leading-6 text-slate-400">Focused apps on top. Shared packages underneath. Nothing drifts.</p></DunetaLayoutSection.Header>
-            <DunetaLayoutSection.Grid columns={3}>{foundations.map(([number, title, description, path]) => <Card key={title} className="group border border-white/10 bg-white/[0.035] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/35 hover:bg-white/[0.06]"><Card.Header className="px-6 pb-1 pt-6"><Card.Description className="text-xs font-semibold tracking-[0.18em] text-cyan-200">{number}</Card.Description><Card.Title className="mt-5 text-xl font-semibold text-white">{title}</Card.Title></Card.Header><Card.Content className="px-6 pb-6 pt-3"><Card.Description className="min-h-12 leading-6 text-slate-400">{description}</Card.Description><div className="mt-6 inline-flex rounded-lg border border-white/10 bg-slate-950/50 px-2.5 py-1 font-mono text-xs text-slate-300">{path}</div></Card.Content></Card>)}</DunetaLayoutSection.Grid>
-          </DunetaLayoutSection>
+        {/* Stack */}
+        <section id="stack" className="scroll-mt-8 border-t border-slate-200/80 py-16">
+          <div className="home-fade-up mb-10 max-w-2xl">
+            <p className="text-sm font-medium text-cyan-700">Cấu trúc app</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Mọi thứ trong <code className="text-cyan-700">app/</code>
+            </h2>
+            <p className="mt-3 text-slate-600">Config, Worker, pages và API — một thư mục, một lệnh deploy.</p>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-3">
+            {pillars.map(({ step, title, desc, path, tint }, i) => (
+              <article
+                key={title}
+                className={`home-card home-fade-up rounded-2xl p-6 transition hover:-translate-y-0.5 ${i === 1 ? 'home-fade-up-delay-1' : i === 2 ? 'home-fade-up-delay-2' : ''}`}
+              >
+                <span className={`inline-flex rounded-lg border px-2 py-0.5 text-xs font-semibold ${tint}`}>
+                  {step}
+                </span>
+                <h3 className="mt-4 text-xl font-semibold text-slate-900">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+                <code className="home-mono mt-5 inline-block rounded-lg bg-slate-100 px-2.5 py-1 text-xs text-slate-700">
+                  {path}
+                </code>
+              </article>
+            ))}
+          </div>
         </section>
 
-        <section id="modules" className="py-8">
-          <Card className="border border-white/10 bg-white/[0.035]"><Card.Content className="grid gap-6 p-7 md:grid-cols-[1fr_auto]"><div><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">CLIENT MODULES</p><Card.Title className="mt-3 text-2xl font-semibold text-white">One UI package. Clear entrypoints.</Card.Title><Card.Description className="mt-3 max-w-2xl leading-7 text-slate-400">Use DunetaInput, DunetaSelect, DunetaForm, DunetaUpload, DunetaTable, DunetaLoadError and DunetaLayout independently—or import them all from the shared client barrel.</Card.Description></div><div className="flex flex-wrap content-start gap-2 md:max-w-64">{['DunetaInput', 'DunetaSelect', 'DunetaForm', 'DunetaUpload', 'DunetaTable', 'DunetaLoadError', 'DunetaLayout'].map((module) => <span key={module} className="rounded-lg border border-cyan-300/15 bg-cyan-300/[0.06] px-2.5 py-1.5 font-mono text-xs text-cyan-100">{module}</span>)}</div></Card.Content></Card>
+        {/* Modules */}
+        <section id="modules" className="py-4">
+          <div className="home-card home-fade-up rounded-2xl p-7 sm:p-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <p className="text-sm font-medium text-cyan-700">UI kit</p>
+                <h2 className="mt-2 text-2xl font-semibold text-slate-900">Components sẵn dùng</h2>
+                <p className="mt-3 max-w-xl text-slate-600">
+                  Import từ <code className="rounded bg-slate-100 px-1 text-cyan-800">@duneta/client</code>, compose
+                  trong <code className="rounded bg-slate-100 px-1 text-cyan-800">app/pages</code>.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 lg:max-w-xs lg:justify-end">
+                {modules.map((name) => (
+                  <span
+                    key={name}
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 home-mono text-xs text-slate-700"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section id="deploy" className="grid gap-6 py-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center"><Card className="border border-white/10 bg-white/[0.035]"><Card.Content className="p-7"><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">ONE WORKFLOW</p><Card.Title className="mt-3 text-2xl font-semibold text-white">Local by default.</Card.Title><Card.Description className="mt-3 leading-7 text-slate-400">Start the web UI and API together, then choose the production runtime when you are ready.</Card.Description></Card.Content></Card><div className="hidden size-10 place-items-center rounded-full border border-cyan-300/20 bg-cyan-300/10 text-cyan-200 lg:grid">→</div><Card className="border border-cyan-300/20 bg-cyan-300/[0.07]"><Card.Content className="p-7"><p className="text-xs font-semibold tracking-[0.18em] text-cyan-100">EVERYWHERE READY</p><Card.Title className="mt-3 text-2xl font-semibold text-white">Deploy with intent.</Card.Title><Card.Description className="mt-3 leading-7 text-slate-300">Cloudflare for global Workers, a VPS for Node, or split the web shell and API when you need scale.</Card.Description></Card.Content></Card></section>
+        {/* Deploy */}
+        <section id="deploy" className="grid gap-4 py-10 sm:grid-cols-2">
+          <div className="home-card home-fade-up rounded-2xl p-7">
+            <p className="text-sm font-medium text-slate-500">Local</p>
+            <h3 className="mt-2 text-2xl font-semibold text-slate-900">pnpm dev</h3>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              Wrangler tại <code className="rounded bg-slate-100 px-1">localhost:8787</code>. Secrets từ{' '}
+              <code className="rounded bg-slate-100 px-1">.dev.vars</code> — tự tạo lần đầu chạy.
+            </p>
+          </div>
+          <div className="home-card home-fade-up home-fade-up-delay-1 rounded-2xl border-cyan-200/60 bg-gradient-to-br from-cyan-50/80 to-white p-7">
+            <p className="text-sm font-medium text-cyan-700">Production</p>
+            <h3 className="mt-2 text-2xl font-semibold text-slate-900">pnpm deploy</h3>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              Sync, build và <code className="rounded bg-white/80 px-1">wrangler deploy</code> — web + API lên edge
+              cùng một Worker.
+            </p>
+          </div>
+        </section>
+
+        <footer className="border-t border-slate-200/80 pt-8 text-center text-sm text-slate-500">
+          Duneta — TypeScript full-stack on Cloudflare Workers
+        </footer>
       </div>
     </main>
   );

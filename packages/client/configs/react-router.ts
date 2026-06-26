@@ -4,5 +4,6 @@ import type { DunetaWebConfig } from './types.js';
 export function createReactRouterConfig(webConfig: DunetaWebConfig): Config {
   return {
     appDirectory: webConfig.router.appDirectory,
+    ssr: true,
   };
 }

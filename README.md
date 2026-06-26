@@ -1,29 +1,27 @@
 # Duneta
 
-Monorepo: `app/api` (backend), `app/web` (frontend), `packages/server`, `packages/client`.
+Một Cloudflare Worker: web + `/api` cùng domain.
 
-## API entry
-
-```ts
-import { defineServer } from '@duneta/server/runtime/worker';
-import { resolvePermissions } from './permissions';
-import config from './duneta.config';
-import { createAppRouter } from './routers';
-import { registerServices } from './services';
-
-export default defineServer({
-  config,
-  createAppRouter,
-  registerServices,
-  resolvePermissions,
-});
+```bash
+pnpm install && pnpm deploy
 ```
 
-## Thêm feature API
+Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
+Có DB/auth: `wrangler secret put DATABASE_URL` · `wrangler secret put AUTH_SECRET`.
 
-1. `repositories/post-repository.ts`
-2. `controllers/post-controller.ts`
-3. `routers/posts.routes.ts` hoặc thêm vào `routers/index.ts`
-4. `pnpm --filter api dev`
+## Dev local
 
-Chi tiết: [docs/architecture.md](docs/architecture.md)
+```bash
+pnpm dev    # HMR — tự tạo .dev.vars nếu chưa có → http://localhost:8787
+```
+
+## Cấu trúc `app/`
+
+```text
+app/
+├── worker.ts          # entry
+├── duneta.config.ts   # cấu hình (secrets qua wrangler)
+├── api/               # backend
+├── pages/             # web pages
+└── build/             # generated
+```

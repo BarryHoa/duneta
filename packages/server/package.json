@@ -7,9 +7,6 @@
   "type": "module",
   "files": ["dist", "scripts", "runtime"],
   "forgeStack": { "kind": "backend", "runtime": "cloudflare-worker" },
-  "bin": {
-    "duneta-api": "./scripts/duneta-api.mjs"
-  },
   "exports": {
     "./configs": {
       "types": "./configs/index.ts",
@@ -31,11 +28,6 @@
       "types": "./runtime/worker/index.ts",
       "import": "./runtime/worker/index.ts",
       "default": "./runtime/worker/index.ts"
-    },
-    "./runtime/node": {
-      "types": "./runtime/node/index.ts",
-      "import": "./runtime/node/index.ts",
-      "default": "./runtime/node/index.ts"
     }
   },
   "scripts": {

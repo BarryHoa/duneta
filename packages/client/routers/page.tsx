@@ -2,10 +2,10 @@ import { DunetaHome } from '@duneta/client/layouts';
 
 export function meta() {
   return [
-    { title: 'Duneta — ship your TypeScript stack' },
+    { title: 'Duneta — one Worker, full stack' },
     {
       name: 'description',
-      content: 'A portable TypeScript toolkit for React Router and Hono.',
+      content: 'React Router + Hono on a single Cloudflare Worker. Web and /api on one domain.',
     },
   ];
 }

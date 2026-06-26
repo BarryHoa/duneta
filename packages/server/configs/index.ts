@@ -43,7 +43,6 @@ export {
   type RateLimitRule,
 } from './rate-limit.js';
 export { createDefaultConfig, DEFAULT_CONFIG_APP_PORT, DEFAULT_TIMEZONE } from './defaults.js';
-export { env, envBool, envFirst } from './env.js';
 export {
   buildSocialProviders,
   isAuthEnabled,

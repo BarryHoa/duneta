@@ -3,7 +3,7 @@ import type { CacheConfig } from './cache';
 export type { CacheConfig } from './cache';
 import type { RateLimitConfig } from './rate-limit';
 
-export type Runtime = 'node' | 'worker';
+export type Runtime = 'worker';
 export type NodeEnv = 'development' | 'production' | 'test';
 
 export type RuntimeConfig = {

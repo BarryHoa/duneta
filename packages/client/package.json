@@ -13,9 +13,6 @@
     "themes",
     "scripts"
   ],
-  "bin": {
-    "duneta-web": "./scripts/duneta-web.mjs"
-  },
   "forgeStack": {
     "kind": "frontend",
     "runtime": "browser-or-react-router"
@@ -29,7 +26,7 @@
     "./configs/vite": "./configs/vite.ts",
     "./configs/react-router": "./configs/react-router.ts",
     "./configs/load": "./configs/load.ts",
-    "./configs/client": "./configs/client.ts",
+    "./configs/bootstrap": "./configs/bootstrap.ts",
     "./validators": {
       "types": "./dist/validators/index.d.ts",
       "import": "./dist/validators/index.js"
@@ -128,8 +125,6 @@
     "@heroui/styles": "^3.2.1",
     "@leeoniya/ufuzzy": "^1.0.19",
     "@react-router/dev": "^8.0.1",
-    "@react-router/node": "^8.0.1",
-    "@react-router/serve": "^8.0.1",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.14.3",

@@ -13,7 +13,7 @@ packages/server/
 ├── middlewares/       # requireSession, CSRF, rate-limit
 ├── auth/              # Better Auth (login — không phải DI)
 ├── configs/           # DunetaServerConfig
-└── scripts/           # duneta-api sync
+└── scripts/           # sync-api.mjs (gọi từ scripts/duneta.mjs)
 ```
 
 ## Exports chính

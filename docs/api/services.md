@@ -1,6 +1,6 @@
 # Services (DI)
 
-Đăng ký **controller** và **repository** qua `registerServices` trong `services/index.ts`.
+Đăng ký **controller** và **repository** qua `registerServices` trong `api/services.ts`.
 
 ```ts
 import { createAppRouter } from './routers';
@@ -30,9 +30,9 @@ export const registerServices: RegisterServices = (ctx) => {
 
 ## Convention + sync
 
-Thêm `*-controller.ts`, `*-repository.ts` → `duneta-api sync` tự sinh `services/index.ts` nếu chưa có.
+Thêm `*-controller.ts`, `*-repository.ts` → `pnpm build` tự sinh `services.ts` nếu chưa có.
 
-Override thủ công: giữ `services/index.ts` — sync bỏ qua.
+Override thủ công: giữ `services.ts` — sync bỏ qua.
 
 ## Resolve trong handler
 

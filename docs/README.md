@@ -7,6 +7,7 @@ Monorepo TypeScript: **Hono API** (`@duneta/server`) + **React Router web** (`@d
 ### Bắt đầu
 
 - [Cài đặt & chạy dev](./getting-started.md)
+- [Deploy Cloudflare Workers](./deployment.md)
 - [Hướng dẫn customize](./customization.md)
 
 ### Kiến trúc
@@ -18,15 +19,14 @@ Monorepo TypeScript: **Hono API** (`@duneta/server`) + **React Router web** (`@d
 
 - [Tổng quan API app](./api/overview.md)
 - [Sync convention](./api/sync.md)
-- [Runtime: Cloud vs Bun](./api/runtime.md)
+- [Runtime](./api/runtime.md)
 - [Routes & `createAppRouter`](./api/routes.md)
 - [Services & DI](./api/services.md)
 - [Controller → Repository](./api/controllers-repositories.md)
 
-### Web (`app/web`)
+### App (`app/`)
 
-- [Tổng quan Web app](./web/overview.md)
-- [Routes & theme](./web/routes.md)
+- [Web routes & theme](./web/routes.md)
 
 ### Packages
 

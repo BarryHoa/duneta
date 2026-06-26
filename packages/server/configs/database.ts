@@ -26,14 +26,11 @@ export const DEFAULT_WORKER_DATABASE_POOL: DatabasePoolConfig = {
 };
 
 export function databasePoolForRuntime(
-  target: 'node' | 'worker',
+  _target: 'worker',
   pool: DatabasePoolConfig,
 ): DatabasePoolConfig {
-  if (target === 'worker') {
-    const base = { ...DEFAULT_WORKER_DATABASE_POOL, ...pool };
-    return { ...base, max: Math.min(base.max, 2) };
-  }
-  return pool;
+  const base = { ...DEFAULT_WORKER_DATABASE_POOL, ...pool };
+  return { ...base, max: Math.min(base.max, 2) };
 }
 
 export type DatabaseConfig<

@@ -97,7 +97,7 @@ Schema Drizzle đặt trong `repositories/schemas/` hoặc `packages/server/repo
 1. Tạo schema Drizzle (nếu table mới)
 2. Tạo `PostRepository extends BaseRepository`
 3. Tạo `PostController extends BaseController`
-4. Đăng ký trong `services/index.ts`
+4. Đăng ký trong `api/services.ts`
 5. Thêm `defineGroup` trong `routers/`
 6. Gắn group vào `createAppRouter`
 

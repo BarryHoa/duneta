@@ -1,0 +1,120 @@
+/* Duneta home landing — imported only by duneta-home.tsx */
+
+.home {
+  --home-bg: #f8fafc;
+  --home-surface: #ffffff;
+  --home-border: rgba(15, 23, 42, 0.08);
+  --home-muted: #64748b;
+  --home-fg: #0f172a;
+  --home-accent: #0891b2;
+  --home-accent-soft: rgba(8, 145, 178, 0.08);
+  --home-violet-soft: rgba(124, 58, 237, 0.06);
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--home-bg);
+  color: var(--home-fg);
+}
+
+.home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% -10%, black 15%, transparent 65%);
+  pointer-events: none;
+}
+
+.home-orb {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(80px);
+}
+
+.home-orb-a {
+  top: -6rem;
+  right: -4rem;
+  width: 28rem;
+  height: 28rem;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+}
+
+.home-orb-b {
+  bottom: 10rem;
+  left: -8rem;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, transparent 70%);
+}
+
+.home-gradient-text {
+  background: linear-gradient(135deg, #0e7490 0%, #0891b2 40%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-card {
+  border: 1px solid var(--home-border);
+  background: var(--home-surface);
+  border-radius: 1rem;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.home-card:hover {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.home-terminal {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+  border-radius: 0.75rem;
+}
+
+.home-mono {
+  font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+}
+
+.home-fade-up {
+  animation: duneta-home-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.home-fade-up-delay-1 {
+  animation-delay: 0.08s;
+}
+
+.home-fade-up-delay-2 {
+  animation-delay: 0.16s;
+}
+
+.home-fade-up-delay-3 {
+  animation-delay: 0.24s;
+}
+
+@keyframes duneta-home-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-fade-up,
+  .home-fade-up-delay-1,
+  .home-fade-up-delay-2,
+  .home-fade-up-delay-3 {
+    animation: none;
+  }
+}

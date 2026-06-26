@@ -2,7 +2,7 @@
 
 ## App hook
 
-`routers/index.ts` export `createAppRouter(config)` — ghép framework + app routes.
+`api/router.ts` export `createAppRouter(config)` — ghép framework + app routes.
 
 ```ts
 import { composeRouter, defineGroup, resolveController } from '@duneta/server/routers';

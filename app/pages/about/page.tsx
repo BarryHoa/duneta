@@ -22,20 +22,20 @@ export default function AboutPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 px-6 py-16">
-      <p className="text-sm font-semibold tracking-[0.18em] text-cyan-200">APP ROUTE</p>
-      <h1 className="text-4xl font-semibold text-white">About Duneta</h1>
-      <p className="text-lg leading-8 text-slate-400">
-        This page lives in <code className="text-cyan-100">app/web/routers/about/page.tsx</code> and
-        overrides the default package routes.
+      <p className="text-sm font-medium text-cyan-700">App page</p>
+      <h1 className="text-4xl font-semibold tracking-tight text-slate-900">About Duneta</h1>
+      <p className="text-lg leading-8 text-slate-600">
+        Trang này nằm trong <code className="rounded bg-slate-100 px-1.5 py-0.5 text-cyan-800">app/pages/about/page.tsx</code>{' '}
+        và override route mặc định từ package.
       </p>
-      <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-mono text-sm text-slate-200">
+      <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-700">
         API health: {health}
       </p>
-      <Link href="/datatable" className="text-cyan-200 hover:text-white">
+      <Link href="/datatable" className="text-cyan-700 hover:text-cyan-900">
         DataTable demo →
       </Link>
-      <Link href="/" className="text-cyan-200 hover:text-white">
-        ← Back home
+      <Link href="/" className="text-cyan-700 hover:text-cyan-900">
+        ← Về trang chủ
       </Link>
     </main>
   );

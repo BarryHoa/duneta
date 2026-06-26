@@ -1,80 +1,42 @@
-# Runtime: Cloud vs Bun
+# Runtime
 
-Hai entry file = hai runtime. Framework tự set `runtime.target` — **không cần** `RUNTIME` trong `.env` hay `duneta.config.ts`.
+Duneta **chỉ chạy trên Cloudflare Workers**. Không có Bun, Node VPS, hay dev server tách biệt.
 
-## Quy tắc đơn giản
-
-| Muốn chạy | Entry file | Command |
-|-----------|------------|---------|
-| Cloudflare Worker | `server.ts` | `pnpm --filter api dev` |
-| Bun local / VPS | `server.node.ts` | `pnpm --filter api dev:node` |
+## Entry duy nhất
 
 ```text
-server.ts       →  import runtime/worker  →  target = worker
-server.node.ts  →  import runtime/node   →  target = node
+wrangler.jsonc  →  app/worker.ts  →  fetch(request, env)
 ```
 
-## So sánh
+`app/worker.ts` là front controller:
 
-| | Cloud (`server.ts`) | Bun (`server.node.ts`) |
+| Path | Handler |
+|------|---------|
+| `/api/*` | Hono API (`defineServer` + `app/api/router.ts`) |
+| static | `env.ASSETS.fetch(request)` |
+| `/*` | React Router SSR (dev: virtual build; prod: `app/build/server`) |
+
+API không deploy riêng — bootstrap inline trong `worker.ts`.
+
+## Local vs production
+
+| | Local (`pnpm dev`) | Production (`pnpm deploy`) |
 |---|---|---|
-| CLI | `duneta-api dev` / `deploy` | `duneta-api dev:node` |
-| URL local | http://localhost:8787/api | http://localhost:3001/api |
-| Export | `{ fetch }` | `{ port, fetch }` |
-| DB | Hyperdrive / Neon serverless | `pg` pool |
-| Worker bindings | Có (`env` mỗi request) | Không |
+| Runtime | Vite + Workers (HMR) | Cloudflare edge |
+| URL | http://localhost:8787 | Custom domain / `*.workers.dev` |
+| Secrets | `.dev.vars` | `wrangler secret put` |
+| Web + API | Cùng origin | Cùng origin |
 
-## Framework tự xử lý theo target
+## SSR
 
-Khi boot, `bootstrapConfig()` merge:
+`entry.server.tsx` dùng `renderToReadableStream` (Web Streams) — tương thích Worker, không dùng `node:stream`.
 
-```ts
-runtime: { target: 'worker' | 'node' }  // từ entry, luôn thắng
-```
+## CLI
 
-Ảnh hưởng nội bộ:
+| Lệnh | Mục đích |
+|------|----------|
+| `pnpm dev` | Sync + `react-router dev` (HMR, :8787) |
+| `pnpm build` | Sync API + build React Router |
+| `pnpm deploy` | Build + `wrangler deploy` (config từ `app/build/server/wrangler.json`) |
 
-- **DB pool**: worker cap `max` 1–2; node dùng pool đầy đủ (`databasePoolForRuntime`)
-- **DB without URL**: worker cho phép Hyperdrive binding lúc request
-- **debug**: node mặc định `app.debug: true` nếu bạn không set
-
-## Cloud — Wrangler
-
-```ts
-// app/api/server.ts
-import { defineServer } from '@duneta/server/runtime/worker';
-export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
-```
-
-`wrangler.jsonc` — secrets, Hyperdrive. Không cần `vars.RUNTIME`.
-
-## Bun — local / VPS
-
-```ts
-// app/api/server.node.ts
-import { defineServer } from '@duneta/server/runtime/node';
-export default defineServer({ config, createAppRouter, registerServices, resolvePermissions });
-```
-
-`.env`:
-
-```env
-PORT=3001
-DATABASE_URL=postgresql://...
-```
-
-## `duneta.config.ts` dùng chung
-
-Một file config cho cả hai entry. Runtime-specific logic do framework lo — bạn chỉ set:
-
-- `PORT` (chủ yếu cho Bun + auth `baseUrl`)
-- `DATABASE_URL`, `AUTH_SECRET`, ...
-
-Worker dev port 8787 do Wrangler quản lý, không đọc `app.port`.
-
-## Deploy
-
-| Target | Command |
-|--------|---------|
-| Cloudflare Worker | `pnpm --filter api deploy` |
-| Bun VPS | `bun server.node.ts` (+ process manager) |
+Sync API chạy tự động trong `build` / `deploy` — không cần lệnh riêng.

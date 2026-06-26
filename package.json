@@ -7,18 +7,26 @@
     "node": ">=22.22.0"
   },
   "scripts": {
-    "build": "pnpm -r --if-present run build",
-    "dev": "node scripts/dev.mjs",
+    "prepare": "node scripts/duneta.mjs prepare",
+    "build": "node scripts/duneta.mjs build",
+    "dev": "node scripts/duneta.mjs dev",
+    "deploy": "node scripts/duneta.mjs deploy",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "pnpm -r --if-present run typecheck",
+    "typecheck": "node node_modules/typescript/bin/tsc -p app/tsconfig.json --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "version:check": "node scripts/version.mjs check",
     "version:sync": "node scripts/version.mjs sync",
     "version:bump": "node scripts/version.mjs bump"
   },
+  "dependencies": {
+    "@duneta/client": "workspace:*",
+    "@duneta/server": "workspace:*"
+  },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.42.3",
+    "@cloudflare/workers-types": "^4.20250617.0",
     "@eslint/js": "^9.39.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
@@ -26,6 +34,7 @@
     "globals": "^16.5.0",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.46.4"
+    "typescript-eslint": "^8.46.4",
+    "wrangler": "^4.105.0"
   }
 }
