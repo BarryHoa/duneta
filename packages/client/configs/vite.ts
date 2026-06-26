@@ -37,6 +37,12 @@ export function createDunetaViteConfig(
     ssr: {
       noExternal: [/^@duneta\/client/, /^@heroui\//],
     },
+    css: {
+      devSourcemap: false,
+    },
+    build: {
+      sourcemap: false,
+    },
     server: {
       port: webConfig.app.port,
       proxy: {
