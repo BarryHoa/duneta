@@ -51,7 +51,7 @@ export function createHttpApp({
     app.use('*', createCsrfMiddleware(config));
   }
 
-  app.onError(createErrorHandler(config.app.debug || config.debug.enabled));
+  app.onError(createErrorHandler(config));
 
   setGlobalCache(cache);
 

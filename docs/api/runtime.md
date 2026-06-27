@@ -5,10 +5,10 @@ Duneta **chỉ chạy trên Cloudflare Workers**. Không có Bun, Node VPS, hay 
 ## Entry duy nhất
 
 ```text
-wrangler.jsonc  →  app/worker.ts  →  fetch(request, env)
+wrangler.jsonc  →  worker.ts  →  fetch(request, env)
 ```
 
-`app/worker.ts` là front controller:
+`worker.ts` là front controller:
 
 | Path | Handler |
 |------|---------|
@@ -26,6 +26,8 @@ API không deploy riêng — bootstrap inline trong `worker.ts`.
 | URL | http://localhost:8787 | Custom domain / `*.workers.dev` |
 | Secrets | `.dev.vars` | `wrangler secret put` |
 | Web + API | Cùng origin | Cùng origin |
+| Logging | `text` or `json` | JSON stdout (Logpush) |
+| Auth cookies | `secure: false` (dev) | `secure: true` (auto when `NODE_ENV=production`) |
 
 ## SSR
 
@@ -40,3 +42,17 @@ API không deploy riêng — bootstrap inline trong `worker.ts`.
 | `pnpm deploy` | Build + `wrangler deploy --config app/build/server/wrangler.json` |
 
 Sync API chạy tự động trong `build` / `deploy` — không cần lệnh riêng.
+
+## Runtime config merge
+
+Wrangler secrets merge vào `duneta.config.ts` lúc request qua `resolveRuntimeConfig()`:
+
+| Secret / var | Effect |
+|--------------|--------|
+| `NODE_ENV=production` | Secure auth cookies, JSON logging |
+| `AUTH_SECRET` | Enables auth |
+| `AUTH_BASE_URL` | Better Auth base URL |
+| `CSRF_SECRET` | CSRF signing (falls back to `AUTH_SECRET`) |
+| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP cache (auto-enables when URL set) |
+| `LOGGING_ENABLED` | Override `logging.enabled` |
+| `HYPERDRIVE` binding | Postgres connection string |

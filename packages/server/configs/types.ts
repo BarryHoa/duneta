@@ -131,6 +131,8 @@ export type SecurityHeadersConfig = {
 
 export type LoggingConfig = {
   enabled?: boolean;
+  /** `json` for production / Logpush; `text` for local readability. */
+  format?: 'json' | 'text';
 };
 
 export type DebugConfig = {

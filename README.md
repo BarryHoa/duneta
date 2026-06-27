@@ -7,7 +7,9 @@ pnpm install && pnpm deploy
 ```
 
 Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
-Có DB/auth: `wrangler secret put DATABASE_URL` · `wrangler secret put AUTH_SECRET`.
+Có DB/auth: `wrangler secret put DATABASE_URL` · `wrangler secret put AUTH_SECRET` · `wrangler secret put AUTH_BASE_URL`
+
+Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
 
 ## Dev local
 

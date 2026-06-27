@@ -11,7 +11,7 @@ app/api/
   permissions.ts   → resolvePermissions
 ```
 
-`app/worker.ts` import trực tiếp các file trên.
+`worker.ts` import trực tiếp các file trên.
 
 ## Convention-only (sync tự sinh)
 

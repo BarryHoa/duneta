@@ -24,6 +24,7 @@
     "./http": { "types": "./dist/http/index.d.ts", "import": "./dist/http/index.js" },
     "./cache": { "types": "./dist/cache/index.d.ts", "import": "./dist/cache/index.js" },
     "./cached": { "types": "./dist/cached/index.d.ts", "import": "./dist/cached/index.js" },
+    "./logging": { "types": "./dist/logging/index.d.ts", "import": "./dist/logging/index.js" },
     "./runtime/worker": {
       "types": "./runtime/worker/index.ts",
       "import": "./runtime/worker/index.ts",

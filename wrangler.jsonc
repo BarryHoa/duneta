@@ -8,7 +8,13 @@
     "NODE_ENV": "production"
   }
   // Dev + build (Vite resolves virtual:react-router/server-build).
-  // Deploy: pnpm deploy → app/build/server/wrangler.json after build.
+  // Deploy: pnpm deploy → app/build/server/wrangler.json (generated, includes ASSETS).
   //
-  // Secrets: .dev.vars (local) or wrangler secret put (production)
+  // Production bindings — see wrangler.production.jsonc.example
+  //
+  // Secrets (.dev.vars / wrangler secret put):
+  //   DATABASE_URL, AUTH_SECRET, AUTH_BASE_URL
+  //   CACHE_URL, CACHE_TOKEN (Redis HTTP — distributed cache + rate limit)
+  //   CSRF_SECRET (optional — defaults to AUTH_SECRET in production)
+  //   LOGGING_ENABLED=true|false (optional — auto JSON logs in production)
 }

@@ -3,15 +3,20 @@
 
 NODE_ENV=development
 
-# Postgres
+# Postgres (or use Hyperdrive binding — see wrangler.production.jsonc.example)
 # DATABASE_URL=postgresql://user:pass@localhost:5432/duneta
 
-# Auth (optional)
+# Auth
 # AUTH_SECRET=your-32-char-minimum-secret
 # AUTH_BASE_URL=http://localhost:8787
 
-# Cache — enable in duneta.config.ts with redisCache({ url, token })
+# CSRF (optional — defaults to AUTH_SECRET when csrf.enabled in duneta.config.ts)
+# CSRF_SECRET=
+
+# Distributed cache + rate limit (Redis HTTP — Upstash REST, etc.)
+# Set CACHE_URL to auto-enable redis cache on Workers.
 # CACHE_URL=https://your-redis-http-endpoint
 # CACHE_TOKEN=your-bearer-token
 
-# Optional Hyperdrive in wrangler.jsonc (recommended for Postgres on Workers)
+# Logging (optional — production defaults to JSON stdout when logging.enabled in config)
+# LOGGING_ENABLED=true

@@ -2,6 +2,7 @@ import { createMiddleware } from 'hono/factory';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { DunetaServerConfig } from '../configs/types.js';
+import { createLogger } from '../logging/index.js';
 import { HttpError } from '../permissions/errors.js';
 import { createCsrfMiddleware } from './csrf.js';
 import type { RequestContext } from './request-context.js';
@@ -58,9 +59,17 @@ export function createCorsMiddleware(origins: string[] = ['*']) {
   });
 }
 
-export function createErrorHandler(debug: boolean) {
+export function createErrorHandler(config: DunetaServerConfig) {
+  const logger = createLogger(config);
+  const debug = config.app.debug || config.debug.enabled;
+
   return (error: Error, c: Context<RequestContext>) => {
-    console.error(error);
+    logger.error(error.message, {
+      requestId: c.get('requestId'),
+      method: c.req.method,
+      path: c.req.path,
+      ...(debug && error.stack ? { stack: error.stack } : {}),
+    });
 
     if (error instanceof HttpError) {
       const message = debug || error.status < 500 ? error.message : 'Internal Server Error';

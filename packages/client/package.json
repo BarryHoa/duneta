@@ -27,6 +27,7 @@
     "./configs/react-router": "./configs/react-router.ts",
     "./configs/load": "./configs/load.ts",
     "./configs/bootstrap": "./configs/bootstrap.ts",
+    "./configs/duneta": "./configs/duneta.ts",
     "./validators": {
       "types": "./dist/validators/index.d.ts",
       "import": "./dist/validators/index.js"

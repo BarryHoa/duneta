@@ -51,7 +51,9 @@ import { config, getConfig } from '@duneta/server/configs';
 | `DATABASE_URL` | Postgres connection string |
 | `AUTH_SECRET` | Bật auth khi có (≥ 32 ký tự) |
 | `AUTH_BASE_URL` | Base URL Better Auth (`http://localhost:8787` khi dev) |
-| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP |
+| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP (auto-enables cache when URL set) |
+| `CSRF_SECRET` | CSRF signing (defaults to `AUTH_SECRET`) |
+| `LOGGING_ENABLED` | Override request logging |
 
 Xem `.dev.vars.example` ở repo root.
 
@@ -71,15 +73,37 @@ export default defineDunetaConfig({
 
 `api.baseUrl` — path API trên cùng domain Worker (same-origin).
 
+## Logging
+
+Workers **không có filesystem** — không ghi log ra file. Duneta dùng stdout (JSON trên production).
+
+```ts
+logging: {
+  enabled: true,
+  format: 'json', // 'text' cho dev local
+},
+```
+
+Request log mẫu:
+
+```json
+{"level":"info","msg":"request","requestId":"...","method":"GET","path":"/api/health","status":200,"durationMs":12}
+```
+
+Override: `LOGGING_ENABLED=true|false` trong `.dev.vars` / wrangler secrets.
+
+Retention: Cloudflare Dashboard, `wrangler tail`, hoặc **Logpush** — không dùng pino/winston file transport.
+
 ## Cache
 
-Bật trong `duneta.config.ts`, không phải `.env` alone:
+Bật trong `duneta.config.ts`. URL/token qua wrangler secrets (không hardcode):
 
 ```ts
 import { redisCache, memoryCache } from '@duneta/server/configs';
 
-cache: redisCache({ url: process.env.CACHE_URL!, token: process.env.CACHE_TOKEN }),
-// cache: memoryCache(),
+// Prod: set CACHE_URL + CACHE_TOKEN secrets — auto-merge at runtime
+cache: redisCache({ url: '', token: '' }),
+// cache: memoryCache(),  // dev only — per-isolate, not shared across edge
 ```
 
 Dùng global facade:
@@ -98,8 +122,10 @@ Bật khi có `auth.enabled: true` + `auth.secret` + database:
 ```ts
 auth: {
   enabled: true,
-  secret: process.env.AUTH_SECRET!,
-  baseUrl: process.env.AUTH_BASE_URL || 'http://localhost:8787',
+  baseUrl: 'http://localhost:8787', // override: AUTH_BASE_URL secret
+},
+security: {
+  csrf: { enabled: true, secret: '' }, // CSRF_SECRET or AUTH_SECRET at runtime
 },
 ```
 
@@ -124,4 +150,10 @@ Dùng distributed cache khi `cache.enabled` + Redis HTTP.
 
 ## Worker bindings
 
-`wrangler.jsonc` (repo root) — Hyperdrive, `ASSETS`, secrets, compatibility flags. `DATABASE_URL` có thể đến từ Hyperdrive binding lúc request.
+| File | Purpose |
+|------|---------|
+| `wrangler.jsonc` | Dev + Vite build |
+| `wrangler.production.jsonc.example` | Hyperdrive + ASSETS reference |
+| `app/build/server/wrangler.json` | Generated deploy config |
+
+`DATABASE_URL` từ secret hoặc Hyperdrive binding (`HYPERDRIVE.connectionString`).

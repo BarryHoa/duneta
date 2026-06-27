@@ -1,7 +1,7 @@
 import { createRequestHandler, RouterContextProvider } from 'react-router';
 import { defineServer } from '@duneta/server/runtime/worker';
 import type { FetcherBinding, PlatformEnv } from '@duneta/server/runtime/shared/platform-env';
-import { toServerConfig } from '@duneta/client/configs';
+import { toServerConfig } from '@duneta/client/configs/duneta';
 import dunetaConfig from './duneta.config';
 import { createAppRouter } from './app/api/router';
 import { resolvePermissions } from './app/api/permissions';

@@ -12,6 +12,7 @@ import type { DunetaServerConfig } from '../configs/types.js';
 import type { ControllerContainer } from '../container/controller-container.js';
 import type { RepositoryContainer } from '../container/repository-container.js';
 import type { Database } from '../database/types.js';
+import { createLogger } from '../logging/index.js';
 import type { RequestContext } from '../middlewares/request-context.js';
 
 export type AttachRequestServicesOptions = {
@@ -60,10 +61,17 @@ export function attachRequestServices(
   }
 
   if (isLoggingEnabled(config)) {
+    const logger = createLogger(config);
     app.use('*', async (c, next) => {
       const start = Date.now();
       await next();
-      console.log(`${c.req.method} ${c.req.path} ${c.res.status} ${Date.now() - start}ms`);
+      logger.request({
+        requestId: c.get('requestId'),
+        method: c.req.method,
+        path: c.req.path,
+        status: c.res.status,
+        durationMs: Date.now() - start,
+      });
     });
   }
 }

@@ -12,11 +12,11 @@ app/api/
 └── routers/           # *.routes.ts (sync)
 ```
 
-Config API + web: `app/duneta.config.ts` (`export const api` + `export default`).
+Config API + web: `duneta.config.ts` (`export default`).
 
 ## Entry
 
-API bootstrap trong `app/worker.ts` — import `router.ts`, `services.ts`, `permissions.ts`, gọi `defineServer` cho `/api/*`.
+API bootstrap trong `worker.ts` — import `router.ts`, `services.ts`, `permissions.ts`, gọi `defineServer` cho `/api/*`.
 
 ## Hooks
 

@@ -28,5 +28,13 @@ export default defineDunetaConfig({
       enabled: true,
       rules: RECOMMENDED_RATE_LIMIT_RULES,
     },
+    csrf: {
+      enabled: true,
+      secret: '',
+    },
+  },
+  logging: {
+    enabled: true,
+    format: 'json',
   },
 });

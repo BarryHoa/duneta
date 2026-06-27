@@ -6,12 +6,12 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 
 | Muốn làm                   | File / hook                             | Doc                                  |
 | -------------------------- | --------------------------------------- | ------------------------------------ |
-| Đổi port, DB, auth, cache  | `app/api/duneta.config.ts` + `.env`     | [Configuration](../configuration.md) |
+| Đổi port, DB, auth, cache  | `duneta.config.ts` + `.dev.vars`        | [Configuration](../configuration.md) |
 | Thêm controller/repository | `app/api/controllers/`, `repositories/` | [Sync](./api/sync.md)                |
 | Thêm API route             | `app/api/routers/*.routes.ts`           | [Sync](./api/sync.md)                |
-| Deploy Worker              | `wrangler.jsonc` + `app/worker.ts`    | [Deploy](../deployment.md)           |
+| Deploy Worker              | `wrangler.jsonc` + `worker.ts`          | [Deploy](../deployment.md)           |
 | Thêm web page              | `app/pages/`                            | [Web pages](../web/routes.md)        |
-| Đổi theme                  | `app/duneta.config.ts`                  | [Web overview](../web/overview.md)   |
+| Đổi theme                  | `duneta.config.ts`                      | [Web overview](../web/overview.md)   |
 
 ## Workflow: thêm feature API mới
 
@@ -124,7 +124,7 @@ export default function PostsPage() {
 ## Nguyên tắc
 
 1. **Config = cấu trúc**, `.dev.vars` / secrets = giá trị
-2. **Một Worker** — `app/worker.ts` route web + API
+2. **Một Worker** — `worker.ts` route web + API
 3. **Convention + sync** — thêm `*-controller.ts`, `*-repository.ts`, `*.routes.ts`
 4. **Repository trước, Controller sau** — sync tự match theo base name
 5. **Arrow methods** trên controller cho `resolveController`

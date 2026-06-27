@@ -15,7 +15,7 @@ Sau đó `pnpm build`.
 
 ## Config
 
-`app/duneta.config.ts` — `api.baseUrl`, `theme.default`.
+`duneta.config.ts` — `api.baseUrl`, `theme.default`.
 
 ## Gọi API
 

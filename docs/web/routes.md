@@ -11,7 +11,7 @@ app/.router-runtime/       ← generated
 
 ## Theme
 
-`app/duneta.config.ts` → `theme.default`
+`duneta.config.ts` → `theme.default`
 
 CSS: `app/themes/globals.css`
 
