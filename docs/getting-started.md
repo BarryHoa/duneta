@@ -22,7 +22,7 @@ Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
 pnpm dev    # http://localhost:8787 — HMR (Vite + Workers runtime)
 ```
 
-Tự tạo `.dev.vars` từ `.dev.vars.example` nếu chưa có. Bỏ comment các biến cần dùng (DB, auth). Sửa `pages/` hoặc component → trang tự cập nhật, không cần F5 hay `pnpm build`.
+Tạo `.env` ở root (xem `duneta.config.ts` — `process.env.*`). Sửa `pages/` hoặc component → trang tự cập nhật, không cần F5 hay `pnpm build`.
 
 ## Cấu trúc
 

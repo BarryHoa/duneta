@@ -5,7 +5,6 @@ import {
   RECOMMENDED_RATE_LIMIT_RULES,
 } from '@duneta/server/configs';
 
-/** Secrets và connection URLs — set trực tiếp trong config. */
 export default defineDunetaConfig({
   app: {
     name: 'duneta',
@@ -17,14 +16,14 @@ export default defineDunetaConfig({
     enabled: true,
     default: 'primary',
     connections: defineConnections({
-      primary: { driver: 'postgres', url: '' },
+      primary: { driver: 'postgres', url: process.env.DATABASE_URL ?? '' },
     }),
     pool: DEFAULT_DATABASE_POOL,
   },
   auth: {
     enabled: true,
-    baseUrl: 'http://localhost:8787',
-    secret: '',
+    baseUrl: process.env.AUTH_BASE_URL ?? 'http://localhost:8787',
+    secret: process.env.AUTH_SECRET ?? '',
   },
   security: {
     rateLimit: {
@@ -33,7 +32,7 @@ export default defineDunetaConfig({
     },
     csrf: {
       enabled: true,
-      secret: '',
+      secret: process.env.CSRF_SECRET ?? '',
     },
   },
   logging: {

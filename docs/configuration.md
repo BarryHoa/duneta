@@ -6,7 +6,9 @@
 duneta.config.ts → DunetaServerConfig (TypeScript types — đọc type là biết phải set gì)
 ```
 
-Cấu hình sai → runtime lỗi. Framework **không** đọc worker env để merge config.
+Cấu hình sai → runtime lỗi.
+
+Trước khi đọc `duneta.config.ts`, Duneta load file `.env` vào `process.env` (biến shell đã có thì giữ nguyên). Trong config dùng `process.env.DATABASE_URL`, v.v.
 
 `duneta.config.ts` — database URL, auth secrets, storage, cache, security, …
 

@@ -6,7 +6,7 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 
 | Muốn làm                   | File / hook                             | Doc                                  |
 | -------------------------- | --------------------------------------- | ------------------------------------ |
-| Đổi port, DB, auth, cache  | `duneta.config.ts` + `.dev.vars`        | [Configuration](../configuration.md) |
+| Đổi port, DB, auth, cache  | `.env` + `duneta.config.ts`             | [Configuration](../configuration.md) |
 | Thêm controller/repository | `app/api/controllers/`, `repositories/` | [Sync](./api/sync.md)                |
 | Thêm API route             | `app/api/routers/*.routes.ts`           | [Sync](./api/sync.md)                |
 | Deploy Worker              | `wrangler.jsonc` + `worker.ts`          | [Deploy](../deployment.md)           |
@@ -123,7 +123,7 @@ export default function PostsPage() {
 
 ## Nguyên tắc
 
-1. **Config = cấu trúc**, `.dev.vars` / secrets = giá trị
+1. **`.env`** — giá trị secret · **`duneta.config.ts`** — map `process.env.*` vào config
 2. **Một Worker** — `worker.ts` route web + API
 3. **Convention + sync** — thêm `*-controller.ts`, `*-repository.ts`, `*.routes.ts`
 4. **Repository trước, Controller sau** — sync tự match theo base name

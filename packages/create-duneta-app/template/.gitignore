@@ -4,5 +4,5 @@ build
 .router-runtime
 dist
 .wrangler
-.dev.vars
+.env
 *.tsbuildinfo

@@ -22,7 +22,7 @@ Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSET
 ## Dev local
 
 ```bash
-pnpm dev    # HMR — tự tạo .dev.vars nếu chưa có → http://localhost:8787
+pnpm dev    # HMR → http://localhost:8787 — secrets trong `.env`, map trong `duneta.config.ts`
 ```
 
 ## Cấu trúc

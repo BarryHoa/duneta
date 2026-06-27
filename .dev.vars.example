@@ -1,4 +1,0 @@
-# `.dev.vars` — wrangler dev only. Framework không đọc file này.
-# App config → `duneta.config.ts`
-
-NODE_ENV=development

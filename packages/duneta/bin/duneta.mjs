@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
@@ -51,15 +51,6 @@ function buildPackagesIfNeeded() {
   run('pnpm', ['--filter', '@duneta/client', '--filter', '@duneta/server', 'run', 'build'], monorepoRoot);
 }
 
-function ensureDevVars() {
-  const devVars = path.join(projectRoot, '.dev.vars');
-  const example = path.join(projectRoot, '.dev.vars.example');
-  if (!existsSync(devVars) && existsSync(example)) {
-    copyFileSync(example, devVars);
-    console.log('[duneta] created .dev.vars from .dev.vars.example');
-  }
-}
-
 async function loadSyncRouters() {
   const mod = await import('@duneta/client/scripts/sync-routers');
   return mod.syncRouters;
@@ -108,7 +99,6 @@ try {
       break;
     case 'dev': {
       buildPackagesIfNeeded();
-      ensureDevVars();
       await sync();
       const syncRouters = await loadSyncRouters();
       syncRouters(appRoot, clientRoot, loadWebConfig());
