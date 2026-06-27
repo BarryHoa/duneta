@@ -1,45 +1,24 @@
 # Services (DI)
 
-Đăng ký **controller** và **repository** qua `registerServices` trong `api/services.ts`.
-
 ```ts
-import { createAppRouter } from './routers';
-import { registerServices } from './services';
+import { defineServices } from '@duneta/server/container';
+import { UserRepository } from '@duneta/server/repositories';
 
-export default defineServer({
-  config,
-  createAppRouter,
-  registerServices,
-  resolvePermissions,
+export const registerServices = defineServices({
+  repositories: {
+    UserRepository,
+  },
+  controllers: {
+    HealthController,
+    MeController,
+    UserController: ({ repositories }) =>
+      new UserController(repositories.resolve(UserRepository)),
+  },
 });
 ```
 
-## `ServiceRegistryContext`
+- **Class** (`UserRepository`, `HealthController`) → `new Class()` tự động
+- **Factory** `(ctx) => instance` — khi cần inject deps hoặc config
+- **`resolve(UserRepository)`** hoặc **`resolve('UserRepository')`** — cùng key (tên class)
 
-```ts
-import type { RegisterServices } from '@duneta/server/container';
-
-export const registerServices: RegisterServices = (ctx) => {
-  ctx.repositories.singleton('PostRepository', () => new PostRepository(ctx.db!));
-  ctx.controllers.singleton(
-    'PostController',
-    () => new PostController(ctx.repositories.resolve('PostRepository')),
-  );
-};
-```
-
-## Convention + sync
-
-Thêm `*-controller.ts`, `*-repository.ts` → `pnpm build` tự sinh `services.ts` nếu chưa có.
-
-Override thủ công: giữ `services.ts` — sync bỏ qua.
-
-## Resolve trong handler
-
-| Cần | Cách |
-|-----|------|
-| Controller | `resolveController('PostController', 'index')` |
-| Repository | Inject constructor trong `registerServices` |
-| DB | `c.get('db')` |
-
-Infra (`db`, `auth`, `cache`) không nằm container — inject qua `attachRequestServices`.
+Instance tạo **một lần** lúc boot.

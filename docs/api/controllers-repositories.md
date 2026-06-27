@@ -76,12 +76,11 @@ CRUD generic trên Drizzle table có cột `id`:
 ```ts
 // app/api/repositories/post-repository.ts
 import { BaseRepository } from '@duneta/server/http';
-import type { Database } from '@duneta/server/database';
 import { post } from './schemas/post';
 
 export class PostRepository extends BaseRepository<typeof post> {
-  constructor(db: Database) {
-    super(db, post);
+  constructor() {
+    super(post);
   }
 
   async findPublished() {
@@ -89,6 +88,8 @@ export class PostRepository extends BaseRepository<typeof post> {
   }
 }
 ```
+
+`db` bind tự động lúc boot qua `BaseRepository.bindDb()` — repository chỉ cần truyền `table`.
 
 Schema Drizzle đặt trong `repositories/schemas/` hoặc `packages/server/repositories/schemas/` (auth schema ship sẵn).
 

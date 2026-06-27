@@ -38,8 +38,8 @@ import { BaseRepository } from '@duneta/server/http';
 import { post } from './schemas/post';
 
 export class PostRepository extends BaseRepository<typeof post> {
-  constructor(db: Database) {
-    super(db, post);
+  constructor() {
+    super(post);
   }
 }
 ```

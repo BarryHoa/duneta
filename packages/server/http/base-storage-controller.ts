@@ -237,6 +237,18 @@ export abstract class BaseStorageController {
     return { ...meta, url: this.backend.url(meta.key) };
   }
 
+  protected async deleteKey(key: string): Promise<void> {
+    await this.backend.delete(key);
+  }
+
+  protected headKey(key: string): Promise<StoredObjectMeta | null> {
+    return this.backend.head(key);
+  }
+
+  protected objectUrl(key: string): string | null {
+    return this.backend.url(key);
+  }
+
   protected json<T>(c: Context<RequestContext>, data: T, status: ContentfulStatusCode = 200) {
     return c.json(data, status);
   }
@@ -291,7 +303,7 @@ export abstract class BaseStorageController {
     this.assertEnabled();
     const key = this.requireKey(c);
     if (key instanceof Response) return key;
-    await this.backend.delete(key);
+    await this.deleteKey(key);
     return this.json(c, { data: { key, deleted: true } });
   };
 
@@ -300,8 +312,8 @@ export abstract class BaseStorageController {
     this.assertEnabled();
     const key = this.requireKey(c);
     if (key instanceof Response) return key;
-    const meta = await this.backend.head(key);
+    const meta = await this.headKey(key);
     if (!meta) return this.notFound(c, 'Object not found');
-    return this.json(c, { data: { ...meta, url: this.backend.url(meta.key) } });
+    return this.json(c, { data: { ...meta, url: this.objectUrl(meta.key) } });
   };
 }

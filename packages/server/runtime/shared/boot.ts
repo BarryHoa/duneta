@@ -6,6 +6,7 @@ import { connectionUrl } from '../../configs/database.js';
 import { createControllerContainer } from '../../container/controller-container.js';
 import { createRepositoryContainer } from '../../container/repository-container.js';
 import { createDatabase } from '../../database/index.js';
+import { BaseRepository } from '../../http/base-repository.js';
 import {
   getConfig,
   loadConfig,
@@ -55,6 +56,7 @@ export async function loadApp(boot: ServerBoot) {
   const controllers = createControllerContainer();
   const repositories = createRepositoryContainer();
   const db = createDatabase(config);
+  BaseRepository.bindDb(db);
   const auth = createAuth(config, db);
 
   boot.registerServices({ controllers, repositories, db, config });

@@ -86,7 +86,7 @@ function generateServices(controllerFiles, repositoryFiles) {
 
   const repoLines = repositoryFiles.map((file) => {
     const className = repositoryClassName(file);
-    return `  ctx.repositories.singleton('${className}', () => new ${className}(ctx.db!));`;
+    return `  ctx.repositories.singleton('${className}', () => new ${className}());`;
   });
 
   const controllerLines = controllerFiles.map((file) => {
@@ -101,7 +101,6 @@ function generateServices(controllerFiles, repositoryFiles) {
 
   const body = [
     `export const registerServices: RegisterServices = (ctx) => {`,
-    ...(repositoryFiles.length ? ['  if (!ctx.db) return;', ''] : []),
     ...repoLines,
     ...(repoLines.length && controllerLines.length ? [''] : []),
     ...controllerLines,

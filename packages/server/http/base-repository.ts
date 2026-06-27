@@ -5,10 +5,24 @@ import type { Database } from '../database/types.js';
 type TableWithId = PgTable & { id: PgColumn };
 
 export abstract class BaseRepository<TTable extends TableWithId> {
-  constructor(
-    protected readonly db: Database,
-    protected readonly table: TTable,
-  ) {}
+  private static contextDb: Database | null | undefined;
+
+  /** Gọi một lần lúc boot — trước `registerServices`. */
+  static bindDb(db: Database | null): void {
+    BaseRepository.contextDb = db;
+  }
+
+  constructor(protected readonly table: TTable) {}
+
+  protected get db(): Database {
+    if (BaseRepository.contextDb === undefined) {
+      throw new Error('Repository context not bound. Call BaseRepository.bindDb() at boot.');
+    }
+    if (BaseRepository.contextDb === null) {
+      throw new Error('Database not configured. Set database in duneta.config.ts.');
+    }
+    return BaseRepository.contextDb;
+  }
 
   async findAll() {
     return this.db.select().from(this.table as PgTable);
