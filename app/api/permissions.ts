@@ -6,7 +6,8 @@ const ROLE_GRANTS: Record<string, readonly string[]> = {
   viewer: ['users.read'],
 };
 
-async function resolveRoles(_userId: string) {
+async function resolveRoles(userId: string) {
+  void userId;
   // TODO: load from DB when roles are persisted.
   return ['member'] as const;
 }

@@ -2,7 +2,8 @@ import { composeRouter, createUsersRoutes, healthRoutes, meRoutes } from '@dunet
 import type { DunetaServerConfig } from '@duneta/server/configs';
 import { imageMediaStorageRoutes } from './Controllers/MediaStorage/index.js';
 
-export function createAppRouter(_config: DunetaServerConfig) {
+export function createAppRouter(config: DunetaServerConfig) {
+  void config;
   return composeRouter([
     healthRoutes,
     meRoutes,

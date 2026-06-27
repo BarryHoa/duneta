@@ -67,7 +67,7 @@ renderTemplates(targetDir, vars);
 
 console.log(`[create-duneta-app] created ${targetDir}`);
 console.log('');
-console.log('  cd', projectArgLabel(targetDir));
+console.log('  cd', targetArgLabel(targetDir));
 console.log('  npm install');
 console.log('  npm run dev');
 console.log('');

@@ -32,14 +32,17 @@ export function DunetaInputSearch({
   className = '',
 }: DunetaInputSearchProps) {
   const [search, setSearch] = useState(initialValue);
+  const [prevInitialValue, setPrevInitialValue] = useState(initialValue);
+
+  if (initialValue !== prevInitialValue) {
+    setPrevInitialValue(initialValue);
+    setSearch(initialValue);
+  }
+
   const debouncedChange = useMemo(
     () => debounce((next: string) => onDebouncedChange(next), debounceMs),
     [debounceMs, onDebouncedChange],
   );
-
-  useEffect(() => {
-    setSearch(initialValue);
-  }, [initialValue]);
 
   useEffect(() => {
     debouncedChange(search);

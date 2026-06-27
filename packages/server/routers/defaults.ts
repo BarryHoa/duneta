@@ -1,7 +1,7 @@
 import type { MiddlewareHandler } from 'hono';
 import { resolveController } from '../http/resolve-controller.js';
 import { requireSession } from '../middlewares/session.js';
-import { composeRouter, defineGroup } from './define.js';
+import { defineGroup } from './define.js';
 
 export const healthRoutes = defineGroup({
   path: '/health',

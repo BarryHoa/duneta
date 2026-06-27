@@ -19,6 +19,6 @@ export type DunetaDataTableColumnMeta = {
 };
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars -- TanStack module augmentation
   interface ColumnMeta<TData, TValue> extends DunetaDataTableColumnMeta {}
 }
