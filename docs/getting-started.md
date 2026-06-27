@@ -8,11 +8,13 @@ pnpm install && pnpm deploy
 
 `pnpm install` tự build framework packages. `pnpm deploy` sync + build app + `wrangler deploy`.
 
-**Một lần:** Cloudflare auth + config trong `duneta.config.ts` (DB URL, auth secret, …):
+**Một lần:** Cloudflare auth:
 
 ```bash
 wrangler login
 ```
+
+App mới chỉ có `GET /api/health` — không cần DB/auth. Bật thêm trong `duneta.config.ts` khi cần (xem [Cấu hình](./configuration.md)).
 
 Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
 
@@ -22,7 +24,7 @@ Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
 pnpm dev    # http://localhost:8787 — HMR (Vite + Workers runtime)
 ```
 
-Tạo `.env` ở root (xem `duneta.config.ts` — `process.env.*`). Sửa `pages/` hoặc component → trang tự cập nhật, không cần F5 hay `pnpm build`.
+Tạo `.env` khi config dùng `process.env.*` (DB, auth, …). App minimal không bắt buộc file này. Sửa `pages/` hoặc component → trang tự cập nhật, không cần F5 hay `pnpm build`.
 
 ## Cấu trúc
 

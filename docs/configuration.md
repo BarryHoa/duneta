@@ -1,22 +1,42 @@
 # Cấu hình
 
-## 1 lớp config
+## Ba lớp (xem [Kiến trúc](./architecture.md))
+
+- **Core defaults** — `createDefaultConfig()`: `database.enabled: false`, `auth.enabled: false`, …
+- **Build sẵn** — không cần config riêng; dùng khi user mount route + register controller tương ứng
+- **User** — `duneta.config.ts` bật feature; `app/api/*` wire route/DI
+
+## 1 file config
 
 ```text
-duneta.config.ts → DunetaServerConfig (TypeScript types — đọc type là biết phải set gì)
+duneta.config.ts → merge lên core defaults
 ```
 
-Cấu hình sai → runtime lỗi.
+Cấu hình sai (bật DB nhưng thiếu URL, mount route auth nhưng `auth.enabled: false`, …) → runtime lỗi. Framework không tự skip.
 
-Trước khi đọc `duneta.config.ts`, Duneta load file `.env` vào `process.env` (biến shell đã có thì giữ nguyên). Trong config dùng `process.env.DATABASE_URL`, v.v.
+Trước khi đọc `duneta.config.ts`, Duneta load `.env` vào `process.env` (shell env ưu tiên). Khi bật DB/auth: map `process.env.DATABASE_URL`, `process.env.AUTH_SECRET`, … trong config.
 
-`duneta.config.ts` — database URL, auth secrets, storage, cache, security, …
+Wrangler bindings (`ASSETS`, …) — chỉ trong `worker.ts`, không qua framework config.
 
-Wrangler `env` (bindings như `ASSETS`) — chỉ dùng trong `worker.ts` cho routing/static, framework API không nhận env.
+## App mới (minimal)
 
-## API + Web config
+`create-duneta-app` scaffold:
 
-File: `duneta.config.ts` — một `export default` cho web và API.
+```ts
+import { defineDunetaConfig } from '@duneta/client/configs';
+
+export default defineDunetaConfig({
+  app: { name: 'my-app', env: 'development' },
+  theme: { default: 'light' },
+  api: { baseUrl: '/api' },
+});
+```
+
+Không cần `.env` cho app chỉ health check. Core defaults giữ mọi optional module OFF.
+
+## Opt in: database + auth
+
+Khi cần — bật trong config, set env, register controller/route build sẵn (hoặc custom):
 
 ```ts
 import { defineDunetaConfig } from '@duneta/client/configs';
@@ -27,21 +47,30 @@ import {
 } from '@duneta/server/configs';
 
 export default defineDunetaConfig({
-  app: { name: 'duneta', env: 'production' },
+  app: { name: 'my-app', env: 'production' },
   theme: { default: 'light' },
   api: { baseUrl: '/api' },
   database: {
     enabled: true,
     default: 'primary',
     connections: defineConnections({
-      primary: { driver: 'postgres', url: 'postgresql://...' },
+      primary: { driver: 'postgres', url: process.env.DATABASE_URL ?? '' },
     }),
     pool: DEFAULT_DATABASE_POOL,
   },
-  auth: { enabled: true, baseUrl: 'http://localhost:8787', secret: '...' },
-  security: { rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES } },
+  auth: {
+    enabled: true,
+    baseUrl: process.env.AUTH_BASE_URL ?? 'http://localhost:8787',
+    secret: process.env.AUTH_SECRET ?? '',
+  },
+  security: {
+    rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES },
+    csrf: { enabled: true, secret: process.env.CSRF_SECRET ?? '' },
+  },
 });
 ```
+
+Kèm `app/api/services.ts` + `router.ts` mount `MeController`, `UserController`, `meRoutes`, `createUsersRoutes()` — xem repo dogfood monorepo.
 
 `app` dùng chung. Web đọc `theme`, `api.baseUrl`; Worker đọc `database`, `auth`, `security`, …
 

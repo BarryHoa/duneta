@@ -15,7 +15,7 @@ pnpm deploy
 ```
 
 Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
-Có DB/auth: set `database.connections`, `auth.secret`, `auth.baseUrl` trong `duneta.config.ts`.
+App mới chỉ health check — DB/auth opt-in trong `duneta.config.ts` khi cần.
 
 Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
 

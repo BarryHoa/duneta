@@ -14,6 +14,8 @@ app/api/
 
 Config API + web: `duneta.config.ts` (`export default`).
 
+App scaffold (`create-duneta-app`): `services.ts` chỉ `HealthController`, `router.ts` chỉ `healthRoutes`. DB/auth là opt-in — xem [Kiến trúc](../architecture.md).
+
 ## Entry
 
 API bootstrap trong `worker.ts` — import `router.ts`, `services.ts`, `permissions.ts`, gọi `defineServer` cho `/api/*`.

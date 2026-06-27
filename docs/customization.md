@@ -98,9 +98,18 @@ Override trong `api/services.ts` — đăng ký lại cùng key:
 ctx.controllers.singleton('UserController', () => new MyUserController(...));
 ```
 
-## Workflow: default routes
+## Workflow: dùng route build sẵn
 
-Default routes trong `api/router.ts` (`healthRoutes`, `usersRoutes`, …).
+Framework ship sẵn trong `@duneta/server/routers` — user chọn mount trong `app/api/router.ts`:
+
+| Route group | Cần config | Cần register |
+|-------------|------------|--------------|
+| `healthRoutes` | — | `HealthController` |
+| `meRoutes` | `auth.enabled: true` | `MeController` |
+| `createUsersRoutes()` | `auth.enabled: true`, `database.enabled: true` | `UserController`, `UserRepository` |
+| `createStorageRoutes()` | `storage.enabled: true` | `StorageController` (hoặc subclass) |
+
+App mới chỉ mount `healthRoutes`. Thêm group = bật config + register service tương ứng.
 
 ## Workflow: web page gọi API mới
 
