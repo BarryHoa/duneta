@@ -53,7 +53,11 @@ export {
   type RateLimitKey,
   type RateLimitRule,
 } from './rate-limit.js';
-export { createDefaultConfig, DEFAULT_CONFIG_APP_PORT, DEFAULT_TIMEZONE } from './defaults.js';
+export {
+  createDefaultConfig,
+  DEFAULT_CONFIG_APP_PORT,
+  DEFAULT_TIMEZONE,
+} from './defaults.js';
 export {
   buildSocialProviders,
   isAuthEnabled,
@@ -69,7 +73,6 @@ export {
   resolveAuthBasePath,
   resolveAuthMountPath,
 } from './features.js';
-export { defineDunetaConfig, loadConfig } from './load.js';
 export { mergeConfig, type DeepPartial } from './merge.js';
 export { config, getConfig } from './registry.js';
 export type {

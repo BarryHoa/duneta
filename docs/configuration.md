@@ -12,7 +12,7 @@ Vite **không** import server config → secrets không evaluate lúc web build.
 | File | Đọc bởi | Nội dung |
 |------|---------|----------|
 | `duneta.client.config.ts` | `loadConfig`, sync routers | `app`, `theme`, `api`, `router` |
-| `duneta.server.config.ts` | `worker.ts` → `loadWorkerServerConfig` | `database`, `auth`, `security`, … |
+| `duneta.server.config.ts` | `defineServer({ importConfig })` | `database`, `auth`, `security`, … |
 
 Cấu hình sai → runtime lỗi. Framework không tự skip.
 
@@ -42,13 +42,13 @@ Khai báo trong `wrangler.jsonc`:
 
 ```ts
 const api = defineServer({
-  loadConfig: () => loadWorkerServerConfig(() => import('./duneta.server.config')),
+  importConfig: () => import('./duneta.server.config'),
   createAppRouter,
   registerServices,
   resolvePermissions,
 });
 
-return api.fetch(request, env);
+return api.fetch(request);
 ```
 
 `duneta.server.config.ts` — chỉ API features + `process.env.*` cho secrets. **`app.name` / `app.env` không cần lặp** — `app.name` chỉ client; `app.env` server auto từ `process.env.NODE_ENV` (Wrangler `vars.NODE_ENV`).

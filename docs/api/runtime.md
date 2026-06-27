@@ -20,11 +20,11 @@ wrangler.jsonc  →  worker.ts  →  fetch(request, env)
 
 ```ts
 const api = defineServer({
-  loadConfig: () => loadWorkerServerConfig(() => import('./duneta.server.config')),
+  importConfig: () => import('./duneta.server.config'),
   ...
 });
 
-return api.fetch(request, env);
+return api.fetch(request);
 ```
 
 - Web: `duneta.client.config.ts` (Vite only)

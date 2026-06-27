@@ -12,17 +12,12 @@ import type { DunetaWebConfig } from './types';
 
 export {
   CLIENT_CONFIG_FILENAME,
-  SERVER_CONFIG_FILENAME,
   defineClientConfig,
-  defineDunetaConfig,
   defineServerConfig,
-  loadWorkerServerConfig,
-  toServerConfig,
   toWebConfig,
 } from './duneta';
 export type {
   DunetaClientConfig,
-  DunetaConfig,
   DunetaServerConfigFile,
 } from './duneta';
 

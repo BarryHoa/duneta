@@ -2,7 +2,7 @@ import type { DunetaServerConfig } from './types';
 
 let cachedConfig: DunetaServerConfig | undefined;
 
-/** Internal — only imported by `load.ts`, not re-exported from the package barrel. */
+/** Internal — set by Worker boot via `loadServerConfig`, not re-exported from the package barrel. */
 export function commitConfig<T extends DunetaServerConfig>(config: T): T {
   cachedConfig = config;
   return config;
@@ -15,7 +15,7 @@ export function getConfig<
 >(): DunetaServerConfig<TExtra, TDatabase> {
   if (!cachedConfig) {
     throw new Error(
-      'Server config is not loaded. Call loadConfig() on boot or add duneta.server.config.ts.',
+      'Server config is not loaded. Pass importConfig to defineServer() or add duneta.server.config.ts.',
     );
   }
   return cachedConfig as unknown as DunetaServerConfig<TExtra, TDatabase>;

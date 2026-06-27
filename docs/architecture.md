@@ -45,7 +45,7 @@ GET /assets/*    →  ASSETS binding
 
 | Hook | File |
 |------|------|
-| `config` | `duneta.server.config.ts` (lazy via `loadConfig`) |
+| `importConfig` | `duneta.server.config.ts` (lazy runtime import) |
 | `createAppRouter` | `app/api/router.ts` |
 | `registerServices` | `app/api/services.ts` |
 | `resolvePermissions` | `app/api/permissions.ts` |

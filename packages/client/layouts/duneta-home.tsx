@@ -1,5 +1,5 @@
 import { DunetaButton as Button, DunetaLink as Link } from '../components';
-import './duneta-home.css';
+import '@duneta/client/layouts/duneta-home.css';
 
 const stack = [
   {

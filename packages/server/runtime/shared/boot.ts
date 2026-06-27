@@ -7,45 +7,24 @@ import { createControllerContainer } from '../../container/controller-container.
 import { createRepositoryContainer } from '../../container/repository-container.js';
 import { createDatabase } from '../../database/index.js';
 import { BaseRepository } from '../../http/base-repository.js';
-import {
-  getConfig,
-  loadConfig,
-  type DeepPartial,
-} from '../../configs/index.js';
+import { getConfig } from '../../configs/index.js';
 import type { DunetaServerConfig } from '../../configs/types.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
-import type { ServerBoot } from './types.js';
+import { resolveServerHandlers, type ServerOptions } from './types.js';
 
 let cachedApp: Hono<RequestContext> | undefined;
 let cachedAppKey: string | undefined;
-let configBootstrapped = false;
 
 function appCacheKey(config: DunetaServerConfig): string {
   return `${connectionUrl(config.database) ?? ''}:${config.auth?.secret ?? ''}`;
 }
 
-export function bootstrapConfig(
-  boot: ServerBoot,
-  overrides?: DeepPartial<DunetaServerConfig>,
-): void {
-  if (configBootstrapped && !overrides) return;
+export async function loadApp(options: ServerOptions) {
+  const handlers = resolveServerHandlers(options);
 
-  const patch: DeepPartial<DunetaServerConfig> = {
-    ...boot.config,
-    ...overrides,
-    runtime: { target: boot.target },
-  };
-
-  loadConfig(patch);
-  configBootstrapped = true;
-}
-
-export async function loadApp(boot: ServerBoot) {
-  bootstrapConfig(boot);
-
-  if (boot.resolvePermissions) {
-    registerPermissionResolver(boot.resolvePermissions);
+  if (handlers.resolvePermissions) {
+    registerPermissionResolver(handlers.resolvePermissions);
   }
 
   const config = getConfig();
@@ -59,10 +38,10 @@ export async function loadApp(boot: ServerBoot) {
   BaseRepository.bindDb(db);
   const auth = createAuth(config, db);
 
-  boot.registerServices({ controllers, repositories, db, config });
+  handlers.registerServices({ controllers, repositories, db, config });
 
   const cache = createCache(config.cache);
-  const router = boot.createAppRouter(config);
+  const router = handlers.createAppRouter(config);
 
   cachedApp = createHttpApp({
     router,
