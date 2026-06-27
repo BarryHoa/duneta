@@ -5,14 +5,15 @@
   "description": "Server utilities for Duneta applications.",
   "license": "MIT",
   "type": "module",
-  "files": ["dist", "scripts", "runtime"],
+  "files": ["dist", "scripts"],
   "forgeStack": { "kind": "backend", "runtime": "cloudflare-worker" },
   "exports": {
+    "./package.json": "./package.json",
     "./configs": {
-      "types": "./configs/index.ts",
-      "import": "./configs/index.ts",
-      "default": "./configs/index.ts"
+      "types": "./dist/configs/index.d.ts",
+      "import": "./dist/configs/index.js"
     },
+    "./scripts/sync-api": "./scripts/sync-api.mjs",
     "./middlewares": { "types": "./dist/middlewares/index.d.ts", "import": "./dist/middlewares/index.js" },
     "./repositories": { "types": "./dist/repositories/index.d.ts", "import": "./dist/repositories/index.js" },
     "./assembly": { "types": "./dist/assembly/index.d.ts", "import": "./dist/assembly/index.js" },
@@ -26,9 +27,8 @@
     "./cached": { "types": "./dist/cached/index.d.ts", "import": "./dist/cached/index.js" },
     "./logging": { "types": "./dist/logging/index.d.ts", "import": "./dist/logging/index.js" },
     "./runtime/worker": {
-      "types": "./runtime/worker/index.ts",
-      "import": "./runtime/worker/index.ts",
-      "default": "./runtime/worker/index.ts"
+      "types": "./dist/runtime/worker/index.d.ts",
+      "import": "./dist/runtime/worker/index.js"
     }
   },
   "scripts": {

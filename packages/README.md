@@ -1,8 +1,10 @@
 # Packages
 
 ```text
-packages/server  →  @duneta/server   (Hono API framework)
-packages/client  →  @duneta/client   (React Router web framework)
+packages/server       →  @duneta/server
+packages/client       →  @duneta/client
+packages/duneta       →  duneta (CLI)
+packages/create-duneta-app → create-duneta-app
 ```
 
 | Package | Dùng trong |

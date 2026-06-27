@@ -1,0 +1,32 @@
+{
+  "name": "duneta",
+  "version": "0.1.0",
+  "description": "Full-stack React + Hono on Cloudflare Workers — dev, build, and deploy CLI.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "duneta": "./bin/duneta.mjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "typecheck": "node -e \"process.exit(0)\""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@duneta/client": "workspace:*",
+    "@duneta/server": "workspace:*",
+    "@react-router/dev": "^8.0.1",
+    "tsx": "^4.19.4",
+    "wrangler": "^4.105.0"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  }
+}

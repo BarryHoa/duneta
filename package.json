@@ -7,10 +7,10 @@
     "node": ">=22.22.0"
   },
   "scripts": {
-    "prepare": "node scripts/duneta.mjs prepare",
-    "build": "node scripts/duneta.mjs build",
-    "dev": "node scripts/duneta.mjs dev",
-    "deploy": "node scripts/duneta.mjs deploy",
+    "prepare": "duneta prepare",
+    "build": "duneta build",
+    "dev": "duneta dev",
+    "deploy": "duneta deploy",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@duneta/client": "workspace:*",
-    "@duneta/server": "workspace:*"
+    "@duneta/server": "workspace:*",
+    "duneta": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.42.3",

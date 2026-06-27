@@ -3,7 +3,15 @@
 Một Cloudflare Worker: web + `/api` cùng domain.
 
 ```bash
-pnpm install && pnpm deploy
+# App mới (sau khi publish npm)
+npx create-duneta-app my-app
+
+# Monorepo / dogfood
+pnpm install && pnpm dev
+```
+
+```bash
+pnpm deploy
 ```
 
 Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
