@@ -71,7 +71,8 @@ console.log('  cd', projectArgLabel(targetDir));
 console.log('  npm install');
 console.log('  npm run dev');
 console.log('');
-console.log('Edit duneta.config.ts — set database URL, auth.secret, csrf.secret before production.');
+console.log('Edit duneta.client.config.ts (web) and duneta.server.config.ts (API).');
+console.log('Production secrets: wrangler secret put — see docs/configuration.md');
 
 function targetArgLabel(dir) {
   return dir === process.cwd() ? '.' : projectName;

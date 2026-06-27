@@ -1,13 +1,12 @@
 import { createRequestHandler, RouterContextProvider } from 'react-router';
 import { defineServer } from '@duneta/server/runtime/worker';
-import { toServerConfig } from '@duneta/client/configs/duneta';
-import dunetaConfig from './duneta.config';
+import { loadWorkerServerConfig } from '@duneta/client/configs';
 import { createAppRouter } from './app/api/router';
 import { resolvePermissions } from './app/api/permissions';
 import { registerServices } from './app/api/services';
 
 const api = defineServer({
-  config: toServerConfig(dunetaConfig),
+  loadConfig: () => loadWorkerServerConfig(() => import('./duneta.server.config')),
   createAppRouter,
   registerServices,
   resolvePermissions,
@@ -20,6 +19,7 @@ const web = createRequestHandler(
 
 type Env = {
   ASSETS?: { fetch: typeof fetch };
+  [key: string]: unknown;
 };
 
 export default {
@@ -27,7 +27,7 @@ export default {
     const { pathname } = new URL(request.url);
 
     if (pathname === '/api' || pathname.startsWith('/api/')) {
-      return api.fetch(request);
+      return api.fetch(request, env);
     }
 
     if (env.ASSETS) {

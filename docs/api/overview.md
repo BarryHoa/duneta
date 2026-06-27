@@ -12,7 +12,7 @@ app/api/
 └── routers/           # *.routes.ts (sync)
 ```
 
-Config API + web: `duneta.config.ts` (`export default`).
+Config web: `duneta.client.config.ts`. API: `duneta.server.config.ts` (lazy load trong worker).
 
 App scaffold (`create-duneta-app`): `services.ts` chỉ `HealthController`, `router.ts` chỉ `healthRoutes`. DB/auth là opt-in — xem [Kiến trúc](../architecture.md).
 

@@ -1,17 +1,11 @@
-import { defineDunetaConfig } from '@duneta/client/configs';
+import { defineServerConfig } from '@duneta/client/configs';
 import {
   DEFAULT_DATABASE_POOL,
   defineConnections,
   RECOMMENDED_RATE_LIMIT_RULES,
 } from '@duneta/server/configs';
 
-export default defineDunetaConfig({
-  app: {
-    name: 'duneta',
-    env: 'production',
-  },
-  theme: { default: 'light' },
-  api: { baseUrl: '/api' },
+export default defineServerConfig({
   database: {
     enabled: true,
     default: 'primary',

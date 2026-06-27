@@ -5,8 +5,15 @@ import type { DeepPartial, Runtime, DunetaServerConfig } from '../../configs/ind
 import type { RegisterServices } from '../../container/index.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 
+export type ServerConfigLoader = () =>
+  | DeepPartial<DunetaServerConfig>
+  | Promise<DeepPartial<DunetaServerConfig>>;
+
 export type ServerOptions = {
-  config: DeepPartial<DunetaServerConfig>;
+  /** Avoid in worker — secrets bake at build. Use `loadConfig`. */
+  config?: DeepPartial<DunetaServerConfig>;
+  /** Dynamic import `duneta.server.config.ts` at runtime (after Worker env). */
+  loadConfig?: ServerConfigLoader;
   createAppRouter?: (config: DunetaServerConfig) => HonoType<RequestContext>;
   registerServices?: RegisterServices;
   /** Role → grants; loaded by `requireSession()` on protected routes. */
@@ -27,7 +34,10 @@ function emptyAppRouter(): HonoType<RequestContext> {
   return new Hono<RequestContext>();
 }
 
-export function createServerBoot(options: ServerOptions, target: Runtime): ServerBoot {
+export function createServerBoot(
+  options: ServerOptions & { config: DeepPartial<DunetaServerConfig> },
+  target: Runtime,
+): ServerBoot {
   return {
     target,
     config: options.config,

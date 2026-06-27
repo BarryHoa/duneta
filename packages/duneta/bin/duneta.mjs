@@ -68,7 +68,7 @@ function loadWebConfig() {
     encoding: 'utf8',
     cwd: projectRoot,
   });
-  if (r.status !== 0) throw new Error(r.stderr || 'Failed to load duneta.config.ts');
+  if (r.status !== 0) throw new Error(r.stderr || 'Failed to load duneta.client.config.ts');
   return JSON.parse(r.stdout);
 }
 

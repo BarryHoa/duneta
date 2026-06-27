@@ -18,7 +18,10 @@ pnpm deploy   # build + wrangler deploy
 
 ## Production checklist
 
-- [ ] **`duneta.config.ts`** — `database.connections.*.url`, `auth.secret`, storage credentials, …
+- [ ] **`duneta.server.config.ts`** — `process.env.*` refs (không literal secrets)
+- [ ] **`wrangler secret put`** — DATABASE_URL, AUTH_SECRET, CSRF_SECRET
+- [ ] **`secrets.required`** trong `wrangler.jsonc`
+- [ ] **CI build sạch** — không `.env` / secret env vars lúc `pnpm build`
 - [ ] **Hyperdrive** (optional) — connection string từ Hyperdrive → paste vào `database.connections.*.url`
 - [ ] **Optional** — Redis HTTP URL trong `cache` config (distributed cache + rate limit)
 - [ ] **Assets** — `ASSETS` binding → `app/build/client` (included in generated deploy config)
@@ -53,7 +56,7 @@ Example production bindings (`wrangler.production.jsonc.example`):
 
 ## Config
 
-Tất cả secrets và connection strings trong `duneta.config.ts`. Wrangler bindings (`ASSETS`, Hyperdrive) chỉ dùng ngoài framework nếu app cần.
+Secrets: `wrangler secret put` → runtime `process.env` → `duneta.server.config.ts`. Web: `duneta.client.config.ts` only.
 
 ## Observability
 

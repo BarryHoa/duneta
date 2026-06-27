@@ -13,7 +13,8 @@
   },
   "include": [
     "worker.ts",
-    "duneta.config.ts",
+    "duneta.client.config.ts",
+    "duneta.server.config.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
     "app/.router-runtime/**/*",

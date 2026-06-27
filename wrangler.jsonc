@@ -6,11 +6,13 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "NODE_ENV": "production"
+  },
+  "secrets": {
+    "required": ["DATABASE_URL", "AUTH_SECRET", "CSRF_SECRET"]
   }
-  // Dev + build (Vite resolves virtual:react-router/server-build).
-  // Deploy: pnpm deploy → app/build/server/wrangler.json (generated, includes ASSETS).
+  // Dev secrets: `.env` at project root (Wrangler / Vite plugin — not bundled on deploy).
+  // Prod: wrangler secret put DATABASE_URL, AUTH_SECRET, CSRF_SECRET
   //
-  // Production bindings — see wrangler.production.jsonc.example (ASSETS)
-  //
-  // App config → duneta.config.ts (DB, auth, storage, cache, …)
+  // Web config → duneta.client.config.ts (Vite only)
+  // API config  → duneta.server.config.ts (Worker runtime only)
 }

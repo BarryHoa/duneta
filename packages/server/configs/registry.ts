@@ -15,7 +15,7 @@ export function getConfig<
 >(): DunetaServerConfig<TExtra, TDatabase> {
   if (!cachedConfig) {
     throw new Error(
-      'Server config is not loaded. Call loadConfig() on boot or add duneta.config.ts.',
+      'Server config is not loaded. Call loadConfig() on boot or add duneta.server.config.ts.',
     );
   }
   return cachedConfig as unknown as DunetaServerConfig<TExtra, TDatabase>;

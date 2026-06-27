@@ -14,7 +14,7 @@ pnpm install && pnpm deploy
 wrangler login
 ```
 
-App mới chỉ có `GET /api/health` — không cần DB/auth. Bật thêm trong `duneta.config.ts` khi cần (xem [Cấu hình](./configuration.md)).
+App mới chỉ có `GET /api/health` — bật thêm trong `duneta.server.config.ts` khi cần.
 
 Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
 
@@ -30,7 +30,8 @@ Tạo `.env` khi config dùng `process.env.*` (DB, auth, …). App minimal khôn
 
 | Path | Việc |
 |------|------|
-| `duneta.config.ts` | Cấu hình (không hardcode secrets) |
+| `duneta.client.config.ts` | Web (theme, api) |
+| `duneta.server.config.ts` | API (database, auth, …) |
 | `wrangler.jsonc` | Worker dev |
 | `worker.ts` | Entry Worker |
 | `app/api/` | Routes, services API |

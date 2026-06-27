@@ -3,11 +3,8 @@ import { cloudflare } from '@cloudflare/vite-plugin';
 import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, type UserConfig } from 'vite';
-import { loadDotEnv } from './load.js';
 
 export function createDunetaViteConfig(repoRoot: string, appRoot: string, overrides: UserConfig = {}): UserConfig {
-  loadDotEnv(repoRoot);
-
   return defineConfig({
     envDir: repoRoot,
     publicDir: path.resolve(appRoot, 'public'),

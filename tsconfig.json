@@ -18,7 +18,8 @@
     "worker.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
-    "duneta.config.ts",
+    "duneta.client.config.ts",
+    "duneta.server.config.ts",
     "app/.router-runtime/**/*",
     "app/.react-router/types/+server-build.d.ts"
   ]
