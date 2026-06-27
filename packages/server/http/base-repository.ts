@@ -19,7 +19,7 @@ export abstract class BaseRepository<TTable extends TableWithId> {
       throw new Error('Repository context not bound. Call BaseRepository.bindDb() at boot.');
     }
     if (BaseRepository.contextDb === null) {
-      throw new Error('Database not configured. Set database in duneta.config.ts.');
+      throw new Error('Database not configured. Set database in duneta.server.config.ts.');
     }
     return BaseRepository.contextDb;
   }

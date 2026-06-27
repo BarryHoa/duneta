@@ -4,7 +4,7 @@
 
 | Lớp | Ở đâu | Vai trò |
 |-----|-------|---------|
-| **Core** | `packages/server`, `packages/client`, `duneta` CLI | Runtime, DI, config, middleware, optional modules (`database`, `auth`, `storage`, …). **Mặc định OFF** — bật trong `duneta.config.ts`. |
+| **Core** | `packages/server`, `packages/client`, `duneta` CLI | Runtime, DI, config, middleware, optional modules. **Mặc định OFF** — bật trong `duneta.server.config.ts`. |
 | **Build sẵn** | `@duneta/server/routers`, `@duneta/server/http`, `@duneta/server/repositories`, `@duneta/client/routers` | Controller/route/UI reference — import và dùng, hoặc bỏ qua. |
 | **User app** | `duneta.client.config.ts`, `duneta.server.config.ts`, `app/api/*`, `app/pages/` | User chọn bật feature nào, mount route nào, register service nào. |
 
@@ -59,7 +59,7 @@ Chỉ Cloudflare Worker. Config: `wrangler.jsonc` · Entry: `worker.ts`.
 | Concern | Duneta approach |
 |---------|-----------------|
 | Logging | JSON stdout — no log files |
-| Database | Postgres — URL trong `duneta.config.ts` |
+| Database | Postgres — URL qua `process.env` trong `duneta.server.config.ts` |
 | Cache | Memory (dev) or Redis HTTP (prod) |
 | Sessions | Postgres (Better Auth) |
 | Static files | `ASSETS` binding, not disk writes |

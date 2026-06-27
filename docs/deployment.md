@@ -25,7 +25,7 @@ pnpm deploy   # build + wrangler deploy
 - [ ] **Hyperdrive** (optional) — connection string từ Hyperdrive → paste vào `database.connections.*.url`
 - [ ] **Optional** — Redis HTTP URL trong `cache` config (distributed cache + rate limit)
 - [ ] **Assets** — `ASSETS` binding → `app/build/client` (included in generated deploy config)
-- [ ] **Logging** — JSON stdout (`logging.enabled` in `duneta.config.ts`); use Cloudflare Logpush for retention — **do not write log files on Workers**
+- [ ] **Logging** — JSON stdout (`logging.enabled` in `duneta.server.config.ts`)
 - [ ] **Auth cookies** — `secure: true` applied automatically when `NODE_ENV=production`
 
 ## wrangler configs

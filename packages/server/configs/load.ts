@@ -10,7 +10,7 @@ export function defineDunetaConfig<const T extends Record<string, unknown>>(
   return (config ?? {}) as DeepPartial<DunetaServerConfig> & T;
 }
 
-/** Merge `duneta.config.ts` overrides onto framework defaults and cache the result. */
+/** Merge server config patch onto framework defaults and cache the result. */
 export function loadConfig(overrides?: DeepPartial<DunetaServerConfig>): DunetaServerConfig {
   return commitConfig(mergeConfig(createDefaultConfig(), overrides));
 }

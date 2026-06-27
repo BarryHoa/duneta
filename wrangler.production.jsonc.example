@@ -7,6 +7,9 @@
   "vars": {
     "NODE_ENV": "production"
   },
+  "secrets": {
+    "required": ["DATABASE_URL", "AUTH_SECRET", "CSRF_SECRET"]
+  },
   "assets": {
     "directory": "app/build/client",
     "binding": "ASSETS",

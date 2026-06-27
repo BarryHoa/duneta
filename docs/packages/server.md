@@ -6,7 +6,7 @@
 |---|------|-----------|
 | Ví dụ | `defineServer`, `defineServices`, `createDatabase`, `createAuth`, middleware | `HealthController`, `healthRoutes`, `UserRepository` |
 | Bắt buộc? | Luôn (runtime) | Không — user import + mount nếu muốn |
-| Bật/tắt | Optional modules qua `duneta.config.ts` | N/A — chỉ chạy khi user register + mount route |
+| Bật/tắt | Optional modules qua `duneta.server.config.ts` | N/A — chỉ chạy khi user register + mount route |
 
 ## Cấu trúc
 

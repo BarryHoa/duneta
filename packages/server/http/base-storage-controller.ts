@@ -2,7 +2,7 @@
  * Storage — một entry point: `BaseStorageController`.
  *
  * Flow:
- *   duneta.config `storage()` → constructor → resolveBackend() → put/head/delete
+ *   duneta.server.config storage → constructor → resolveBackend() → put/head/delete
  *
  * Drivers:
  *   s3  — AWS S3, MinIO, …
@@ -99,7 +99,7 @@ function disabledBackend(opts: StoreOpts): StorageBackend {
     enabled: false,
     driver: 'none',
     url: (key) => publicUrl(key, opts),
-    put: () => Promise.reject(new Error('Storage disabled — set storage() in duneta.config.ts')),
+    put: () => Promise.reject(new Error('Storage disabled — set storage in duneta.server.config.ts')),
     head: () => Promise.resolve(null),
     delete: () => Promise.resolve(),
   };

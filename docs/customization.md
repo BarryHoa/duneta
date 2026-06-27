@@ -6,12 +6,12 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 
 | Muốn làm                   | File / hook                             | Doc                                  |
 | -------------------------- | --------------------------------------- | ------------------------------------ |
-| Đổi port, DB, auth, cache  | `.env` + `duneta.config.ts`             | [Configuration](../configuration.md) |
+| Đổi port, DB, auth, cache  | `.env` + `duneta.server.config.ts`      | [Configuration](../configuration.md) |
 | Thêm controller/repository | `app/api/controllers/`, `repositories/` | [Sync](./api/sync.md)                |
 | Thêm API route             | `app/api/routers/*.routes.ts`           | [Sync](./api/sync.md)                |
 | Deploy Worker              | `wrangler.jsonc` + `worker.ts`          | [Deploy](../deployment.md)           |
 | Thêm web page              | `app/pages/`                            | [Web pages](../web/routes.md)        |
-| Đổi theme                  | `duneta.config.ts`                      | [Web overview](../web/overview.md)   |
+| Đổi theme                  | `duneta.client.config.ts`               | [Web overview](../web/overview.md)   |
 
 ## Workflow: thêm feature API mới
 
@@ -89,7 +89,7 @@ pnpm dev
 Thêm path vào `app/api/tsconfig.json` nếu tạo thư mục mới:
 
 ```json
-"include": ["api/**/*.ts", "duneta.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
+"include": ["api/**/*.ts", "duneta.client.config.ts", "duneta.server.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
 ```
 
 Override trong `api/services.ts` — đăng ký lại cùng key:
@@ -132,7 +132,7 @@ export default function PostsPage() {
 
 ## Nguyên tắc
 
-1. **`.env`** — giá trị secret · **`duneta.config.ts`** — map `process.env.*` vào config
+1. **`.env`** — secret values · **`duneta.server.config.ts`** — map `process.env.*` · **`duneta.client.config.ts`** — web
 2. **Một Worker** — `worker.ts` route web + API
 3. **Convention + sync** — thêm `*-controller.ts`, `*-repository.ts`, `*.routes.ts`
 4. **Repository trước, Controller sau** — sync tự match theo base name
