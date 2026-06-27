@@ -8,18 +8,13 @@ pnpm install && pnpm deploy
 
 `pnpm install` tự build framework packages. `pnpm deploy` sync + build app + `wrangler deploy`.
 
-**Một lần:** Cloudflare auth + secrets (nếu dùng DB/auth):
+**Một lần:** Cloudflare auth + config trong `duneta.config.ts` (DB URL, auth secret, …):
 
 ```bash
 wrangler login
-wrangler secret put DATABASE_URL
-wrangler secret put AUTH_SECRET
-wrangler secret put AUTH_BASE_URL   # URL production, ví dụ https://example.com
-wrangler secret put CACHE_URL       # optional — Redis HTTP
-wrangler secret put CSRF_SECRET     # optional — defaults to AUTH_SECRET
 ```
 
-Production bindings: copy `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
+Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
 
 ## Dev local
 

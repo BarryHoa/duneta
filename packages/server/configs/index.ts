@@ -33,6 +33,17 @@ export {
   type RedisStoreOptions,
 } from './cache.js';
 export {
+  isStorageActive,
+  storage,
+  storeOptions,
+  type ActiveStorageConfig,
+  type CustomConfig,
+  type S3Config,
+  type StorageConfig,
+  type StorageDriver,
+  type StorageDriverConfigMap,
+} from './storage.js';
+export {
   activeRateLimitRules,
   DEFAULT_RATE_LIMIT_RULES,
   defineRateLimitRules,
@@ -53,6 +64,7 @@ export {
   isJwtEnabled,
   isLoggingEnabled,
   isRateLimitEnabled,
+  isStorageEnabled,
   isWorkerRuntime,
   resolveAuthBasePath,
   resolveAuthMountPath,

@@ -7,7 +7,7 @@ pnpm install && pnpm deploy
 ```
 
 Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
-Có DB/auth: `wrangler secret put DATABASE_URL` · `wrangler secret put AUTH_SECRET` · `wrangler secret put AUTH_BASE_URL`
+Có DB/auth: set `database.connections`, `auth.secret`, `auth.baseUrl` trong `duneta.config.ts`.
 
 Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
 
@@ -20,7 +20,7 @@ pnpm dev    # HMR — tự tạo .dev.vars nếu chưa có → http://localhost:
 ## Cấu trúc
 
 ```text
-duneta.config.ts       # cấu hình app (secrets qua wrangler)
+duneta.config.ts       # cấu hình app (DB, auth, storage, …)
 vite.config.mts        # Vite + Cloudflare plugin
 react-router.config.mts
 wrangler.jsonc         # Worker dev (deploy → app/build/server/wrangler.json)

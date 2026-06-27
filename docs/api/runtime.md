@@ -24,7 +24,7 @@ API không deploy riêng — bootstrap inline trong `worker.ts`.
 |---|---|---|
 | Runtime | Vite + Workers (HMR) | Cloudflare edge |
 | URL | http://localhost:8787 | Custom domain / `*.workers.dev` |
-| Secrets | `.dev.vars` | `wrangler secret put` |
+| Secrets | `duneta.config.ts` | `duneta.config.ts` |
 | Web + API | Cùng origin | Cùng origin |
 | Logging | `text` or `json` | JSON stdout (Logpush) |
 | Auth cookies | `secure: false` (dev) | `secure: true` (auto when `NODE_ENV=production`) |
@@ -43,16 +43,6 @@ API không deploy riêng — bootstrap inline trong `worker.ts`.
 
 Sync API chạy tự động trong `build` / `deploy` — không cần lệnh riêng.
 
-## Runtime config merge
+## Config
 
-Wrangler secrets merge vào `duneta.config.ts` lúc request qua `resolveRuntimeConfig()`:
-
-| Secret / var | Effect |
-|--------------|--------|
-| `NODE_ENV=production` | Secure auth cookies, JSON logging |
-| `AUTH_SECRET` | Enables auth |
-| `AUTH_BASE_URL` | Better Auth base URL |
-| `CSRF_SECRET` | CSRF signing (falls back to `AUTH_SECRET`) |
-| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP cache (auto-enables when URL set) |
-| `LOGGING_ENABLED` | Override `logging.enabled` |
-| `HYPERDRIVE` binding | Postgres connection string |
+Cấu hình lấy từ `duneta.config.ts` (`getConfig()`). `defineServer().fetch(request)` không nhận worker env.

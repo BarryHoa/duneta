@@ -1,6 +1,6 @@
-import { isAuthEnabled, isDatabaseEnabled } from '@duneta/server/configs';
+import { isAuthEnabled, isDatabaseEnabled, isStorageEnabled } from '@duneta/server/configs';
 import type { RegisterServices } from '@duneta/server/container';
-import { HealthController, MeController, UserController } from '@duneta/server/http';
+import { HealthController, MeController, StorageController, UserController } from '@duneta/server/http';
 import { UserRepository } from '@duneta/server/repositories';
 
 export const registerServices: RegisterServices = ({
@@ -21,5 +21,9 @@ export const registerServices: RegisterServices = ({
       'UserController',
       () => new UserController(repositories.resolve('UserRepository')),
     );
+  }
+
+  if (isStorageEnabled(config)) {
+    controllers.singleton('StorageController', () => new StorageController(config.storage));
   }
 };

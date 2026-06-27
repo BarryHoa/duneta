@@ -1,10 +1,12 @@
 import {
   isAuthEnabled,
   isDatabaseEnabled,
+  isStorageEnabled,
   type DunetaServerConfig,
 } from '@duneta/server/configs';
 import {
   composeRouter,
+  createStorageRoutes,
   createUsersRoutes,
   healthRoutes,
   meRoutes,
@@ -19,6 +21,10 @@ export function createAppRouter(config: DunetaServerConfig) {
 
   if (isDatabaseEnabled(config)) {
     groups.push(createUsersRoutes());
+  }
+
+  if (isStorageEnabled(config)) {
+    groups.push(createStorageRoutes());
   }
 
   return composeRouter(groups);

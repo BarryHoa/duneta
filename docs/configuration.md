@@ -1,14 +1,16 @@
 # Cấu hình
 
-## 3 lớp (Laravel-style)
+## 1 lớp config
 
 ```text
-1. @duneta/server defaults     → baseline framework (global)
-2. duneta.config.ts              → cấu trúc app (bạn chỉnh)
-3. .dev.vars / wrangler secrets → giá trị (URL, secret)
+duneta.config.ts → DunetaServerConfig (TypeScript types — đọc type là biết phải set gì)
 ```
 
-`duneta.config.ts` khai báo **cấu trúc** theo TypeScript types. Secrets (`DATABASE_URL`, `AUTH_SECRET`, …) qua `.dev.vars` / `wrangler secret put` — merge lúc runtime trên Worker.
+Cấu hình sai → runtime lỗi. Framework **không** đọc worker env để merge config.
+
+`duneta.config.ts` — database URL, auth secrets, storage, cache, security, …
+
+Wrangler `env` (bindings như `ASSETS`) — chỉ dùng trong `worker.ts` cho routing/static, framework API không nhận env.
 
 ## API + Web config
 
@@ -28,10 +30,13 @@ export default defineDunetaConfig({
   api: { baseUrl: '/api' },
   database: {
     enabled: true,
-    connections: defineConnections({}),
+    default: 'primary',
+    connections: defineConnections({
+      primary: { driver: 'postgres', url: 'postgresql://...' },
+    }),
     pool: DEFAULT_DATABASE_POOL,
   },
-  auth: { enabled: true, baseUrl: 'http://localhost:8787' },
+  auth: { enabled: true, baseUrl: 'http://localhost:8787', secret: '...' },
   security: { rateLimit: { enabled: true, rules: RECOMMENDED_RATE_LIMIT_RULES } },
 });
 ```
@@ -43,19 +48,6 @@ export default defineDunetaConfig({
 ```ts
 import { config, getConfig } from '@duneta/server/configs';
 ```
-
-### Secrets (`.dev.vars` / wrangler)
-
-| Biến | Mô tả |
-|------|-------|
-| `DATABASE_URL` | Postgres connection string |
-| `AUTH_SECRET` | Bật auth khi có (≥ 32 ký tự) |
-| `AUTH_BASE_URL` | Base URL Better Auth (`http://localhost:8787` khi dev) |
-| `CACHE_URL` / `CACHE_TOKEN` | Redis HTTP (auto-enables cache when URL set) |
-| `CSRF_SECRET` | CSRF signing (defaults to `AUTH_SECRET`) |
-| `LOGGING_ENABLED` | Override request logging |
-
-Xem `.dev.vars.example` ở repo root.
 
 ## Web config
 
@@ -90,19 +82,19 @@ Request log mẫu:
 {"level":"info","msg":"request","requestId":"...","method":"GET","path":"/api/health","status":200,"durationMs":12}
 ```
 
-Override: `LOGGING_ENABLED=true|false` trong `.dev.vars` / wrangler secrets.
+Override: set `logging.enabled` trong `duneta.config.ts`.
 
 Retention: Cloudflare Dashboard, `wrangler tail`, hoặc **Logpush** — không dùng pino/winston file transport.
 
 ## Cache
 
-Bật trong `duneta.config.ts`. URL/token qua wrangler secrets (không hardcode):
+Bật trong `duneta.config.ts`. Redis URL/token set trong config:
 
 ```ts
 import { redisCache, memoryCache } from '@duneta/server/configs';
 
-// Prod: set CACHE_URL + CACHE_TOKEN secrets — auto-merge at runtime
-cache: redisCache({ url: '', token: '' }),
+// Prod: set url + token trong config
+cache: redisCache({ url: '...', token: '...' }),
 // cache: memoryCache(),  // dev only — per-isolate, not shared across edge
 ```
 
@@ -115,6 +107,39 @@ await cached.set('key', 'value', 60_000);
 await cached.get('key');
 ```
 
+## Storage
+
+Upload file/image lên S3-compatible storage (R2, AWS S3, MinIO). Chi tiết: [storage](./api/storage.md).
+
+```ts
+import { storage } from '@duneta/server/configs';
+
+storage({
+  driver: 's3',
+  config: {
+    bucket: 'duneta',
+    endpoint: 'https://<account>.r2.cloudflarestorage.com',
+    accessKeyId: '...',
+    secretAccessKey: '...',
+    publicUrl: 'https://cdn.example.com',
+  },
+}),
+```
+
+Custom store (app) — extend `BaseStorageController`:
+
+```ts
+import { BaseStorageController } from '@duneta/server/http';
+
+export class AppStorageController extends BaseStorageController {
+  uploadAvatar(file: Blob) {
+    return this.upload(file, { folder: 'avatars' });
+  }
+}
+```
+
+Register: `new AppStorageController(config.storage)`.
+
 ## Auth
 
 Bật khi có `auth.enabled: true` + `auth.secret` + database:
@@ -122,10 +147,11 @@ Bật khi có `auth.enabled: true` + `auth.secret` + database:
 ```ts
 auth: {
   enabled: true,
-  baseUrl: 'http://localhost:8787', // override: AUTH_BASE_URL secret
+  baseUrl: 'http://localhost:8787',
+  secret: '...',
 },
 security: {
-  csrf: { enabled: true, secret: '' }, // CSRF_SECRET or AUTH_SECRET at runtime
+  csrf: { enabled: true, secret: '...' },
 },
 ```
 
@@ -156,4 +182,4 @@ Dùng distributed cache khi `cache.enabled` + Redis HTTP.
 | `wrangler.production.jsonc.example` | Hyperdrive + ASSETS reference |
 | `app/build/server/wrangler.json` | Generated deploy config |
 
-`DATABASE_URL` từ secret hoặc Hyperdrive binding (`HYPERDRIVE.connectionString`).
+Postgres URL trong `database.connections.*.url`. Hyperdrive: dùng connection string Hyperdrive cung cấp làm `url`.

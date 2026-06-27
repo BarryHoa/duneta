@@ -39,7 +39,7 @@ Chỉ Cloudflare Worker. Config: `wrangler.jsonc` · Entry: `worker.ts`.
 | Concern | Duneta approach |
 |---------|-----------------|
 | Logging | JSON stdout — no log files |
-| Database | Postgres via Hyperdrive / `DATABASE_URL` |
+| Database | Postgres — URL trong `duneta.config.ts` |
 | Cache | Memory (dev) or Redis HTTP (prod) |
 | Sessions | Postgres (Better Auth) |
 | Static files | `ASSETS` binding, not disk writes |

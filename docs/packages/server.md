@@ -5,7 +5,7 @@
 ```text
 packages/server/
 ├── assembly/          # createHttpApp, attachRequestServices
-├── runtime/           # defineServer, boot, PlatformEnv
+├── runtime/           # defineServer, boot
 ├── container/         # RegisterServices, DI containers
 ├── routers/           # composeRouter, defineGroup, RouteGroup
 ├── http/              # BaseController, resolveController

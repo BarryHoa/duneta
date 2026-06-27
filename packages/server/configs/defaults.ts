@@ -92,6 +92,8 @@ export function createDefaultConfig(): DunetaServerConfig {
 
     cache: { enabled: false },
 
+    storage: { enabled: false },
+
     security: {
       rateLimit: {
         enabled: false,

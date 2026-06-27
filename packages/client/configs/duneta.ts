@@ -14,6 +14,7 @@ const SERVER_KEYS = [
   'request',
   'headers',
   'cache',
+  'storage',
   'security',
   'logging',
   'debug',

@@ -1,6 +1,8 @@
 import type { DatabaseConfig } from './database';
 import type { CacheConfig } from './cache';
 export type { CacheConfig } from './cache';
+import type { StorageConfig } from './storage';
+export type { StorageConfig } from './storage';
 import type { RateLimitConfig } from './rate-limit';
 
 export type Runtime = 'worker';
@@ -151,6 +153,7 @@ export interface DunetaCoreConfig {
   request: RequestConfig;
   headers: SecurityHeadersConfig;
   cache: CacheConfig;
+  storage: StorageConfig;
   security: SecurityConfig;
   logging: LoggingConfig;
   debug: DebugConfig;

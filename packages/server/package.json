@@ -38,6 +38,7 @@
   },
   "publishConfig": { "access": "public" },
   "dependencies": {
+    "aws4fetch": "^1.0.20",
     "better-auth": "^1.2.0",
     "drizzle-orm": "^0.44.0",
     "hono": "^4.7.0",

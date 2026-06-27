@@ -6,7 +6,6 @@ import { connectionUrl } from '../../configs/database.js';
 import { createControllerContainer } from '../../container/controller-container.js';
 import { createRepositoryContainer } from '../../container/repository-container.js';
 import { createDatabase } from '../../database/index.js';
-import { resolveDatabaseUrl } from '../../database/resolve-url.js';
 import {
   getConfig,
   loadConfig,
@@ -15,24 +14,14 @@ import {
 import type { DunetaServerConfig } from '../../configs/types.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
-import { isHyperdriveBinding, type PlatformEnv } from './platform-env.js';
-import { resolveRuntimeConfig } from './resolve-runtime-config.js';
 import type { ServerBoot } from './types.js';
 
 let cachedApp: Hono<RequestContext> | undefined;
 let cachedAppKey: string | undefined;
 let configBootstrapped = false;
 
-function appCacheKey(config: DunetaServerConfig, platform?: PlatformEnv): string {
-  const resolved = resolveRuntimeConfig(config, platform);
-  const dbUrl =
-    resolveDatabaseUrl(resolved, platform) ??
-    connectionUrl(resolved.database) ??
-    '';
-  const hyperdrive = platform?.HYPERDRIVE;
-  const hyperKey = isHyperdriveBinding(hyperdrive) ? hyperdrive.connectionString : '';
-  const authKey = resolved.auth?.secret ?? '';
-  return `${dbUrl}:${hyperKey}:${authKey}`;
+function appCacheKey(config: DunetaServerConfig): string {
+  return `${connectionUrl(config.database) ?? ''}:${config.auth?.secret ?? ''}`;
 }
 
 export function bootstrapConfig(
@@ -51,21 +40,21 @@ export function bootstrapConfig(
   configBootstrapped = true;
 }
 
-export async function loadApp(boot: ServerBoot, platform?: PlatformEnv) {
+export async function loadApp(boot: ServerBoot) {
   bootstrapConfig(boot);
 
   if (boot.resolvePermissions) {
     registerPermissionResolver(boot.resolvePermissions);
   }
 
-  const config = resolveRuntimeConfig(getConfig(), platform);
-  const cacheKey = appCacheKey(config, platform);
+  const config = getConfig();
+  const cacheKey = appCacheKey(config);
 
   if (cachedApp && cachedAppKey === cacheKey) return cachedApp;
 
   const controllers = createControllerContainer();
   const repositories = createRepositoryContainer();
-  const db = createDatabase(config, platform);
+  const db = createDatabase(config);
   const auth = createAuth(config, db);
 
   boot.registerServices({ controllers, repositories, db, config });

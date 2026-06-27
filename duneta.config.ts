@@ -5,7 +5,7 @@ import {
   RECOMMENDED_RATE_LIMIT_RULES,
 } from '@duneta/server/configs';
 
-/** Structure only — secrets via wrangler `.dev.vars` / `wrangler secret put`. */
+/** Secrets và connection URLs — set trực tiếp trong config. */
 export default defineDunetaConfig({
   app: {
     name: 'duneta',
@@ -16,12 +16,15 @@ export default defineDunetaConfig({
   database: {
     enabled: true,
     default: 'primary',
-    connections: defineConnections({}),
+    connections: defineConnections({
+      primary: { driver: 'postgres', url: '' },
+    }),
     pool: DEFAULT_DATABASE_POOL,
   },
   auth: {
     enabled: true,
     baseUrl: 'http://localhost:8787',
+    secret: '',
   },
   security: {
     rateLimit: {
@@ -37,4 +40,5 @@ export default defineDunetaConfig({
     enabled: true,
     format: 'json',
   },
+  storage: { enabled: false },
 });

@@ -16,10 +16,12 @@
     "container",
     "database",
     "http",
+    "logging",
     "middlewares",
     "repositories",
     "routers",
-    "runtime"
+    "runtime",
+    "storage"
   ],
   "exclude": ["dist", "node_modules"]
 }

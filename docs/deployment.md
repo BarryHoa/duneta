@@ -18,10 +18,9 @@ pnpm deploy   # build + wrangler deploy
 
 ## Production checklist
 
-- [ ] **Hyperdrive** — Postgres connection pooling at the edge (`HYPERDRIVE` binding)
-- [ ] **Secrets** — `DATABASE_URL` (if no Hyperdrive), `AUTH_SECRET`, `AUTH_BASE_URL` (production URL)
-- [ ] **Optional** — `CACHE_URL` + `CACHE_TOKEN` (Redis HTTP for distributed cache + rate limit)
-- [ ] **Optional** — `CSRF_SECRET` (defaults to `AUTH_SECRET` when `security.csrf.enabled`)
+- [ ] **`duneta.config.ts`** — `database.connections.*.url`, `auth.secret`, storage credentials, …
+- [ ] **Hyperdrive** (optional) — connection string từ Hyperdrive → paste vào `database.connections.*.url`
+- [ ] **Optional** — Redis HTTP URL trong `cache` config (distributed cache + rate limit)
 - [ ] **Assets** — `ASSETS` binding → `app/build/client` (included in generated deploy config)
 - [ ] **Logging** — JSON stdout (`logging.enabled` in `duneta.config.ts`); use Cloudflare Logpush for retention — **do not write log files on Workers**
 - [ ] **Auth cookies** — `secure: true` applied automatically when `NODE_ENV=production`
@@ -52,20 +51,9 @@ Example production bindings (`wrangler.production.jsonc.example`):
 }
 ```
 
-## Secrets
+## Config
 
-Local: `.dev.vars` (see `.dev.vars.example`)
-
-Production:
-
-```bash
-wrangler secret put DATABASE_URL    # skip if using Hyperdrive only
-wrangler secret put AUTH_SECRET
-wrangler secret put AUTH_BASE_URL   # e.g. https://example.com
-wrangler secret put CACHE_URL       # optional — Redis HTTP
-wrangler secret put CACHE_TOKEN     # optional
-wrangler secret put CSRF_SECRET     # optional
-```
+Tất cả secrets và connection strings trong `duneta.config.ts`. Wrangler bindings (`ASSETS`, Hyperdrive) chỉ dùng ngoài framework nếu app cần.
 
 ## Observability
 

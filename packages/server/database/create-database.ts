@@ -1,18 +1,13 @@
-import { databasePoolForRuntime } from '../configs/database.js';
+import { connectionUrl, databasePoolForRuntime } from '../configs/database.js';
 import { isDatabaseEnabled } from '../configs/features.js';
 import type { DunetaServerConfig } from '../configs/types.js';
-import type { PlatformEnv } from '../runtime/shared/platform-env.js';
 import { createPgDatabase } from './create-pg-database.js';
-import { resolveDatabaseUrl } from './resolve-url.js';
 import type { Database } from './types.js';
 
-export function createDatabase(
-  config: DunetaServerConfig,
-  platform?: PlatformEnv,
-): Database | null {
+export function createDatabase(config: DunetaServerConfig): Database | null {
   if (!isDatabaseEnabled(config)) return null;
 
-  const url = resolveDatabaseUrl(config, platform);
+  const url = connectionUrl(config.database);
   if (!url) return null;
 
   const connection = config.database.connections[config.database.default];

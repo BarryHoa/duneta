@@ -24,6 +24,22 @@ export function createUsersRoutes(middleware: MiddlewareHandler[] = [requireSess
   });
 }
 
+/** Default storage HTTP routes — requires `StorageController` in DI. */
+export function createStorageRoutes(
+  controllerKey = 'StorageController',
+  middleware: MiddlewareHandler[] = [requireSession()],
+) {
+  return defineGroup({
+    path: '/storage',
+    middleware,
+    endpoints: [
+      { method: 'POST', handler: resolveController(controllerKey, 'store') },
+      { method: 'GET', path: '/meta', handler: resolveController(controllerKey, 'head') },
+      { method: 'DELETE', path: '/objects', handler: resolveController(controllerKey, 'destroy') },
+    ],
+  });
+}
+
 export const usersRoutes = createUsersRoutes();
 
 export { composeRouter, defineGroup, type RouteGroup } from './define.js';
