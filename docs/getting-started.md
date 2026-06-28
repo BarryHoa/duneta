@@ -39,3 +39,17 @@ Tạo `.env` khi config dùng `process.env.*` (DB, auth, …). App minimal khôn
 | `app/themes/` | CSS |
 
 Thêm route mới trong `pages/` → restart `pnpm dev` (sync routers). Sửa file trong route đã có → HMR tự reload.
+
+## CLI DX
+
+```bash
+pnpm duneta routes
+pnpm duneta make:page dashboard
+pnpm duneta make:controller post
+pnpm duneta make:repository post
+pnpm duneta make:route posts
+pnpm duneta make:policy post
+pnpm duneta make:middleware audit
+```
+
+`make:*` tạo file theo convention trong `app/`. Nếu app đang dùng `api/services.ts` hoặc `api/router.ts` thủ công, import/mount file mới ở đó. Nếu bỏ qua file thủ công, `duneta sync` trong dev/build sẽ tự sinh từ `controllers/`, `repositories/`, `routers/`.

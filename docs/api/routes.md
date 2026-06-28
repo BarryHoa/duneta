@@ -38,3 +38,16 @@ Controller method phải là **arrow property** (`index = async (c) =>`).
 | `createAppRouter(config)` | App | `DunetaServerConfig` |
 
 Mọi route mount dưới `/api` (`createHttpApp`).
+
+## Inspect routes
+
+```bash
+pnpm duneta routes
+```
+
+In route groups đang mount trong `app/api/router.ts`, gồm framework routes (`healthRoutes`, `meRoutes`, `createUsersRoutes`) và app routes khai báo bằng `defineGroup`.
+
+```text
+GET    /health            @duneta/server/routers
+POST   /media/images      app/api/Controllers/MediaStorage/routes.ts
+```
