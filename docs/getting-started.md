@@ -16,7 +16,7 @@ wrangler login
 
 App mới chỉ có `GET /api/health` — bật thêm trong `duneta.server.config.ts` khi cần.
 
-Production bindings: copy `wrangler.production.jsonc.example` (ASSETS).
+Production bindings (optional): copy `wrangler.production.jsonc.example` (Hyperdrive, R2).
 
 ## Dev local
 

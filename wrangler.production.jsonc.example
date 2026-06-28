@@ -10,11 +10,6 @@
   "secrets": {
     "required": ["DATABASE_URL", "AUTH_SECRET", "CSRF_SECRET"]
   },
-  "assets": {
-    "directory": "app/build/client",
-    "binding": "ASSETS",
-    "run_worker_first": true
-  },
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",

@@ -1,4 +1,9 @@
 export {
+  createDunetaWorker,
+  type DunetaWorkerExport,
+  type WebRequestHandler,
+} from './create-worker.js';
+export {
   defineServer,
   type ExecutionContextLike,
   type ScheduledControllerLike,

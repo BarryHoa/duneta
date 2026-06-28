@@ -69,7 +69,7 @@ export default defineServerConfig({
 
 Verify sau build: `grep -r postgresql:// app/build/server/` → rỗng.
 
-Bindings (`ASSETS`, Hyperdrive) — `worker.ts` only.
+Bindings (Hyperdrive, R2, …) — `wrangler.jsonc` / `wrangler.production.jsonc.example`. Static assets (`ASSETS`) do `pnpm build` + `createDunetaWorker` — không cấu hình tay.
 
 ## Client config (web)
 
@@ -112,5 +112,5 @@ Cấu hình trong `duneta.server.config.ts`. Chi tiết storage: [storage](./api
 | File | Purpose |
 |------|---------|
 | `wrangler.jsonc` | Dev + `secrets.required` |
-| `wrangler.production.jsonc.example` | Hyperdrive + ASSETS |
+| `wrangler.production.jsonc.example` | Hyperdrive, R2 (optional) |
 | `app/build/server/wrangler.json` | Generated deploy |

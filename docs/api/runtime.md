@@ -13,7 +13,7 @@ wrangler.jsonc  →  worker.ts  →  fetch(request, env)
 | Path | Handler |
 |------|---------|
 | `/api/*` | Hono API (`defineServer` + `app/api/router.ts`) |
-| static | `env.ASSETS.fetch(request)` |
+| static | `createDunetaWorker` → ASSETS (auto) |
 | `/*` | React Router SSR |
 
 ## Config load

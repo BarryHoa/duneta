@@ -17,7 +17,7 @@ pnpm deploy
 Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
 App mới chỉ health check — DB/auth opt-in trong `duneta.server.config.ts` khi cần.
 
-Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
+Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive, R2).
 
 ## Dev local
 

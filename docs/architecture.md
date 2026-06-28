@@ -36,7 +36,7 @@ Web **không** import `@duneta/server` — gọi API qua `/api` same-origin.
 ```text
 GET /api/health  →  Hono (basePath /api)
 GET /about       →  React Router SSR
-GET /assets/*    →  ASSETS binding
+GET /assets/*    →  ASSETS (framework — auto)
 ```
 
 ## Boot API
@@ -62,4 +62,4 @@ Chỉ Cloudflare Worker. Config: `wrangler.jsonc` · Entry: `worker.ts`.
 | Database | Postgres — URL qua `process.env` trong `duneta.server.config.ts` |
 | Cache | Memory (dev) or Redis HTTP (prod) |
 | Sessions | Postgres (Better Auth) |
-| Static files | `ASSETS` binding, not disk writes |
+| Static files | `ASSETS` via `createDunetaWorker` — auto on deploy |
