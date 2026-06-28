@@ -182,11 +182,10 @@ export default function DataTableDemoPage() {
     SortDescriptor | undefined
   >();
 
-  const dynamicRows = useMemo(
-    () =>
-      fetchServerPage(allRows, page, PAGE_SIZE, sortDescriptor, searchQuery),
-    [allRows, page, refreshNonce, searchQuery, sortDescriptor],
-  );
+  const dynamicRows = useMemo(() => {
+    void refreshNonce;
+    return fetchServerPage(allRows, page, PAGE_SIZE, sortDescriptor, searchQuery);
+  }, [allRows, page, refreshNonce, searchQuery, sortDescriptor]);
 
   const tableData = dataType === 'static' ? allRows : dynamicRows;
 

@@ -6,11 +6,13 @@ import { getHeaderLabel } from '../../core/table';
 import type { DunetaDataTableToolbarColumnConfig } from '../../types/toolbar';
 import type { ToolbarColumnOption } from './types';
 
+const EMPTY_HEADERS: ReturnType<ReactTable<object>['getHeaderGroups']>[number]['headers'] = [];
+
 export function useToolbarColumnOptions<TData extends object>(
   table: ReactTable<TData>,
   columnConfig: DunetaDataTableToolbarColumnConfig | null,
 ) {
-  const headers = table.getHeaderGroups()[0]?.headers ?? [];
+  const headers = table.getHeaderGroups()[0]?.headers ?? EMPTY_HEADERS;
 
   const columnOptions = useMemo((): ToolbarColumnOption[] => {
     return headers

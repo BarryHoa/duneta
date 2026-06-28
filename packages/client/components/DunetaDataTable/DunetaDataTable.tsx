@@ -185,8 +185,6 @@ function DunetaDataTableImpl<TData extends object>({
             {virtualEnabled ? (
               <DataTableVirtualBody
                 table={table}
-                data={data}
-                getRowId={getRowId}
                 columnCount={columnCount}
                 pinEnabled={pinEnabled}
               />

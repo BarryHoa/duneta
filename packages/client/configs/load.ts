@@ -1,3 +1,4 @@
+import { access } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
@@ -14,14 +15,18 @@ export { CLIENT_CONFIG_FILENAME, defineClientConfig, toWebConfig } from './dunet
 export type { DunetaClientConfig } from './duneta';
 
 async function loadClientConfigFile(cwd: string): Promise<DunetaClientConfig> {
+  const configPath = join(cwd, CLIENT_CONFIG_FILENAME);
+
   try {
-    const configModule = await import(
-      /* @vite-ignore */ pathToFileURL(join(cwd, CLIENT_CONFIG_FILENAME)).href
-    );
-    return configModule.default ?? {};
+    await access(configPath);
   } catch {
     return {};
   }
+
+  const configModule = await import(
+    /* @vite-ignore */ pathToFileURL(configPath).href
+  );
+  return configModule.default ?? {};
 }
 
 /** Merge `duneta.client.config.ts` onto web defaults (Vite / sync only — no server secrets). */
