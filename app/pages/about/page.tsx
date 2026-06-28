@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { DunetaLink as Link } from '@duneta/client/components';
-import { apiFetch } from '@duneta/client/hooks/use-api';
+import { DunetaLink as Link } from '@duneta/client/ui';
+import { apiFetch } from '@duneta/client/runtime';
 
 type HealthResponse = {
   ok: boolean;

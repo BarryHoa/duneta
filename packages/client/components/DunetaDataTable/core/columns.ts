@@ -10,7 +10,7 @@ import type {
 } from '@tanstack/react-table';
 import type { CSSProperties } from 'react';
 import type { DunetaTableColumnProps } from '../../DunetaTable';
-import { cn } from '../../../helpers';
+import { cn } from '../../../core/cn.js';
 import type {
   ColumnWidthValue,
   DunetaDataTableColumnMeta,

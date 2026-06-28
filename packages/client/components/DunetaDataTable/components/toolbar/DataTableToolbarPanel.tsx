@@ -1,7 +1,7 @@
 
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaPopover } from '../../../DunetaPopover';
 import { DataTableToolbarPanelApplyFooter } from './DataTableToolbarPanelApplyFooter';
 

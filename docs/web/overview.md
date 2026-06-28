@@ -19,7 +19,7 @@ Sau đó `pnpm build`.
 
 ## Gọi API
 
-Same-origin `/api` — `apiFetch` từ `@duneta/client/hooks/use-api`.
+Same-origin `/api` — `apiFetch` từ `@duneta/client/runtime`.
 
 ```bash
 pnpm dev   # web + API cùng :8787

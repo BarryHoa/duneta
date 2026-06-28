@@ -1,5 +1,5 @@
 
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DataTableToolbarActions } from './DataTableToolbarActions';
 import { DataTableToolbarSearch } from './DataTableToolbarSearch';
 import type { DataTableToolbarProps } from './types';

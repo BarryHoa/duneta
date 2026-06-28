@@ -2,6 +2,6 @@
 @import '@heroui/styles';
 
 @source "../../node_modules/@duneta/client";
-@source "../../node_modules/@duneta/client/routers";
+@source "../../node_modules/@duneta/client/starter/routers";
 @source "../pages";
 @source "../.router-runtime";

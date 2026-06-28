@@ -3,7 +3,7 @@ import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { GripVertical, Pin } from 'lucide-react';
 import type { PointerEvent } from 'react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaTable } from '../../../DunetaTable';
 import { DunetaTooltip } from '../../../DunetaTooltip';
 

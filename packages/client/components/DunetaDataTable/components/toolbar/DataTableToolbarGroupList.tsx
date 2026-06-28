@@ -1,6 +1,6 @@
 
 import { Check } from 'lucide-react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaTypography } from '../../../DunetaTypography';
 import { filterToolbarOptions } from './filter-options';
 import type { ToolbarColumnOption } from './types';

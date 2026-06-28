@@ -1,7 +1,7 @@
 
 import type { LucideIcon } from 'lucide-react';
 import { ArrowLeftRight, Eye, GripHorizontal, RotateCcw } from 'lucide-react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaButton } from '../../../DunetaButton';
 import { DunetaTooltip } from '../../../DunetaTooltip';
 import type { ColumnPanelResetHandlers } from './wrap-reset-handlers';

@@ -1,6 +1,6 @@
 
 import { Checkbox } from '@heroui/react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaCheckbox } from '../../../DunetaCheckbox';
 import { DunetaLabel } from '../../../DunetaLabel';
 import { DunetaTypography } from '../../../DunetaTypography';

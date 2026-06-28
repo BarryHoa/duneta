@@ -23,12 +23,12 @@ bootstrapConfig(${JSON.stringify(patch)});
 }
 
 /**
- * Merge app/pages (overrides) with packages/client/routers (defaults)
+ * Merge app/pages (overrides) with starter default routers
  * into .router-runtime/ for React Router.
  */
 export function syncRouters(webRoot, clientRoot, webConfig) {
   const webPages = path.join(webRoot, 'pages');
-  const clientRouters = path.join(clientRoot, 'routers');
+  const clientRouters = path.join(clientRoot, 'starter', 'routers');
   const outDir = path.join(webRoot, '.router-runtime');
 
   if (!fs.existsSync(clientRouters)) {
@@ -68,7 +68,7 @@ export function syncRouters(webRoot, clientRoot, webConfig) {
 
   const layoutFile = path.join(outDir, 'layout.tsx');
   if (!fs.existsSync(layoutFile)) {
-    throw new Error('A root layout.tsx is required in pages/ (packages/client/routers or app/pages).');
+    throw new Error('A root layout.tsx is required in pages/ (starter/routers or app/pages).');
   }
 
   fs.copyFileSync(layoutFile, path.join(outDir, 'root.tsx'));

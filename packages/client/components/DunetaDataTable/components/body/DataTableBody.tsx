@@ -1,6 +1,6 @@
 
 import { flexRender, type Row, type Table as ReactTable } from '@tanstack/react-table';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { getColumnPinPresentation } from '../../core/columns';
 import { isSelectionColumnId } from '../../core/row-selection';
 import { SELECTION_COLUMN_CLASS } from '../../constants';

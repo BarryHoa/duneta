@@ -1,6 +1,6 @@
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import { Checkbox } from '@heroui/react';
-import { cn } from '../../../helpers';
+import { cn } from '../../../core/cn.js';
 import { DunetaCheckbox, type DunetaCheckboxProps } from '../../DunetaCheckbox';
 import { SELECTION_COLUMN_ID } from '../constants';
 import type { DunetaDataTableRowSelectionConfig } from '../types';

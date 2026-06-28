@@ -1,73 +1,69 @@
 # `@duneta/client`
 
-Framework React Router web — config, default routes, UI components. Build qua `pnpm build` ở repo root.
+Framework React Router web — layered frontend lib.
 
-## UI components (HeroUI v3)
-
-Toàn bộ [HeroUI v3 components](https://heroui.com/en/docs/react/components) được wrap thành `Duneta*`:
+## Layers
 
 ```text
-packages/client/components/
-  DunetaButton/
-    types.ts              # DunetaButtonProps
-    DunetaButton.tsx      # wrap HeroUI Button
-    index.ts
-  DunetaCard/
-  DunetaModal/
-  ... (70 components)
-  index.ts                # export * all
+@duneta/client/ui        → Duneta* components (design system)
+@duneta/client/runtime   → Image, Script, apiFetch, ThemeProvider
+@duneta/client/router    → Link hooks, meta, dynamic import
+@duneta/client/core      → cn, validators, constants
+@duneta/client/configs   → duneta.client.config.ts (Vite / sync)
+starter/                 → default routers + layouts (sync only, not imported)
 ```
 
-Regenerate sau khi upgrade `@heroui/react` không còn cần — wrappers là source thủ công trong repo.
+## UI (`@duneta/client/ui`)
 
-## Usage
+HeroUI v3 wrappers as `Duneta*`:
 
 ```tsx
-import { DunetaButton, DunetaCard, DunetaModal } from '@duneta/client/components';
-import { DunetaTabs } from '@duneta/client/components/DunetaTabs';
+import { DunetaButton, DunetaCard } from '@duneta/client/ui';
+import { DunetaTabs } from '@duneta/client/ui/DunetaTabs';
 ```
 
-## Kit
+Source lives in `packages/client/components/` (compiled to `dist/components/`).
 
-`@duneta/client/kit` là public client toolkit của Duneta. Nó export lại component set hiện có và thêm một số app-building primitives để user không nhầm với API của React hoặc Next.js:
+## Runtime (`@duneta/client/runtime`)
 
 ```tsx
-import {
-  DunetaButton,
-  DunetaImage,
-  DunetaScript,
-  createDynamicComponent,
-  createPageMeta,
-} from '@duneta/client/kit';
+import { DunetaImage, DunetaScript, apiFetch, ThemeProvider } from '@duneta/client/runtime';
 ```
 
 | Export | Mô tả |
 |--------|------|
-| `DunetaImage` | Responsive image wrapper với `priority`, `fill`, `sizes`, custom loader |
-| `DunetaScript` | Load third-party script theo `afterInteractive` hoặc `lazyOnload` |
-| `createDynamicComponent` | Dynamic import wrapper với fallback, preload, optional client-only render |
-| `createPageMeta` / `defineMeta` | Helper tạo React Router meta descriptors |
-| `preloadImage` / `preconnect` | Helper cho resource hints |
+| `DunetaImage` | Responsive image + optimization loader (`/duneta/image`) |
+| `DunetaScript` | Third-party scripts (`afterInteractive` / `lazyOnload`) |
+| `apiFetch` | Same-origin `/api` fetch |
+| `ThemeProvider` | Dark/light theme |
 
-## Extensions (app-level)
+## Router (`@duneta/client/router`)
+
+```tsx
+import { DunetaLink } from '@duneta/client/ui';
+import { defineMeta, createDynamicComponent, useRouter } from '@duneta/client/router';
+```
 
 | Export | Mô tả |
-|--------|--------|
-| `DunetaLink` | React Router link |
-| `DunetaHrefLink` | HeroUI Link |
-| `DunetaAlertDialog` + `showDuneta*` | Alert dialog helpers |
-| `DunetaInput*` variants | Email, password, search, … |
-| `DunetaSelectSingle` | Select + uFuzzy + virtual |
-| `DunetaSimpleTable` | HTML table (≠ HeroUI `DunetaTable`) |
-| `DunetaLoadError` | Load error state |
-| `DunetaLayout*` | Page section layout |
+|--------|------|
+| `defineMeta` / `createPageMeta` | React Router meta |
+| `createDynamicComponent` | Lazy import + fallback |
+| `useRouter`, `usePathname`, … | Navigation hooks |
 
-## Package exports
+## Core (`@duneta/client/core`)
+
+```ts
+import { cn, emailSchema, IMAGE_OPTIMIZATION_PATH } from '@duneta/client/core';
+```
+
+## Config
 
 | Path | Nội dung |
 |------|----------|
-| `@duneta/client/kit` | Duneta client toolkit: components + app-building primitives |
-| `@duneta/client/components` | Barrel (wrappers + extensions) |
-| `@duneta/client/components/DunetaButton` | Single component module |
 | `@duneta/client/configs` | Web config |
 | `@duneta/client/configs/vite` | `createDunetaViteConfig` |
+| `@duneta/client/themes/globals.css` | Tailwind + HeroUI entry |
+
+## Starter (not a public import)
+
+`starter/routers` + `starter/layouts` — merged into `app/.router-runtime/` by `duneta sync`.

@@ -1,6 +1,6 @@
 
 import { RefreshCw } from 'lucide-react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import { DunetaButton } from '../../../DunetaButton';
 
 type DataTableToolbarRefreshProps = {

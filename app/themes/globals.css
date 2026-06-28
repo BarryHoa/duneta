@@ -6,7 +6,7 @@
 
 /* Scan shared UI kit and app source. */
 @source "../../packages/client";
-@source "../../packages/client/routers";
+@source "../../packages/client/starter/routers";
 @source "../pages";
 @source "../.router-runtime";
 /*

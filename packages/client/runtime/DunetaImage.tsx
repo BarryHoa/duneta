@@ -1,6 +1,6 @@
 import type { CSSProperties, ImgHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
-import { IMAGE_OPTIMIZATION_PATH } from '../configs/image-path.js';
+import { IMAGE_OPTIMIZATION_PATH } from '../core/image-path.js';
 import { getConfig } from '../configs/registry.js';
 import type { ImageConfig } from '../configs/types.js';
 

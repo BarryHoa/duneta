@@ -1,6 +1,6 @@
 
 import type { ReactNode } from 'react';
-import { cn } from '../../../helpers';
+import { cn } from '../../../core/cn.js';
 import {
   TABLE_RESIZABLE_CONTAINER_CLASS,
   TABLE_ROOT_OVERFLOW_CLASS,

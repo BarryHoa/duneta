@@ -13,13 +13,11 @@
   },
   "include": [
     "configs",
-    "validators",
-    "helpers",
-    "kit",
-    "hooks",
+    "core",
+    "runtime",
+    "router",
+    "ui",
     "components",
-    "layouts",
-    "providers",
-    "routers"
+    "starter"
   ]
 }

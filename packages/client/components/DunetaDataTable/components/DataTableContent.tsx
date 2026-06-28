@@ -1,7 +1,7 @@
 
 import type { Selection, SortDescriptor } from '@heroui/react';
 import type { ReactNode } from 'react';
-import { cn } from '../../../helpers';
+import { cn } from '../../../core/cn.js';
 import { DunetaTable } from '../../DunetaTable';
 
 type DataTableContentProps = {

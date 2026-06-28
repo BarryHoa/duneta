@@ -1,5 +1,5 @@
 
-import { cn } from '../../../helpers';
+import { cn } from '../../../core/cn.js';
 import { DEFAULT_TABLE_HEIGHT } from '../constants';
 
 type DataTablePlaceholderProps = {

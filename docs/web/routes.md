@@ -3,7 +3,7 @@
 ## Router merge
 
 ```text
-packages/client/routers/   ← defaults
+packages/client/starter/routers/   ← defaults
 app/pages/               ← pages của bạn
          ↓ build sync
 app/.router-runtime/       ← generated

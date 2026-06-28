@@ -12,7 +12,7 @@ import {
   type ReactNode,
   type Ref,
 } from 'react';
-import { cn } from '../../../../helpers';
+import { cn } from '../../../../core/cn.js';
 import {
   getColumnPinPresentation,
   isColumnDragEnabled,

@@ -1,6 +1,6 @@
 import { forwardRef, type MouseEvent } from 'react';
 import { Link as RouterLink, type LinkProps as RouterLinkProps } from 'react-router';
-import { useRouter } from '../../hooks/link';
+import { useRouter } from '../../router/link/use-router.js';
 import type { DunetaLinkProps } from './types';
 
 const linkClassName =

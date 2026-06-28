@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-import { ThemeProvider } from '@duneta/client/providers';
+import { ThemeProvider } from '@duneta/client/runtime';
 import '@duneta/client/themes/globals.css';
 
 export function Layout({ children }: { children: React.ReactNode }) {
