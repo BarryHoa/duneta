@@ -116,10 +116,10 @@ App mới chỉ mount `healthRoutes`. Thêm group = bật config + register serv
 ```tsx
 // app/pages/posts/page.tsx
 import { useLoaderData } from 'react-router';
-import { apiFetch } from '@duneta/client/runtime';
+import { http } from '@duneta/client/http';
 
 export async function loader() {
-  return apiFetch({ path: '/posts' });
+  return http.json('/posts');
 }
 
 export default function PostsPage() {

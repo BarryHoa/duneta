@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DunetaLink as Link } from '@duneta/client/ui';
-import { apiFetch } from '@duneta/client/runtime';
+import { http } from '@duneta/client/http';
 
 type HealthResponse = {
   ok: boolean;
@@ -15,7 +15,7 @@ export default function AboutPage() {
   const [health, setHealth] = useState<string>('Checking API…');
 
   useEffect(() => {
-    apiFetch<HealthResponse>({ path: '/health' })
+    http.json<HealthResponse>('/health')
       .then((data) => setHealth(data.message))
       .catch(() => setHealth('API unavailable'));
   }, []);

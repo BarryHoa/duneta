@@ -1,4 +1,3 @@
-export { apiFetch } from './api-fetch.js';
 export { DunetaImage, createDunetaImageLoader, dunetaPassthroughImageLoader } from './DunetaImage.js';
 export type { DunetaImageLoader, DunetaImageLoaderParams, DunetaImageProps } from './DunetaImage.js';
 export { DunetaScript } from './DunetaScript.js';

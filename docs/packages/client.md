@@ -6,7 +6,8 @@ Framework React Router web — layered frontend lib.
 
 ```text
 @duneta/client/ui        → Duneta* components (design system)
-@duneta/client/runtime   → Image, Script, apiFetch, ThemeProvider
+@duneta/client/http       → BaseHttpService, HttpService, http instance
+@duneta/client/runtime   → Image, Script, ThemeProvider
 @duneta/client/router    → Link hooks, meta, dynamic import
 @duneta/client/core        → cn, constants
 @duneta/client/validators  → Zod schema factories (string, number, auth, …)
@@ -25,17 +26,66 @@ import { DunetaTabs } from '@duneta/client/ui/DunetaTabs';
 
 Source lives in `packages/client/components/` (compiled to `dist/components/`).
 
+## HTTP (`@duneta/client/http`)
+
+`BaseHttpService` abstract class + default `http` instance. Override hooks when you need auth headers, error mapping, etc.
+
+```ts
+import { BaseHttpService, http, HttpError } from '@duneta/client/http';
+
+// Default — config.api.baseUrl, credentials: same-origin, headers below
+const health = await http.json<{ ok: boolean }>('/health');
+
+// JSON body + query params + custom headers (override defaults per call)
+await http.post('/posts', {
+  params: { draft: false },
+  json: { title: 'Hello' },
+  headers: { 'X-Request-Id': 'my-trace-id' },
+});
+
+// Stream / file / blob
+const stream = await http.stream('/events');
+const { blob, filename } = await http.download('/export.csv');
+await http.upload('/avatar', { file, fieldName: 'avatar', data: { userId: '1' } });
+
+// Custom service
+class AppHttp extends BaseHttpService {
+  protected getBaseUrl() {
+    return '/api';
+  }
+
+  protected async onRequest(_url, init) {
+    const headers = new Headers(init.headers);
+    headers.set('Authorization', `Bearer ${token}`);
+    return { ...init, headers };
+  }
+}
+
+const appHttp = new AppHttp();
+```
+
+| Method | `responseType` |
+|--------|----------------|
+| `json()` | `json` |
+| `text()` | `text` |
+| `blob()` | `blob` |
+| `stream()` | `stream` |
+| `download()` | `blob` + `Content-Disposition` filename |
+| `upload()` | `multipart/form-data` |
+| `request()` | `auto` (infer from `Content-Type`) |
+
+Default per request: `Accept: application/json`, `X-Duneta-Timezone` (browser TZ), `X-Request-Id` (UUID), `credentials: same-origin` (auth cookies). `Accept-Language` is sent by the browser automatically.
+
 ## Runtime (`@duneta/client/runtime`)
 
 ```tsx
-import { DunetaImage, DunetaScript, apiFetch, ThemeProvider } from '@duneta/client/runtime';
+import { DunetaImage, DunetaScript, ThemeProvider } from '@duneta/client/runtime';
 ```
 
 | Export | Mô tả |
 |--------|------|
 | `DunetaImage` | Responsive image + optimization loader (`/duneta/image`) |
 | `DunetaScript` | Third-party scripts (`afterInteractive` / `lazyOnload`) |
-| `apiFetch` | Same-origin `/api` fetch |
 | `ThemeProvider` | Dark/light theme |
 
 ## Router (`@duneta/client/router`)
