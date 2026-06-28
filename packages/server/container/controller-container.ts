@@ -1,4 +1,5 @@
 import { Container } from './container.js';
+import type { ServiceKey } from './service-key.js';
 
 /** DI container for controllers — separate from repositories and infra. */
 export class ControllerContainer {
@@ -9,11 +10,11 @@ export class ControllerContainer {
     return this;
   }
 
-  has(key: string): boolean {
+  has(key: ServiceKey): boolean {
     return this.inner.has(key);
   }
 
-  resolve<T>(key: string): T {
+  resolve<T>(key: ServiceKey<T>): T {
     return this.inner.resolve<T>(key);
   }
 }

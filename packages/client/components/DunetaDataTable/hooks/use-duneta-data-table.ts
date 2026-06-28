@@ -1,4 +1,3 @@
-'use client';
 
 import {
   getCoreRowModel,
@@ -59,6 +58,8 @@ import type {
   DataTableColumnResetHandlers,
   ResolvedDunetaDataTableToolbarConfig,
 } from '../types/toolbar';
+
+const EMPTY_SELECTED_IDS: string[] = [];
 
 export type UseDunetaDataTableOptions<TData extends object> = {
   columns: Array<ColumnDef<TData, unknown>>;
@@ -191,13 +192,12 @@ export function useDunetaDataTable<TData extends object>({
     [tableColumns, toolbar?.column?.hiddenByDefault],
   );
 
-  const selectedIds = rowSelectionConfig?.selectedIds ?? [];
-  const selectedIdsKey = selectedIds.join('\0');
+  const selectedIds = rowSelectionConfig?.selectedIds ?? EMPTY_SELECTED_IDS;
 
   const rowSelection = useMemo(
     () =>
       rowSelectionEnabled ? selectedIdsToRowSelection(selectedIds) : {},
-    [rowSelectionEnabled, selectedIdsKey],
+    [rowSelectionEnabled, selectedIds],
   );
 
   const rowSelectionOnChangeRef = useRef(rowSelectionConfig?.onChange);
@@ -300,17 +300,18 @@ export function useDunetaDataTable<TData extends object>({
 
   const columnOrder = controlledColumnOrder ?? internalColumnOrder;
 
-  const setColumnOrder: Dispatch<SetStateAction<ColumnOrderState>> = (
-    value,
-  ) => {
-    const next =
-      typeof value === 'function' ? value(columnOrder) : value;
-    if (onColumnOrderChange) {
-      onColumnOrderChange(next);
-      return;
-    }
-    setInternalColumnOrder(next);
-  };
+  const setColumnOrder = useCallback<Dispatch<SetStateAction<ColumnOrderState>>>(
+    (value) => {
+      const next =
+        typeof value === 'function' ? value(columnOrder) : value;
+      if (onColumnOrderChange) {
+        onColumnOrderChange(next);
+        return;
+      }
+      setInternalColumnOrder(next);
+    },
+    [columnOrder, onColumnOrderChange],
+  );
 
   // --- Column layout reset (widths, order, visibility, pinning) ---
   const columnReset = useMemo(
@@ -460,7 +461,7 @@ export function useDunetaDataTable<TData extends object>({
   const sortDescriptor = useMemo(() => toSortDescriptor(sorting), [sorting]);
   const selectedKeys = useMemo(
     () => new Set(selectedIds),
-    [selectedIdsKey],
+    [selectedIds],
   );
 
   const handleSelectionChange = useCallback((selection: Selection) => {

@@ -1,4 +1,3 @@
-'use client';
 
 import debounce from 'lodash/debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,15 +16,17 @@ export function DataTableToolbarSearch({
   const { placeholder = 'Search…', initialValue = '', debounceMs = 300 } =
     config;
   const [value, setValue] = useState(initialValue);
+  const [prevInitialValue, setPrevInitialValue] = useState(initialValue);
+
+  if (initialValue !== prevInitialValue) {
+    setPrevInitialValue(initialValue);
+    setValue(initialValue);
+  }
 
   const debouncedChange = useMemo(
     () => debounce((next: string) => onDebouncedChange(next), debounceMs),
     [debounceMs, onDebouncedChange],
   );
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
 
   useEffect(() => {
     debouncedChange(value);

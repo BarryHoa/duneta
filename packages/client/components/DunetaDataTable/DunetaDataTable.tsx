@@ -1,4 +1,3 @@
-'use client';
 
 import isObject from 'lodash/isObject';
 import { useCallback, useMemo } from 'react';
@@ -186,8 +185,6 @@ function DunetaDataTableImpl<TData extends object>({
             {virtualEnabled ? (
               <DataTableVirtualBody
                 table={table}
-                data={data}
-                getRowId={getRowId}
                 columnCount={columnCount}
                 pinEnabled={pinEnabled}
               />

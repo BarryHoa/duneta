@@ -30,7 +30,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['app/web/**/*.{ts,tsx}', 'packages/client/**/*.{ts,tsx}'],
+    files: ['app/**/*.{ts,tsx}', 'packages/client/**/*.{ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,

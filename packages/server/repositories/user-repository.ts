@@ -1,11 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { BaseRepository } from '../http/base-repository.js';
-import type { Database } from '../database/types.js';
 import { user } from './schemas/auth.js';
 
 export class UserRepository extends BaseRepository<typeof user> {
-  constructor(db: Database) {
-    super(db, user);
+  constructor() {
+    super(user);
   }
 
   findByEmail(email: string) {

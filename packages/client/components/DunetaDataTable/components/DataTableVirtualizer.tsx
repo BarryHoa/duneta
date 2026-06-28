@@ -1,4 +1,3 @@
-'use client';
 
 import { TableLayout, Virtualizer } from '@heroui/react';
 import type { ReactNode } from 'react';

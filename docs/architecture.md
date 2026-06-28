@@ -1,80 +1,65 @@
 # Kiến trúc
 
+## Ba lớp
+
+| Lớp | Ở đâu | Vai trò |
+|-----|-------|---------|
+| **Core** | `packages/server`, `packages/client`, `duneta` CLI | Runtime, DI, config, middleware, optional modules. **Mặc định OFF** — bật trong `duneta.server.config.ts`. |
+| **Build sẵn** | `@duneta/server/routers`, `@duneta/server/http`, `@duneta/server/repositories`, `@duneta/client/routers` | Controller/route/UI reference — import và dùng, hoặc bỏ qua. |
+| **User app** | `duneta.client.config.ts`, `duneta.server.config.ts`, `app/api/*`, `app/pages/` | User chọn bật feature nào, mount route nào, register service nào. |
+
+```text
+Core (engine)
+  └─ optional modules ← duneta.server.config.ts enabled: true
+Build sẵn (reference)
+  └─ HealthController, healthRoutes, UserController, … ← import nếu cần
+User app
+  └─ router.ts mount gì · services.ts register gì · pages/ web
+```
+
+App mới (`create-duneta-app`): chỉ `GET /api/health`, không DB/auth. Repo dogfood monorepo bật đủ feature — **một ví dụ**, không phải contract framework.
+
 ## Monorepo
 
 ```text
-app/api   ──depends──▶  @duneta/server
-app/web   ──depends──▶  @duneta/client
-
-app/web KHÔNG import @duneta/server
+worker.ts          →  /api/* (app/api)  +  /* (SSR + assets)
+duneta.client.config.ts   →  web (Vite / React Router)
+duneta.server.config.ts   →  API (Worker runtime only)
+app/               →  source only (pages, api, themes)
+packages/          →  framework (@duneta/server, @duneta/client)
 ```
 
-App shell mỏng — framework trong `packages/`, mở rộng qua config + hooks.
+Web **không** import `@duneta/server` — gọi API qua `/api` same-origin.
 
-## Luồng boot API
+## Request routing
 
-```mermaid
-flowchart TD
-  A["defineServer()"] --> B["loadConfig"]
-  B --> C["createDatabase + createAuth"]
-  C --> D["registerServices"]
-  D --> E["createAppRouter"]
-  E --> F["createHttpApp"]
-  F --> G["/api/*"]
+```text
+GET /api/health  →  Hono (basePath /api)
+GET /about       →  React Router SSR
+GET /assets/*    →  ASSETS binding
 ```
 
-### `defineServer` — hooks
+## Boot API
 
-| Hook | File | Việc |
-|------|------|------|
-| `config` | `duneta.config.ts` | Cấu hình app |
-| `createAppRouter` | `routers/index.ts` | Ghép route groups |
-| `registerServices` | `services/index.ts` | Đăng ký controller/repository |
-| `resolvePermissions` | `permissions/index.ts` | Role → grants (optional) |
+`defineServer()` bootstrap trong `worker.ts` — không có `server.ts` riêng, không deploy API riêng.
+
+| Hook | File |
+|------|------|
+| `importConfig` | `duneta.server.config.ts` (lazy runtime import) |
+| `createAppRouter` | `app/api/router.ts` |
+| `registerServices` | `app/api/services.ts` |
+| `resolvePermissions` | `app/api/permissions.ts` |
 
 ## Runtime
 
-| Entry | Import | Target |
-|-------|--------|--------|
-| `server.ts` | `@duneta/server/runtime/worker` | `worker` |
-| `server.node.ts` | `@duneta/server/runtime/node` | `node` |
+Chỉ Cloudflare Worker. Config: `wrangler.jsonc` · Entry: `worker.ts`.
 
-## Dependency injection
+## Cloudflare constraints
 
-| Container | Đăng ký qua |
-|-----------|-------------|
-| `ControllerContainer` | `registerServices` |
-| `RepositoryContainer` | `registerServices` |
-
-Infra (`db`, `auth`, `cache`) inject trực tiếp qua `attachRequestServices` — không qua DI container.
-
-## Request context
-
-| Key | Khi nào có |
-|-----|------------|
-| `db`, `auth`, `cache` | Khi feature bật |
-| `controllers`, `repositories` | Luôn |
-| `userId`, `session` | Sau `requireSession()` |
-| `permissionCheck` | Sau `requireSession()` + `resolvePermissions` |
-
-## Layer domain
-
-```text
-Route  →  Controller  →  Repository  →  Database
-```
-
-- **Route**: `defineGroup` + `resolveController('UserController', 'index')`
-- **Protected route**: `requireSession()` middleware
-- **Policy**: `UserPolicy.list(c)` trong controller
-
-## Vocabulary
-
-| Term | Nghĩa |
-|------|--------|
-| `registerServices` | Đăng ký DI (không phải OAuth providers) |
-| `composeRouter` | Ghép `RouteGroup[]` → Hono (framework) |
-| `createAppRouter` | App compose routes theo config |
-| `resolveController` | Handler lấy controller từ container |
-| `requireSession` | Login + load permission grants |
-| `PlatformEnv` | Cloudflare Worker `env` |
-| `ServerBoot` | Config đã normalize lúc boot |
+| Concern | Duneta approach |
+|---------|-----------------|
+| Logging | JSON stdout — no log files |
+| Database | Postgres — URL qua `process.env` trong `duneta.server.config.ts` |
+| Cache | Memory (dev) or Redis HTTP (prod) |
+| Sessions | Postgres (Better Auth) |
+| Static files | `ASSETS` binding, not disk writes |

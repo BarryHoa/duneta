@@ -1,6 +1,6 @@
 # `@duneta/client`
 
-Framework React Router web — config, default routes, UI components, `duneta-web` CLI.
+Framework React Router web — config, default routes, UI components. Build qua `pnpm build` ở repo root.
 
 ## UI components (HeroUI v3)
 

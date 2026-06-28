@@ -1,3 +1,5 @@
+import { serviceKey, type ServiceKey } from './service-key.js';
+
 type Factory<T> = () => T;
 
 export class Container {
@@ -9,18 +11,19 @@ export class Container {
     return this;
   }
 
-  has(key: string): boolean {
-    return this.factories.has(key);
+  has(key: string | ServiceKey): boolean {
+    return this.factories.has(serviceKey(key));
   }
 
-  resolve<T>(key: string): T {
-    const factory = this.factories.get(key);
-    if (!factory) throw new Error(`No binding registered for "${key}".`);
+  resolve<T>(key: ServiceKey<T>): T {
+    const name = serviceKey(key);
+    const factory = this.factories.get(name);
+    if (!factory) throw new Error(`No binding registered for "${name}".`);
 
-    if (!this.instances.has(key)) {
-      this.instances.set(key, factory());
+    if (!this.instances.has(name)) {
+      this.instances.set(name, factory());
     }
-    return this.instances.get(key) as T;
+    return this.instances.get(name) as T;
   }
 }
 

@@ -1,5 +1,6 @@
-export { DEFAULT_API_PORT, DEFAULT_WEB_PORT, createDefaultConfig } from './defaults';
-export { defineDunetaConfig, env, loadConfig } from './load';
+export { createDefaultConfig } from './defaults';
+export { CLIENT_CONFIG_FILENAME, defineClientConfig, loadConfig, toWebConfig } from './load';
 export { mergeConfig, type DeepPartial } from './merge';
 export { config, getConfig } from './registry';
+export type { DunetaClientConfig } from './duneta';
 export type { DunetaWebConfig, ThemeMode } from './types';

@@ -1,4 +1,3 @@
-'use client';
 
 import { flexRender, type Row, type Table as ReactTable } from '@tanstack/react-table';
 import { cn } from '../../../../helpers';
@@ -6,7 +5,6 @@ import { getColumnPinPresentation } from '../../core/columns';
 import { isSelectionColumnId } from '../../core/row-selection';
 import { SELECTION_COLUMN_CLASS } from '../../constants';
 import { DunetaTable } from '../../../DunetaTable';
-import type { DunetaDataTableProps } from '../../types';
 import { DataTableEmptyState } from './DataTableEmptyState';
 
 type DataTableRowProps<TData> = {
@@ -95,35 +93,25 @@ export function DataTableStaticBody<TData>({
 
 type DataTableVirtualBodyProps<TData extends object> = {
   table: ReactTable<TData>;
-  data: TData[];
-  getRowId?: DunetaDataTableProps<TData>['getRowId'];
   columnCount: number;
   pinEnabled: boolean;
 };
 
 export function DataTableVirtualBody<TData extends object>({
   table,
-  data,
-  getRowId,
   columnCount,
   pinEnabled,
 }: DataTableVirtualBodyProps<TData>) {
-  const rowsById = table.getRowModel().rowsById;
+  const rows = table.getRowModel().rows;
 
   return (
     <DunetaTable.Body
-      items={data}
-      dependencies={[data]}
+      items={rows}
+      dependencies={[rows]}
       renderEmptyState={() => <DataTableEmptyState columnCount={columnCount} />}
     >
       {(item) => {
-        const typedItem = item as TData;
-        const index = data.indexOf(typedItem);
-        const rowId = getRowId
-          ? getRowId(typedItem, index >= 0 ? index : 0)
-          : (typedItem as { id?: string }).id;
-        const row = rowId ? rowsById[rowId] : undefined;
-        if (!row) return null;
+        const row = item as Row<TData>;
 
         return (
           <DunetaTable.Row id={row.id}>

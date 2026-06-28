@@ -1,45 +1,26 @@
 # Sync convention
 
-Codegen trước `dev` / `deploy` / `typecheck` khi chưa có `services/index.ts` hoặc `routers/index.ts`.
+Codegen tự chạy trong `pnpm build` / `pnpm deploy` khi chưa có `api/services.ts` hoặc `api/router.ts`.
 
 ## Manual (khuyến nghị)
 
 ```text
 app/api/
-  services/index.ts   → registerServices
-  routers/index.ts    → createAppRouter
+  services.ts      → registerServices
+  router.ts        → createAppRouter
+  permissions.ts   → resolvePermissions
 ```
 
-`server.ts` import trực tiếp:
-
-```ts
-import { createAppRouter } from './routers';
-import { registerServices } from './services';
-```
+`worker.ts` import trực tiếp các file trên.
 
 ## Convention-only (sync tự sinh)
 
-Thêm file theo pattern — sync ghi `services/index.ts` / `routers/index.ts` nếu chưa có:
+Thêm file theo pattern — sync ghi `services.ts` / `router.ts` nếu chưa có:
 
 | File | Export |
 |------|--------|
 | `post-controller.ts` | `PostController` |
 | `post-repository.ts` | `PostRepository` |
-| `posts.routes.ts` | `postsRoutes` |
+| `routers/posts.routes.ts` | `postsRoutes` |
 
-## `defineServer`
-
-```ts
-import { defineServer } from '@duneta/server/runtime/worker';
-import { resolvePermissions } from './permissions';
-import config from './duneta.config';
-import { createAppRouter } from './routers';
-import { registerServices } from './services';
-
-export default defineServer({
-  config,
-  createAppRouter,
-  registerServices,
-  resolvePermissions,
-});
-```
+Override thủ công: giữ `services.ts` / `router.ts` — sync bỏ qua.

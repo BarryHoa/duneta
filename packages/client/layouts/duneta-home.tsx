@@ -1,73 +1,188 @@
-import {
-  DunetaButton as Button,
-  DunetaCard as Card,
-  DunetaLayoutSection,
-  DunetaLink as Link,
-} from '../components';
+import { DunetaButton as Button, DunetaLink as Link } from '../components';
+import '@duneta/client/layouts/duneta-home.css';
 
-const ArrowUpRight = () => <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17 17 7M8 7h9v9" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-const Check = () => <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m5 12 4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-
-const foundations = [
-  ['01', 'Web', 'React Router shell with a deliberately thin app layer.', 'app/web'],
-  ['02', 'API', 'Hono API, ESM-first and ready for Node or Workers.', 'app/api'],
-  ['03', 'Packages', 'Published client and server modules with clear boundaries.', '@duneta/*'],
+const stack = [
+  {
+    num: '01',
+    title: 'React',
+    desc: 'Full-stack React with React Router 8 — SSR, file-based routes, and UI components in app/pages.',
+    path: 'app/pages',
+  },
+  {
+    num: '02',
+    title: 'Hono',
+    desc: 'Type-safe API layer with Hono — services, auth, and route groups under /api.',
+    path: 'app/api',
+  },
+  {
+    num: '03',
+    title: 'Cloudflare Worker',
+    desc: 'Single Worker entry at the edge — routes traffic between React SSR and the Hono API.',
+    path: 'worker.ts',
+  },
 ] as const;
 
 export function DunetaHome() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#07111f] px-5 pb-12 pt-5 text-slate-100 sm:px-8">
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
-      <div className="relative mx-auto max-w-6xl">
-        <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 backdrop-blur-xl sm:px-5">
-          <Link href="#top" aria-label="Duneta home" className="gap-3 text-white hover:text-white">
-            <span className="grid size-8 place-items-center rounded-xl bg-cyan-300 text-sm font-black text-slate-950">T</span>
-            <span className="text-sm font-semibold tracking-[0.18em]">DUNETA</span>
+    <main className="home">
+      <div className="home-inner">
+        <header className="home-header">
+          <Link href="/" className="home-logo !text-zinc-900 hover:!text-zinc-900">
+            <span className="home-logo-mark">D</span>
+            Duneta
           </Link>
-          <nav className="hidden items-center gap-6 text-sm sm:flex" aria-label="Primary navigation">
-            <Link href="#stack" className="text-slate-400 hover:text-white">Stack</Link>
-            <Link href="#modules" className="text-slate-400 hover:text-white">Modules</Link>
-            <Link href="#deploy" className="text-slate-400 hover:text-white">Deploy</Link>
-            <Link href="/about" className="text-slate-400 hover:text-white">About</Link>
+          <nav className="home-nav" aria-label="Navigation">
+            <Link href="/about" className="!text-zinc-500 hover:!text-zinc-900">
+              About
+            </Link>
+            <Link href="/datatable" className="!text-zinc-500 hover:!text-zinc-900">
+              Demo
+            </Link>
+            <a
+              href="https://github.com/BarryHoa/Duneta"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="!text-zinc-500 hover:!text-zinc-900"
+            >
+              GitHub
+            </a>
           </nav>
-          <Link href="https://github.com/BarryHoa/Duneta" target="_blank" className="text-sm font-medium text-cyan-200 hover:text-white">GitHub <span aria-hidden="true">↗</span></Link>
         </header>
 
-        <section id="top" className="grid gap-12 pb-20 pt-20 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:pt-28">
+        <section className="home-hero">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-cyan-100"><span className="size-1.5 rounded-full bg-cyan-300 shadow-[0_0_14px_3px_rgba(103,232,249,.5)]" />MODULAR TOOLKIT · ANY RUNTIME</div>
-            <h1 className="max-w-3xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">Build once.<br /><span className="text-gradient">Ship anywhere.</span></h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-400">A TypeScript starter where the React Router web app, Hono API, and publishable Duneta packages move as one.</p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button variant="primary" onPress={() => document.querySelector('#stack')?.scrollIntoView({ behavior: 'smooth' })}>Explore the stack <ArrowUpRight /></Button>
-              <Button variant="secondary" onPress={() => window.open('https://github.com/BarryHoa/Duneta', '_blank', 'noopener,noreferrer')}>View source</Button>
+            <p className="home-eyebrow">Cloudflare Workers</p>
+            <h1 className="home-title">
+              Full-stack React.
+              <br />
+              Hono API. One Worker.
+            </h1>
+            <p className="home-lead">
+              Duneta pairs server-rendered React with a Hono API — both deployed on Cloudflare Workers. No Node
+              server, no split deployments. One runtime at the edge for your UI and <code>/api</code>.
+            </p>
+            <div className="home-actions">
+              <Button variant="primary" onPress={() => (window.location.href = '/datatable')}>
+                View demo
+              </Button>
+              <Button
+                variant="secondary"
+                onPress={() => window.open('https://github.com/BarryHoa/Duneta', '_blank', 'noopener,noreferrer')}
+              >
+                GitHub
+              </Button>
             </div>
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-400">{['React Router 8', 'Hono API', 'Cloudflare ready', 'ESM packages'].map((item) => <span key={item} className="flex items-center gap-2"><Check />{item}</span>)}</div>
+            <ul className="home-tags">
+              <li>React</li>
+              <li>Hono</li>
+              <li>Cloudflare Workers</li>
+              <li>TypeScript</li>
+            </ul>
           </div>
 
-          <Card className="hero-console border border-white/10 bg-slate-950/60 shadow-2xl shadow-cyan-950/30">
-            <Card.Header className="flex items-center justify-between border-b border-white/10 px-5 py-4"><div className="flex gap-1.5" aria-hidden="true"><span className="size-2.5 rounded-full bg-rose-400/80" /><span className="size-2.5 rounded-full bg-amber-300/80" /><span className="size-2.5 rounded-full bg-emerald-300/80" /></div><Card.Description className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate-500">duneta / workspace</Card.Description></Card.Header>
-            <Card.Content className="space-y-5 p-5 sm:p-7">
-              <div className="flex items-center justify-between"><div><p className="text-sm text-slate-400">Release status</p><p className="mt-1 text-2xl font-semibold tracking-tight text-white">Ready to compose</p></div><span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-200">All systems go</span></div>
-              <div className="grid grid-cols-3 gap-3">{[['WEB', 'React Router'], ['API', 'Hono'], ['UI', 'HeroUI']].map(([label, item]) => <div key={label} className="rounded-xl border border-white/8 bg-white/[0.035] p-3"><p className="text-[10px] font-semibold tracking-[0.14em] text-slate-500">{label}</p><p className="mt-2 text-sm font-medium text-slate-200">{item}</p></div>)}</div>
-              <div className="rounded-xl border border-cyan-300/10 bg-cyan-300/[0.045] p-4 font-mono text-sm leading-7 text-cyan-100"><span className="text-cyan-300">$</span> pnpm dev<br /><span className="text-emerald-300">✓</span> @duneta/client ready<br /><span className="text-emerald-300">✓</span> @duneta/server ready</div>
-            </Card.Content>
-          </Card>
+          <div className="home-diagram" aria-label="Request routing architecture">
+            <div className="home-diagram-bar">
+              <div className="home-diagram-dots" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <span className="home-diagram-file">worker.ts</span>
+            </div>
+            <div className="home-diagram-body">
+              <div className="home-route-grid">
+                <div className="home-route-cell">
+                  <strong>/api/*</strong>
+                  <span>Hono</span>
+                </div>
+                <div className="home-route-cell">
+                  <strong>/assets</strong>
+                  <span>Static</span>
+                </div>
+                <div className="home-route-cell">
+                  <strong>/*</strong>
+                  <span>React SSR</span>
+                </div>
+              </div>
+              <div className="home-code">
+                <div>
+                  <span className="c-dim">$ </span>
+                  <span className="c-cmd">pnpm install && pnpm deploy</span>
+                </div>
+                <div className="c-ok">✓ build → wrangler deploy</div>
+                <div>
+                  <span className="c-dim">$ pnpm dev</span>
+                  <span className="c-dim"> # localhost:8787</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section id="stack" className="scroll-mt-8 border-t border-white/10 py-16">
-          <DunetaLayoutSection>
-            <DunetaLayoutSection.Header><div><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">THE FOUNDATION</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.035em] text-white sm:text-4xl">A stack with clear edges.</h2></div><p className="max-w-sm text-sm leading-6 text-slate-400">Focused apps on top. Shared packages underneath. Nothing drifts.</p></DunetaLayoutSection.Header>
-            <DunetaLayoutSection.Grid columns={3}>{foundations.map(([number, title, description, path]) => <Card key={title} className="group border border-white/10 bg-white/[0.035] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/35 hover:bg-white/[0.06]"><Card.Header className="px-6 pb-1 pt-6"><Card.Description className="text-xs font-semibold tracking-[0.18em] text-cyan-200">{number}</Card.Description><Card.Title className="mt-5 text-xl font-semibold text-white">{title}</Card.Title></Card.Header><Card.Content className="px-6 pb-6 pt-3"><Card.Description className="min-h-12 leading-6 text-slate-400">{description}</Card.Description><div className="mt-6 inline-flex rounded-lg border border-white/10 bg-slate-950/50 px-2.5 py-1 font-mono text-xs text-slate-300">{path}</div></Card.Content></Card>)}</DunetaLayoutSection.Grid>
-          </DunetaLayoutSection>
+        <section className="home-section">
+          <div className="home-section-head">
+            <h2>The stack</h2>
+            <p>
+              React for the frontend, Hono for the API, Cloudflare Workers for runtime — wired together in{' '}
+              <code>worker.ts</code>.
+            </p>
+          </div>
+          <div className="home-grid-3">
+            {stack.map(({ num, title, desc, path }) => (
+              <article key={title} className="home-grid-cell">
+                <span className="home-grid-num">{num}</span>
+                <h3>{title}</h3>
+                <p>{desc}</p>
+                <code>{path}</code>
+              </article>
+            ))}
+          </div>
         </section>
 
-        <section id="modules" className="py-8">
-          <Card className="border border-white/10 bg-white/[0.035]"><Card.Content className="grid gap-6 p-7 md:grid-cols-[1fr_auto]"><div><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">CLIENT MODULES</p><Card.Title className="mt-3 text-2xl font-semibold text-white">One UI package. Clear entrypoints.</Card.Title><Card.Description className="mt-3 max-w-2xl leading-7 text-slate-400">Use DunetaInput, DunetaSelect, DunetaForm, DunetaUpload, DunetaTable, DunetaLoadError and DunetaLayout independently—or import them all from the shared client barrel.</Card.Description></div><div className="flex flex-wrap content-start gap-2 md:max-w-64">{['DunetaInput', 'DunetaSelect', 'DunetaForm', 'DunetaUpload', 'DunetaTable', 'DunetaLoadError', 'DunetaLayout'].map((module) => <span key={module} className="rounded-lg border border-cyan-300/15 bg-cyan-300/[0.06] px-2.5 py-1.5 font-mono text-xs text-cyan-100">{module}</span>)}</div></Card.Content></Card>
+        <section className="home-section">
+          <div className="home-section-head">
+            <h2>Workflow</h2>
+            <p>Two commands cover local development and production deployment.</p>
+          </div>
+          <div className="home-commands">
+            <div className="home-command">
+              <p className="home-command-label">Development</p>
+              <pre>pnpm dev</pre>
+              <p>
+                Local development on the Workers runtime with Vite HMR. React and Hono both run behind{' '}
+                <code>pnpm dev</code> on port 8787.
+              </p>
+            </div>
+            <div className="home-command">
+              <p className="home-command-label">Production</p>
+              <pre>pnpm deploy</pre>
+              <p>
+                Build and deploy React SSR plus the Hono API to Cloudflare Workers — one artifact, one edge
+                deployment.
+              </p>
+            </div>
+          </div>
         </section>
 
-        <section id="deploy" className="grid gap-6 py-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center"><Card className="border border-white/10 bg-white/[0.035]"><Card.Content className="p-7"><p className="text-xs font-semibold tracking-[0.18em] text-cyan-200">ONE WORKFLOW</p><Card.Title className="mt-3 text-2xl font-semibold text-white">Local by default.</Card.Title><Card.Description className="mt-3 leading-7 text-slate-400">Start the web UI and API together, then choose the production runtime when you are ready.</Card.Description></Card.Content></Card><div className="hidden size-10 place-items-center rounded-full border border-cyan-300/20 bg-cyan-300/10 text-cyan-200 lg:grid">→</div><Card className="border border-cyan-300/20 bg-cyan-300/[0.07]"><Card.Content className="p-7"><p className="text-xs font-semibold tracking-[0.18em] text-cyan-100">EVERYWHERE READY</p><Card.Title className="mt-3 text-2xl font-semibold text-white">Deploy with intent.</Card.Title><Card.Description className="mt-3 leading-7 text-slate-300">Cloudflare for global Workers, a VPS for Node, or split the web shell and API when you need scale.</Card.Description></Card.Content></Card></section>
+        <footer className="home-footer">
+          <span>Duneta — Full-stack React &amp; Hono on Cloudflare Workers</span>
+          <div className="home-footer-links">
+            <Link href="/about" className="!text-zinc-500 hover:!text-zinc-900">
+              About
+            </Link>
+            <Link href="/datatable" className="!text-zinc-500 hover:!text-zinc-900">
+              DataTable
+            </Link>
+            <a
+              href="https://github.com/BarryHoa/Duneta"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="!text-zinc-500 hover:!text-zinc-900"
+            >
+              GitHub
+            </a>
+          </div>
+        </footer>
       </div>
     </main>
   );

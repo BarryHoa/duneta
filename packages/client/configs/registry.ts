@@ -11,7 +11,7 @@ export function commitConfig<T extends DunetaWebConfig>(config: T): T {
 export function getConfig(): DunetaWebConfig {
   if (!cachedConfig) {
     throw new Error(
-      'Web config is not loaded. Call loadConfig() on boot or add app/web/duneta.config.ts.',
+      'Web config is not loaded. Call loadConfig() or add duneta.client.config.ts at the project root.',
     );
   }
   return cachedConfig;

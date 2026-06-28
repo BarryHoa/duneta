@@ -1,9 +1,11 @@
 import type { DatabaseConfig } from './database';
 import type { CacheConfig } from './cache';
 export type { CacheConfig } from './cache';
+import type { StorageConfig } from './storage';
+export type { StorageConfig } from './storage';
 import type { RateLimitConfig } from './rate-limit';
 
-export type Runtime = 'node' | 'worker';
+export type Runtime = 'worker';
 export type NodeEnv = 'development' | 'production' | 'test';
 
 export type RuntimeConfig = {
@@ -131,6 +133,8 @@ export type SecurityHeadersConfig = {
 
 export type LoggingConfig = {
   enabled?: boolean;
+  /** `json` for production / Logpush; `text` for local readability. */
+  format?: 'json' | 'text';
 };
 
 export type DebugConfig = {
@@ -149,6 +153,7 @@ export interface DunetaCoreConfig {
   request: RequestConfig;
   headers: SecurityHeadersConfig;
   cache: CacheConfig;
+  storage: StorageConfig;
   security: SecurityConfig;
   logging: LoggingConfig;
   debug: DebugConfig;

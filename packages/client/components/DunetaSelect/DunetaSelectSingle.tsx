@@ -1,4 +1,3 @@
-'use client';
 
 import uFuzzy from '@leeoniya/ufuzzy';
 import { useVirtualizer } from '@tanstack/react-virtual';

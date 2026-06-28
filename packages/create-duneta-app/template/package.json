@@ -1,0 +1,25 @@
+{
+  "name": "{{name}}",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "duneta dev",
+    "build": "duneta build",
+    "deploy": "duneta deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "duneta": "^0.1.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250617.0",
+    "typescript": "^5.8.3"
+  }
+}

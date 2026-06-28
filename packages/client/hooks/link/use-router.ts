@@ -78,7 +78,9 @@ export function useRouter(): AppRouter {
   const back = useCallback(() => navigate(-1), [navigate]);
   const forward = useCallback(() => navigate(1), [navigate]);
   const refresh = useCallback(() => navigate(0), [navigate]);
-  const prefetch = useCallback((_href: RouterHref) => undefined, []);
+  const prefetch = useCallback((href: RouterHref) => {
+    void href;
+  }, []);
 
   return useMemo(
     () => ({

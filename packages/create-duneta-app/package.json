@@ -1,0 +1,20 @@
+{
+  "name": "create-duneta-app",
+  "version": "0.1.0",
+  "description": "Scaffold a new Duneta full-stack Cloudflare Workers project.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-duneta-app": "./bin/create-duneta-app.mjs"
+  },
+  "files": [
+    "bin",
+    "template"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  }
+}

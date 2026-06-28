@@ -76,12 +76,11 @@ CRUD generic trên Drizzle table có cột `id`:
 ```ts
 // app/api/repositories/post-repository.ts
 import { BaseRepository } from '@duneta/server/http';
-import type { Database } from '@duneta/server/database';
 import { post } from './schemas/post';
 
 export class PostRepository extends BaseRepository<typeof post> {
-  constructor(db: Database) {
-    super(db, post);
+  constructor() {
+    super(post);
   }
 
   async findPublished() {
@@ -90,6 +89,8 @@ export class PostRepository extends BaseRepository<typeof post> {
 }
 ```
 
+`db` bind tự động lúc boot qua `BaseRepository.bindDb()` — repository chỉ cần truyền `table`.
+
 Schema Drizzle đặt trong `repositories/schemas/` hoặc `packages/server/repositories/schemas/` (auth schema ship sẵn).
 
 ## Đăng ký + route — checklist
@@ -97,7 +98,7 @@ Schema Drizzle đặt trong `repositories/schemas/` hoặc `packages/server/repo
 1. Tạo schema Drizzle (nếu table mới)
 2. Tạo `PostRepository extends BaseRepository`
 3. Tạo `PostController extends BaseController`
-4. Đăng ký trong `services/index.ts`
+4. Đăng ký trong `api/services.ts`
 5. Thêm `defineGroup` trong `routers/`
 6. Gắn group vào `createAppRouter`
 

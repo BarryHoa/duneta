@@ -6,13 +6,12 @@ Tóm tắt **chỗ nào sửa** cho từng nhu cầu — không cần đụng `p
 
 | Muốn làm                   | File / hook                             | Doc                                  |
 | -------------------------- | --------------------------------------- | ------------------------------------ |
-| Đổi port, DB, auth, cache  | `app/api/duneta.config.ts` + `.env`     | [Configuration](../configuration.md) |
+| Đổi port, DB, auth, cache  | `.env` + `duneta.server.config.ts`      | [Configuration](../configuration.md) |
 | Thêm controller/repository | `app/api/controllers/`, `repositories/` | [Sync](./api/sync.md)                |
 | Thêm API route             | `app/api/routers/*.routes.ts`           | [Sync](./api/sync.md)                |
-| Đổi runtime local          | Dùng `server.node.ts` + `dev:node`      | [Runtime](./api/runtime.md)          |
-| Deploy Worker              | `wrangler.jsonc` + `server.ts`          | [Runtime](./api/runtime.md)          |
-| Thêm web page              | `app/web/routers/`                      | [Web routes](../web/routes.md)       |
-| Đổi theme / port web       | `app/web/duneta.config.ts`              | [Web overview](../web/overview.md)   |
+| Deploy Worker              | `wrangler.jsonc` + `worker.ts`          | [Deploy](../deployment.md)           |
+| Thêm web page              | `app/pages/`                            | [Web pages](../web/routes.md)        |
+| Đổi theme                  | `duneta.client.config.ts`               | [Web overview](../web/overview.md)   |
 
 ## Workflow: thêm feature API mới
 
@@ -39,8 +38,8 @@ import { BaseRepository } from '@duneta/server/http';
 import { post } from './schemas/post';
 
 export class PostRepository extends BaseRepository<typeof post> {
-  constructor(db: Database) {
-    super(db, post);
+  constructor() {
+    super(post);
   }
 }
 ```
@@ -77,12 +76,12 @@ export const postsRoutes = defineGroup({
 });
 ```
 
-`duneta-api sync` tự đăng ký DI + merge routes — hoặc thêm vào `services/index.ts` / `routers/index.ts`.
+`pnpm build` tự sync API (DI + merge routes) — hoặc chỉnh `api/services.ts` / `api/router.ts` thủ công.
 
 ### 5. Dev
 
 ```bash
-pnpm --filter api dev   # sync → wrangler
+pnpm dev
 ```
 
 ### 6. Typecheck
@@ -90,23 +89,32 @@ pnpm --filter api dev   # sync → wrangler
 Thêm path vào `app/api/tsconfig.json` nếu tạo thư mục mới:
 
 ```json
-"include": ["server.ts", "server.node.ts", "duneta.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
+"include": ["api/**/*.ts", "duneta.client.config.ts", "duneta.server.config.ts", "services", "routers", "permissions", "controllers", "repositories"]
 ```
 
-Override trong `services/index.ts` — đăng ký lại cùng key:
+Override trong `api/services.ts` — đăng ký lại cùng key:
 
 ```ts
 ctx.controllers.singleton('UserController', () => new MyUserController(...));
 ```
 
-## Workflow: default routes
+## Workflow: dùng route build sẵn
 
-Default routes trong `routers/index.ts` (`healthRoutes`, `usersRoutes`, …).
+Framework ship sẵn trong `@duneta/server/routers` — user chọn mount trong `app/api/router.ts`:
+
+| Route group | Cần config | Cần register |
+|-------------|------------|--------------|
+| `healthRoutes` | — | `HealthController` |
+| `meRoutes` | `auth.enabled: true` | `MeController` |
+| `createUsersRoutes()` | `auth.enabled: true`, `database.enabled: true` | `UserController`, `UserRepository` |
+| `createStorageRoutes()` | `storage.enabled: true` | `StorageController` (hoặc subclass) |
+
+App mới chỉ mount `healthRoutes`. Thêm group = bật config + register service tương ứng.
 
 ## Workflow: web page gọi API mới
 
 ```tsx
-// app/web/routers/posts/page.tsx
+// app/pages/posts/page.tsx
 import { useLoaderData } from 'react-router';
 import { apiFetch } from '@duneta/client/hooks/use-api';
 
@@ -120,12 +128,12 @@ export default function PostsPage() {
 }
 ```
 
-Đảm bảo API chạy và proxy đúng `api.port` trong `app/web/duneta.config.ts`.
+Đảm bảo `pnpm dev` đang chạy — API same-origin tại `/api`.
 
 ## Nguyên tắc
 
-1. **Config = cấu trúc**, `.env` = giá trị
-2. **Entry file** chọn runtime (cloud / node)
+1. **`.env`** — secret values · **`duneta.server.config.ts`** — map `process.env.*` · **`duneta.client.config.ts`** — web
+2. **Một Worker** — `worker.ts` route web + API
 3. **Convention + sync** — thêm `*-controller.ts`, `*-repository.ts`, `*.routes.ts`
 4. **Repository trước, Controller sau** — sync tự match theo base name
 5. **Arrow methods** trên controller cho `resolveController`

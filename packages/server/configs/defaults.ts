@@ -2,13 +2,13 @@ import { DEFAULT_DATABASE_POOL } from './database';
 import { DEFAULT_RATE_LIMIT_RULES } from './rate-limit';
 import type { DunetaServerConfig } from './types';
 
-export const DEFAULT_CONFIG_APP_PORT = 3001;
+export const DEFAULT_CONFIG_APP_PORT = 8787;
 export const DEFAULT_TIMEZONE = 'Asia/Ho_Chi_Minh';
 
 const THREE_DAYS = 60 * 60 * 24 * 3;
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
-/** Minimal defaults — opt in to features in `duneta.config.ts`. */
+/** Minimal defaults — opt in to features in `duneta.server.config.ts`. */
 export function createDefaultConfig(): DunetaServerConfig {
   const port = DEFAULT_CONFIG_APP_PORT;
 
@@ -91,6 +91,8 @@ export function createDefaultConfig(): DunetaServerConfig {
     },
 
     cache: { enabled: false },
+
+    storage: { enabled: false },
 
     security: {
       rateLimit: {

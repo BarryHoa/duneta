@@ -6,73 +6,42 @@ import { connectionUrl } from '../../configs/database.js';
 import { createControllerContainer } from '../../container/controller-container.js';
 import { createRepositoryContainer } from '../../container/repository-container.js';
 import { createDatabase } from '../../database/index.js';
-import { resolveDatabaseUrl } from '../../database/resolve-url.js';
-import {
-  getConfig,
-  loadConfig,
-  type DeepPartial,
-} from '../../configs/index.js';
+import { BaseRepository } from '../../http/base-repository.js';
+import { getConfig } from '../../configs/index.js';
 import type { DunetaServerConfig } from '../../configs/types.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
-import { isHyperdriveBinding, type PlatformEnv } from './platform-env.js';
-import type { ServerBoot } from './types.js';
+import { resolveServerHandlers, type ServerOptions } from './types.js';
 
 let cachedApp: Hono<RequestContext> | undefined;
 let cachedAppKey: string | undefined;
-let configBootstrapped = false;
 
-function appCacheKey(config: DunetaServerConfig, platform?: PlatformEnv): string {
-  const dbUrl =
-    resolveDatabaseUrl(config, platform) ??
-    connectionUrl(config.database) ??
-    '';
-  const hyperdrive = platform?.HYPERDRIVE;
-  const hyperKey = isHyperdriveBinding(hyperdrive) ? hyperdrive.connectionString : '';
-  return `${dbUrl}:${hyperKey}`;
+function appCacheKey(config: DunetaServerConfig): string {
+  return `${connectionUrl(config.database) ?? ''}:${config.auth?.secret ?? ''}`;
 }
 
-export function bootstrapConfig(
-  boot: ServerBoot,
-  overrides?: DeepPartial<DunetaServerConfig>,
-): void {
-  if (configBootstrapped && !overrides) return;
+export async function loadApp(options: ServerOptions) {
+  const handlers = resolveServerHandlers(options);
 
-  const patch: DeepPartial<DunetaServerConfig> = {
-    ...boot.config,
-    ...overrides,
-    runtime: { target: boot.target },
-  };
-
-  if (boot.target === 'node' && boot.config.app?.debug === undefined) {
-    patch.app = { ...patch.app, debug: true };
-  }
-
-  loadConfig(patch);
-  configBootstrapped = true;
-}
-
-export async function loadApp(boot: ServerBoot, platform?: PlatformEnv) {
-  bootstrapConfig(boot);
-
-  if (boot.resolvePermissions) {
-    registerPermissionResolver(boot.resolvePermissions);
+  if (handlers.resolvePermissions) {
+    registerPermissionResolver(handlers.resolvePermissions);
   }
 
   const config = getConfig();
-  const cacheKey = appCacheKey(config, platform);
+  const cacheKey = appCacheKey(config);
 
   if (cachedApp && cachedAppKey === cacheKey) return cachedApp;
 
   const controllers = createControllerContainer();
   const repositories = createRepositoryContainer();
-  const db = createDatabase(config, platform);
+  const db = createDatabase(config);
+  BaseRepository.bindDb(db);
   const auth = createAuth(config, db);
 
-  boot.registerServices({ controllers, repositories, db, config });
+  handlers.registerServices({ controllers, repositories, db, config });
 
   const cache = createCache(config.cache);
-  const router = boot.createAppRouter(config);
+  const router = handlers.createAppRouter(config);
 
   cachedApp = createHttpApp({
     router,

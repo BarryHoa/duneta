@@ -1,4 +1,3 @@
-'use client';
 
 import type { Selection, SortDescriptor } from '@heroui/react';
 import type { ReactNode } from 'react';

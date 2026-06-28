@@ -1,5 +1,4 @@
-'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { DunetaInput } from './DunetaInput';
 import type { DunetaInputProps } from './types';
 
@@ -80,25 +79,6 @@ export function DunetaInputNumber({
   const [draft, setDraft] = useState(() =>
     format(active, decimalPlaces, thousandSeparator, decimalSeparator, fixZero),
   );
-  useEffect(() => {
-    if (!focused)
-      setDraft(
-        format(
-          active,
-          decimalPlaces,
-          thousandSeparator,
-          decimalSeparator,
-          fixZero,
-        ),
-      );
-  }, [
-    active,
-    decimalPlaces,
-    thousandSeparator,
-    decimalSeparator,
-    fixZero,
-    focused,
-  ]);
   const commit = (raw: string) => {
     let parsed = parse(raw, thousandSeparator, decimalSeparator, allowNegative);
     if (parsed != null) {

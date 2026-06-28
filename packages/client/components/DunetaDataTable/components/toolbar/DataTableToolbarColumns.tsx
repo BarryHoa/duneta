@@ -1,4 +1,3 @@
-'use client';
 
 import type { Column } from '@tanstack/react-table';
 import { Columns3 } from 'lucide-react';
@@ -39,11 +38,9 @@ export function DataTableToolbarColumns<TData>({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const appliedVisibleIds = useMemo(
-    () => getVisibleColumnIds(toggleableColumns),
-    // Re-read when TanStack visibility state changes outside this panel.
-    [toggleableColumns, columnVisibility],
-  );
+  // Read column visibility each render because TanStack column objects expose mutable state.
+  void columnVisibility;
+  const appliedVisibleIds = getVisibleColumnIds(toggleableColumns);
 
   const [draftVisibleIds, setDraftVisibleIds] = useDraftOnOpen(
     open,

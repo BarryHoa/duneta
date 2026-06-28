@@ -1,4 +1,3 @@
-'use client';
 
 import { Layers } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';

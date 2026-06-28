@@ -13,13 +13,10 @@ function writeJson(path, value) {
 }
 
 function workspaceManifestPaths() {
-  const appManifests = readdirSync(join(root, 'app'), { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => join(root, 'app', entry.name, 'package.json'));
   const packageManifests = readdirSync(join(root, 'packages'), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => join(root, 'packages', entry.name, 'package.json'));
-  return [...appManifests, ...packageManifests];
+  return packageManifests;
 }
 
 function assertVersion(version) {

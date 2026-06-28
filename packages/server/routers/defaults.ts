@@ -1,7 +1,7 @@
 import type { MiddlewareHandler } from 'hono';
 import { resolveController } from '../http/resolve-controller.js';
 import { requireSession } from '../middlewares/session.js';
-import { composeRouter, defineGroup } from './define.js';
+import { defineGroup } from './define.js';
 
 export const healthRoutes = defineGroup({
   path: '/health',
@@ -20,6 +20,22 @@ export function createUsersRoutes(middleware: MiddlewareHandler[] = [requireSess
     endpoints: [
       { method: 'GET', handler: resolveController('UserController', 'index') },
       { method: 'GET', path: '/:id', handler: resolveController('UserController', 'show') },
+    ],
+  });
+}
+
+/** Default storage HTTP routes — requires `StorageController` in DI. */
+export function createStorageRoutes(
+  controllerKey = 'StorageController',
+  middleware: MiddlewareHandler[] = [requireSession()],
+) {
+  return defineGroup({
+    path: '/storage',
+    middleware,
+    endpoints: [
+      { method: 'POST', handler: resolveController(controllerKey, 'store') },
+      { method: 'GET', path: '/meta', handler: resolveController(controllerKey, 'head') },
+      { method: 'DELETE', path: '/objects', handler: resolveController(controllerKey, 'destroy') },
     ],
   });
 }

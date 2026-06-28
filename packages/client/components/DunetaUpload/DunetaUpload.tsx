@@ -1,4 +1,3 @@
-'use client';
 
 import { useRef, type ComponentProps } from 'react';
 import { DunetaButton } from '../DunetaButton';

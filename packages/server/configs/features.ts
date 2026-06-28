@@ -3,9 +3,7 @@ import type { AuthProvidersConfig, DunetaServerConfig } from './types.js';
 
 export function isDatabaseEnabled(config: DunetaServerConfig): boolean {
   if (config.database?.enabled !== true) return false;
-  if (connectionUrl(config.database)) return true;
-  // Worker can supply DATABASE_URL / Hyperdrive via bindings at request time.
-  return isWorkerRuntime(config);
+  return Boolean(connectionUrl(config.database));
 }
 
 export function isWorkerRuntime(config: DunetaServerConfig): boolean {
@@ -20,6 +18,10 @@ export function isAuthEnabled(config: DunetaServerConfig): boolean {
 
 export function isCacheEnabled(config: DunetaServerConfig): boolean {
   return config.cache?.enabled === true;
+}
+
+export function isStorageEnabled(config: DunetaServerConfig): boolean {
+  return config.storage?.enabled === true;
 }
 
 export function isRateLimitEnabled(config: DunetaServerConfig): boolean {

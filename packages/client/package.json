@@ -9,27 +9,43 @@
     "dist",
     "configs",
     "routers",
+    "layouts",
     "providers",
     "themes",
     "scripts"
   ],
-  "bin": {
-    "duneta-web": "./scripts/duneta-web.mjs"
-  },
   "forgeStack": {
     "kind": "frontend",
     "runtime": "browser-or-react-router"
   },
   "exports": {
+    "./package.json": "./package.json",
     "./configs": {
-      "types": "./configs/index.ts",
-      "import": "./configs/index.ts",
-      "default": "./configs/index.ts"
+      "types": "./dist/configs/index.d.ts",
+      "import": "./dist/configs/index.js"
     },
-    "./configs/vite": "./configs/vite.ts",
-    "./configs/react-router": "./configs/react-router.ts",
-    "./configs/load": "./configs/load.ts",
-    "./configs/client": "./configs/client.ts",
+    "./configs/vite": {
+      "types": "./dist/configs/vite.d.ts",
+      "import": "./dist/configs/vite.js"
+    },
+    "./configs/react-router": {
+      "types": "./dist/configs/react-router.d.ts",
+      "import": "./dist/configs/react-router.js"
+    },
+    "./configs/load": {
+      "types": "./dist/configs/load.d.ts",
+      "import": "./dist/configs/load.js"
+    },
+    "./configs/bootstrap": {
+      "types": "./dist/configs/bootstrap.d.ts",
+      "import": "./dist/configs/bootstrap.js"
+    },
+    "./configs/duneta": {
+      "types": "./dist/configs/duneta.d.ts",
+      "import": "./dist/configs/duneta.js"
+    },
+    "./scripts/sync-routers": "./scripts/sync-routers.mjs",
+    "./scripts/load-config": "./scripts/load-config.mjs",
     "./validators": {
       "types": "./dist/validators/index.d.ts",
       "import": "./dist/validators/index.js"
@@ -50,58 +66,15 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
-    "./components/DunetaAlertDialog": {
-      "types": "./dist/components/DunetaAlertDialog/index.d.ts",
-      "import": "./dist/components/DunetaAlertDialog/index.js"
-    },
-    "./components/DunetaButton": {
-      "types": "./dist/components/DunetaButton/index.d.ts",
-      "import": "./dist/components/DunetaButton/index.js"
-    },
-    "./components/DunetaLink": {
-      "types": "./dist/components/DunetaLink/index.d.ts",
-      "import": "./dist/components/DunetaLink/index.js"
-    },
-    "./components/DunetaLoadError": {
-      "types": "./dist/components/DunetaLoadError/index.d.ts",
-      "import": "./dist/components/DunetaLoadError/index.js"
-    },
-    "./components/DunetaSimpleTable": {
-      "types": "./dist/components/DunetaSimpleTable/index.d.ts",
-      "import": "./dist/components/DunetaSimpleTable/index.js"
-    },
-    "./components/DunetaInput": {
-      "types": "./dist/components/DunetaInput/index.d.ts",
-      "import": "./dist/components/DunetaInput/index.js"
-    },
-    "./components/DunetaSelect": {
-      "types": "./dist/components/DunetaSelect/index.d.ts",
-      "import": "./dist/components/DunetaSelect/index.js"
-    },
-    "./components/DunetaForm": {
-      "types": "./dist/components/DunetaForm/index.d.ts",
-      "import": "./dist/components/DunetaForm/index.js"
-    },
-    "./components/DunetaUpload": {
-      "types": "./dist/components/DunetaUpload/index.d.ts",
-      "import": "./dist/components/DunetaUpload/index.js"
-    },
-    "./components/DunetaTable": {
-      "types": "./dist/components/DunetaTable/index.d.ts",
-      "import": "./dist/components/DunetaTable/index.js"
-    },
-    "./components/DunetaDataTable": {
-      "types": "./dist/components/DunetaDataTable/index.d.ts",
-      "import": "./dist/components/DunetaDataTable/index.js"
-    },
-    "./components/DunetaLayout": {
-      "types": "./dist/components/DunetaLayout/index.d.ts",
-      "import": "./dist/components/DunetaLayout/index.js"
+    "./components/*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js"
     },
     "./layouts": {
       "types": "./dist/layouts/index.d.ts",
       "import": "./dist/layouts/index.js"
     },
+    "./layouts/duneta-home.css": "./layouts/duneta-home.css",
     "./providers": {
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
@@ -121,6 +94,7 @@
     "react-dom": "^19.2.7"
   },
   "dependencies": {
+    "@cloudflare/vite-plugin": "^1.42.3",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -128,8 +102,7 @@
     "@heroui/styles": "^3.2.1",
     "@leeoniya/ufuzzy": "^1.0.19",
     "@react-router/dev": "^8.0.1",
-    "@react-router/node": "^8.0.1",
-    "@react-router/serve": "^8.0.1",
+    "@tailwindcss/vite": "^4.3.1",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.14.3",
@@ -141,6 +114,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router": "^8.0.1",
+    "tailwindcss": "^4.3.1",
     "tailwind-variants": "^3.2.2",
     "vite": "^7.0.0",
     "zod": "^3.24.0"

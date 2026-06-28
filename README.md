@@ -1,29 +1,43 @@
 # Duneta
 
-Monorepo: `app/api` (backend), `app/web` (frontend), `packages/server`, `packages/client`.
+Một Cloudflare Worker: web + `/api` cùng domain.
 
-## API entry
+```bash
+# App mới (sau khi publish npm)
+npx create-duneta-app my-app
 
-```ts
-import { defineServer } from '@duneta/server/runtime/worker';
-import { resolvePermissions } from './permissions';
-import config from './duneta.config';
-import { createAppRouter } from './routers';
-import { registerServices } from './services';
-
-export default defineServer({
-  config,
-  createAppRouter,
-  registerServices,
-  resolvePermissions,
-});
+# Monorepo / dogfood
+pnpm install && pnpm dev
 ```
 
-## Thêm feature API
+```bash
+pnpm deploy
+```
 
-1. `repositories/post-repository.ts`
-2. `controllers/post-controller.ts`
-3. `routers/posts.routes.ts` hoặc thêm vào `routers/index.ts`
-4. `pnpm --filter api dev`
+Lần đầu: đăng nhập Cloudflare (`wrangler login` hoặc `CLOUDFLARE_API_TOKEN`).  
+App mới chỉ health check — DB/auth opt-in trong `duneta.server.config.ts` khi cần.
 
-Chi tiết: [docs/architecture.md](docs/architecture.md)
+Production bindings: xem `wrangler.production.jsonc.example` (Hyperdrive + ASSETS).
+
+## Dev local
+
+```bash
+pnpm dev    # HMR → http://localhost:8787 — secrets trong `.env`, map trong `duneta.server.config.ts`
+```
+
+## Cấu trúc
+
+```text
+duneta.client.config.ts       # web (theme, api)
+duneta.server.config.ts       # API (database, auth, …)
+vite.config.mts        # Vite + Cloudflare plugin
+react-router.config.mts
+wrangler.jsonc         # Worker dev (deploy → app/build/server/wrangler.json)
+
+worker.ts              # entry
+app/                   # source only
+├── api/               # backend
+├── pages/             # web pages
+├── themes/            # CSS
+└── build/             # generated
+```

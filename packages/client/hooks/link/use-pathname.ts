@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useLocation } from 'react-router';
 
 /** Current pathname without the query string (Next.js `usePathname`). */
