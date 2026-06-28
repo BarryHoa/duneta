@@ -1,4 +1,4 @@
-import { defineServerConfig } from '@duneta/client/configs';
+import { defineServerConfig } from '@duneta/server/configs';
 import {
   DEFAULT_DATABASE_POOL,
   defineConnections,

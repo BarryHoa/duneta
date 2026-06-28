@@ -10,16 +10,8 @@ import { mergeConfig, type DeepPartial } from './merge';
 import { commitConfig } from './registry';
 import type { DunetaWebConfig } from './types';
 
-export {
-  CLIENT_CONFIG_FILENAME,
-  defineClientConfig,
-  defineServerConfig,
-  toWebConfig,
-} from './duneta';
-export type {
-  DunetaClientConfig,
-  DunetaServerConfigFile,
-} from './duneta';
+export { CLIENT_CONFIG_FILENAME, defineClientConfig, toWebConfig } from './duneta';
+export type { DunetaClientConfig } from './duneta';
 
 async function loadClientConfigFile(cwd: string): Promise<DunetaClientConfig> {
   try {

@@ -54,7 +54,7 @@ return api.fetch(request);
 `duneta.server.config.ts` — chỉ API features + `process.env.*` cho secrets. **`app.name` / `app.env` không cần lặp** — `app.name` chỉ client; `app.env` server auto từ `process.env.NODE_ENV` (Wrangler `vars.NODE_ENV`).
 
 ```ts
-import { defineServerConfig } from '@duneta/client/configs';
+import { defineServerConfig } from '@duneta/server/configs';
 
 export default defineServerConfig({
   database: {

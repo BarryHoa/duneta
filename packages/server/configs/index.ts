@@ -74,6 +74,11 @@ export {
   resolveAuthMountPath,
 } from './features.js';
 export { mergeConfig, type DeepPartial } from './merge.js';
+export {
+  defineServerConfig,
+  SERVER_CONFIG_FILENAME,
+  type DunetaServerConfigFile,
+} from './duneta.js';
 export { config, getConfig } from './registry.js';
 export type {
   AppConfig,
