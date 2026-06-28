@@ -6,8 +6,6 @@ function DunetaButtonRoot(props: DunetaButtonProps) {
   return <Button {...props} />;
 }
 
-
-
 export const DunetaButton = Object.assign(DunetaButtonRoot, {
   Root: DunetaButtonRoot,
 });

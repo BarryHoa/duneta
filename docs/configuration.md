@@ -11,7 +11,7 @@ Vite **không** import server config → secrets không evaluate lúc web build.
 
 | File | Đọc bởi | Nội dung |
 |------|---------|----------|
-| `duneta.client.config.ts` | `loadConfig`, sync routers | `app`, `theme`, `api`, `router`, `image` (sizes, quality) |
+| `duneta.client.config.ts` | `loadConfig`, sync routers | `app`, `theme`, `api`, `locale`, `router`, `image` (sizes, quality) |
 | `duneta.server.config.ts` | `defineServer({ importConfig })` | `database`, `auth`, `image` (domains, cache), … |
 
 Image optimization route is fixed at `/duneta/image` (`IMAGE_OPTIMIZATION_PATH`) — not in user config.
@@ -84,6 +84,7 @@ export default defineClientConfig({
   app: { name: 'my-app', env: 'development' },
   theme: { default: 'light' },
   api: { baseUrl: '/api' },
+  locale: { default: 'vi', supported: ['vi', 'en'] },
 });
 ```
 

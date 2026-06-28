@@ -6,8 +6,6 @@ function DunetaToolbarRoot(props: DunetaToolbarProps) {
   return <Toolbar {...props} />;
 }
 
-
-
 export const DunetaToolbar = Object.assign(DunetaToolbarRoot, {
   Root: DunetaToolbarRoot,
 });

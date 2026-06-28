@@ -6,8 +6,6 @@ function DunetaSeparatorRoot(props: DunetaSeparatorProps) {
   return <Separator {...props} />;
 }
 
-
-
 export const DunetaSeparator = Object.assign(DunetaSeparatorRoot, {
   Root: DunetaSeparatorRoot,
 });

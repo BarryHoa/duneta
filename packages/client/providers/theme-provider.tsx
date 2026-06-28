@@ -2,11 +2,11 @@ import type { ThemeMode } from '../configs/types.js';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { PropsWithChildren } from 'react';
 
-type ThemeProviderProps = PropsWithChildren<{
+export type DunetaThemeProviderProps = PropsWithChildren<{
   defaultTheme?: ThemeMode;
 }>;
 
-export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProviderProps) {
+export function DunetaThemeProvider({ children, defaultTheme = 'dark' }: DunetaThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
@@ -17,3 +17,6 @@ export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProvider
     </NextThemesProvider>
   );
 }
+
+/** @deprecated Use `DunetaThemeProvider` */
+export const ThemeProvider = DunetaThemeProvider;

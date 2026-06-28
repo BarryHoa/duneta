@@ -7,6 +7,11 @@ export type ImageConfig = {
   quality: number;
 };
 
+export type LocaleConfig = {
+  default: string;
+  supported: string[];
+};
+
 export type DunetaWebConfig = {
   app: {
     name: string;
@@ -25,5 +30,6 @@ export type DunetaWebConfig = {
   theme: {
     default: ThemeMode;
   };
+  locale: LocaleConfig;
   image: ImageConfig;
 };

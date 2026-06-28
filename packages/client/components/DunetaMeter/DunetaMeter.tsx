@@ -6,8 +6,6 @@ function DunetaMeterRoot(props: DunetaMeterProps) {
   return <Meter {...props} />;
 }
 
-
-
 export const DunetaMeter = Object.assign(DunetaMeterRoot, {
   Root: DunetaMeterRoot,
 });

@@ -6,8 +6,6 @@ function DunetaErrorMessageRoot(props: DunetaErrorMessageProps) {
   return <ErrorMessage {...props} />;
 }
 
-
-
 export const DunetaErrorMessage = Object.assign(DunetaErrorMessageRoot, {
   Root: DunetaErrorMessageRoot,
 });

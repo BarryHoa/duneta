@@ -6,8 +6,6 @@ function DunetaSurfaceRoot(props: DunetaSurfaceProps) {
   return <Surface {...props} />;
 }
 
-
-
 export const DunetaSurface = Object.assign(DunetaSurfaceRoot, {
   Root: DunetaSurfaceRoot,
 });

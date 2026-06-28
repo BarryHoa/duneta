@@ -6,8 +6,6 @@ function DunetaDisclosureGroupRoot(props: DunetaDisclosureGroupProps) {
   return <DisclosureGroup {...props} />;
 }
 
-
-
 export const DunetaDisclosureGroup = Object.assign(DunetaDisclosureGroupRoot, {
   Root: DunetaDisclosureGroupRoot,
 });

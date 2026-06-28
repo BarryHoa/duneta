@@ -6,8 +6,6 @@ function DunetaInputRoot(props: DunetaInputProps) {
   return <Input {...props} />;
 }
 
-
-
 export const DunetaInput = Object.assign(DunetaInputRoot, {
   Root: DunetaInputRoot,
 });

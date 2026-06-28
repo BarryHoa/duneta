@@ -36,23 +36,29 @@ export function createDunetaViteConfig(repoRoot: string, appRoot: string, overri
       rollupOptions: {
         output: {
           manualChunks(id) {
+            if (id.includes('/components/DunetaDataTable/')) return 'duneta-datatable';
+
             const herouiComponent = id.match(
               /node_modules\/@heroui\/react\/dist\/components\/([^/]+)/,
             );
             if (herouiComponent) return `heroui-${herouiComponent[1]}`;
-            if (id.includes('node_modules/@heroui/react/dist/hooks/')) return 'heroui-hooks';
-            if (id.includes('node_modules/@heroui/react/dist/utils/')) return 'heroui-utils';
-            if (id.includes('node_modules/tailwind-variants')) return 'vendor-tailwind-variants';
-            if (id.includes('node_modules/@heroui/styles')) return 'vendor-heroui-styles';
-            if (id.includes('node_modules/react-aria-components')) return 'vendor-rac';
-            if (id.includes('node_modules/@react-aria/')) return 'vendor-react-aria';
-            if (id.includes('node_modules/@react-stately/')) return 'vendor-react-stately';
-            if (id.includes('node_modules/@internationalized/')) return 'vendor-intl';
-            if (id.includes('node_modules/@heroui/')) return 'vendor-heroui';
-            if (id.includes('node_modules/@tanstack/')) return 'vendor-tanstack';
-            if (id.includes('node_modules/@dnd-kit/')) return 'vendor-dnd-kit';
-            if (id.includes('node_modules/lucide-react')) return 'vendor-lucide';
-            if (id.includes('/components/DunetaDataTable/')) return 'duneta-datatable';
+
+            if (!id.includes('node_modules')) return;
+
+            // Shared UI/runtime deps reference each other — one chunk avoids Rollup circular chunk warnings.
+            if (
+              id.includes('node_modules/@heroui/') ||
+              id.includes('node_modules/@tanstack/') ||
+              id.includes('node_modules/@react-aria/') ||
+              id.includes('node_modules/@react-stately/') ||
+              id.includes('node_modules/@internationalized/') ||
+              id.includes('node_modules/react-aria-components') ||
+              id.includes('node_modules/tailwind-variants') ||
+              id.includes('node_modules/@dnd-kit/') ||
+              id.includes('node_modules/lucide-react')
+            ) {
+              return 'vendor-ui';
+            }
           },
         },
         onwarn(warning, warn) {

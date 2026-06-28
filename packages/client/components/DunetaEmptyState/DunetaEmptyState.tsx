@@ -6,8 +6,6 @@ function DunetaEmptyStateRoot(props: DunetaEmptyStateProps) {
   return <EmptyState {...props} />;
 }
 
-
-
 export const DunetaEmptyState = Object.assign(DunetaEmptyStateRoot, {
   Root: DunetaEmptyStateRoot,
 });

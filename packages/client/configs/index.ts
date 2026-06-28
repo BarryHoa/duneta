@@ -3,4 +3,4 @@ export { CLIENT_CONFIG_FILENAME, defineClientConfig, loadConfig, toWebConfig } f
 export { mergeConfig, type DeepPartial } from './merge';
 export { config, getConfig } from './registry';
 export type { DunetaClientConfig } from './duneta';
-export type { DunetaWebConfig, ImageConfig, ThemeMode } from './types';
+export type { DunetaWebConfig, ImageConfig, LocaleConfig, ThemeMode } from './types';

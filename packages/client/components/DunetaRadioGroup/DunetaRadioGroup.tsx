@@ -6,8 +6,6 @@ function DunetaRadioGroupRoot(props: DunetaRadioGroupProps) {
   return <RadioGroup {...props} />;
 }
 
-
-
 export const DunetaRadioGroup = Object.assign(DunetaRadioGroupRoot, {
   Root: DunetaRadioGroupRoot,
 });

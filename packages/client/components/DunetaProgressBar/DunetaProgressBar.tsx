@@ -6,8 +6,6 @@ function DunetaProgressBarRoot(props: DunetaProgressBarProps) {
   return <ProgressBar {...props} />;
 }
 
-
-
 export const DunetaProgressBar = Object.assign(DunetaProgressBarRoot, {
   Root: DunetaProgressBarRoot,
 });

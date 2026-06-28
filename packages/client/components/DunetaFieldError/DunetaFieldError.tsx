@@ -6,8 +6,6 @@ function DunetaFieldErrorRoot(props: DunetaFieldErrorProps) {
   return <FieldError {...props} />;
 }
 
-
-
 export const DunetaFieldError = Object.assign(DunetaFieldErrorRoot, {
   Root: DunetaFieldErrorRoot,
 });

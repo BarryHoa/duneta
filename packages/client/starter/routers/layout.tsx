@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-import { ThemeProvider } from '@duneta/client/runtime';
+import { DunetaAppProviders } from '@duneta/client/providers';
 import '@duneta/client/themes/globals.css';
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -20,11 +20,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-background text-foreground">
-        <ThemeProvider defaultTheme="light">
+        <DunetaAppProviders>
           {children}
           <ScrollRestoration />
           <Scripts />
-        </ThemeProvider>
+        </DunetaAppProviders>
       </body>
     </html>
   );

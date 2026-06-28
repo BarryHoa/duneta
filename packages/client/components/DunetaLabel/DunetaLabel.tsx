@@ -6,8 +6,6 @@ function DunetaLabelRoot(props: DunetaLabelProps) {
   return <Label {...props} />;
 }
 
-
-
 export const DunetaLabel = Object.assign(DunetaLabelRoot, {
   Root: DunetaLabelRoot,
 });

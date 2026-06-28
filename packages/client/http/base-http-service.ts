@@ -1,8 +1,10 @@
+import { createRequestSignal } from './abort-signal.js';
 import { createDefaultRequestHeaders } from './default-headers.js';
 import { HttpError } from './errors.js';
 import { mergeHeaders, setHeaderIfMissing } from './merge-headers.js';
 import { inferResponseType, parseContentDisposition, parseResponseBody } from './parse-response.js';
 import { resolveUrl } from './resolve-url.js';
+import { createFetchTransport } from './transport.js';
 import type {
   HttpDownloadResult,
   HttpRequestOptions,
@@ -35,15 +37,23 @@ export abstract class BaseHttpService {
     throw await HttpError.fromResponse(response);
   }
 
-  protected getFetcher(): typeof fetch {
-    return this.options.fetch ?? fetch;
+  protected getTransport() {
+    return this.options.transport ?? createFetchTransport(this.options.fetch);
   }
 
-  protected buildRequestInit(options: HttpRequestOptions): RequestInit {
-    const { path: _path, params: _params, responseType: _responseType, json, timeout, headers, body, ...init } =
+  protected buildRequestInit(options: HttpRequestOptions): {
+    init: RequestInit;
+    cleanup: () => void;
+  } {
+    const { path: _path, params: _params, responseType, json, timeout, headers, body, ...init } =
       options;
 
     const mergedHeaders = mergeHeaders(this.getDefaultHeaders(), this.options.defaultHeaders, headers);
+
+    if (responseType === 'stream') {
+      setHeaderIfMissing(mergedHeaders, 'Accept', 'text/event-stream');
+    }
+
     let requestBody = body ?? null;
 
     if (json !== undefined) {
@@ -53,27 +63,32 @@ export abstract class BaseHttpService {
       mergedHeaders.delete('Content-Type');
     }
 
-    let signal = init.signal;
-
-    if (timeout !== undefined && signal === undefined) {
-      const controller = new AbortController();
-      setTimeout(() => controller.abort(), timeout);
-      signal = controller.signal;
-    }
+    const { signal, cleanup } = createRequestSignal(timeout, init.signal ?? undefined);
 
     return {
-      ...init,
-      body: requestBody,
-      credentials: init.credentials ?? this.options.credentials ?? 'same-origin',
-      headers: mergedHeaders,
-      signal,
+      cleanup,
+      init: {
+        ...init,
+        body: requestBody,
+        credentials: init.credentials ?? this.options.credentials ?? 'same-origin',
+        headers: mergedHeaders,
+        signal: signal ?? init.signal,
+      },
     };
   }
 
   async fetchResponse(options: HttpRequestOptions): Promise<Response> {
     const url = this.resolveUrl(options.path, options.params);
-    const init = await this.onRequest(url, this.buildRequestInit(options));
-    return this.getFetcher()(url, init);
+    const built = this.buildRequestInit(options);
+    const init = await this.onRequest(url, built.init);
+
+    try {
+      return await this.getTransport()(url, init);
+    } catch (error) {
+      throw HttpError.network(url, error);
+    } finally {
+      built.cleanup();
+    }
   }
 
   async request<T = unknown>(options: HttpRequestOptions): Promise<T> {
@@ -81,6 +96,10 @@ export abstract class BaseHttpService {
 
     if (!response.ok) {
       await this.onError(response);
+    }
+
+    if (response.status === 204) {
+      return undefined as T;
     }
 
     const responseType: HttpResponseType =

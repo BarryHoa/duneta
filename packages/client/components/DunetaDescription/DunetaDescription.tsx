@@ -6,8 +6,6 @@ function DunetaDescriptionRoot(props: DunetaDescriptionProps) {
   return <Description {...props} />;
 }
 
-
-
 export const DunetaDescription = Object.assign(DunetaDescriptionRoot, {
   Root: DunetaDescriptionRoot,
 });

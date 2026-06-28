@@ -6,8 +6,6 @@ function DunetaSwitchRoot(props: DunetaSwitchProps) {
   return <Switch {...props} />;
 }
 
-
-
 export const DunetaSwitch = Object.assign(DunetaSwitchRoot, {
   Root: DunetaSwitchRoot,
 });

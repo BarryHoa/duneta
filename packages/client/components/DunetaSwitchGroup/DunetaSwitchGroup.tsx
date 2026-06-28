@@ -6,8 +6,6 @@ function DunetaSwitchGroupRoot(props: DunetaSwitchGroupProps) {
   return <SwitchGroup {...props} />;
 }
 
-
-
 export const DunetaSwitchGroup = Object.assign(DunetaSwitchGroupRoot, {
   Root: DunetaSwitchGroupRoot,
 });

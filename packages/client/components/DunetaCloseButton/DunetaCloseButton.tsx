@@ -6,8 +6,6 @@ function DunetaCloseButtonRoot(props: DunetaCloseButtonProps) {
   return <CloseButton {...props} />;
 }
 
-
-
 export const DunetaCloseButton = Object.assign(DunetaCloseButtonRoot, {
   Root: DunetaCloseButtonRoot,
 });

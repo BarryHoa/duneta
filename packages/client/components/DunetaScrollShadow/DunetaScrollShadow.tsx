@@ -6,8 +6,6 @@ function DunetaScrollShadowRoot(props: DunetaScrollShadowProps) {
   return <ScrollShadow {...props} />;
 }
 
-
-
 export const DunetaScrollShadow = Object.assign(DunetaScrollShadowRoot, {
   Root: DunetaScrollShadowRoot,
 });

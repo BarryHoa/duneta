@@ -6,8 +6,6 @@ function DunetaProgressCircleRoot(props: DunetaProgressCircleProps) {
   return <ProgressCircle {...props} />;
 }
 
-
-
 export const DunetaProgressCircle = Object.assign(DunetaProgressCircleRoot, {
   Root: DunetaProgressCircleRoot,
 });

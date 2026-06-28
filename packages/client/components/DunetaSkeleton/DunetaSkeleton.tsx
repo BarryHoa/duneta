@@ -6,8 +6,6 @@ function DunetaSkeletonRoot(props: DunetaSkeletonProps) {
   return <Skeleton {...props} />;
 }
 
-
-
 export const DunetaSkeleton = Object.assign(DunetaSkeletonRoot, {
   Root: DunetaSkeletonRoot,
 });

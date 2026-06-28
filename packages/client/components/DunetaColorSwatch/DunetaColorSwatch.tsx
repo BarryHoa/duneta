@@ -6,8 +6,6 @@ function DunetaColorSwatchRoot(props: DunetaColorSwatchProps) {
   return <ColorSwatch {...props} />;
 }
 
-
-
 export const DunetaColorSwatch = Object.assign(DunetaColorSwatchRoot, {
   Root: DunetaColorSwatchRoot,
 });

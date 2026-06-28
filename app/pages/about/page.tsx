@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { DunetaLink as Link } from '@duneta/client/ui';
-import { http } from '@duneta/client/http';
+import { DunetaAsyncBoundary } from '@duneta/client/feedback';
+import { useHttpQuery } from '@duneta/client/query';
 
 type HealthResponse = {
   ok: boolean;
@@ -11,15 +12,17 @@ export function meta() {
   return [{ title: 'About — Duneta' }];
 }
 
+function AboutHealth() {
+  const { data } = useHttpQuery<HealthResponse>('/health', { ssr: true });
+
+  return (
+    <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-700">
+      API health: {data.message}
+    </p>
+  );
+}
+
 export default function AboutPage() {
-  const [health, setHealth] = useState<string>('Checking API…');
-
-  useEffect(() => {
-    http.json<HealthResponse>('/health')
-      .then((data) => setHealth(data.message))
-      .catch(() => setHealth('API unavailable'));
-  }, []);
-
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 px-6 py-16">
       <p className="text-sm font-medium text-cyan-700">App page</p>
@@ -28,9 +31,17 @@ export default function AboutPage() {
         Trang này nằm trong <code className="rounded bg-slate-100 px-1.5 py-0.5 text-cyan-800">app/pages/about/page.tsx</code>{' '}
         và override route mặc định từ package.
       </p>
-      <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-700">
-        API health: {health}
-      </p>
+      <DunetaAsyncBoundary>
+        <Suspense
+          fallback={
+            <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-700">
+              API health: Checking…
+            </p>
+          }
+        >
+          <AboutHealth />
+        </Suspense>
+      </DunetaAsyncBoundary>
       <Link href="/datatable" className="text-cyan-700 hover:text-cyan-900">
         DataTable demo →
       </Link>

@@ -61,4 +61,18 @@ export class HttpError extends Error {
       body,
     });
   }
+
+  static network(url: string, cause?: unknown): HttpError {
+    const message =
+      cause instanceof Error && cause.name === 'AbortError'
+        ? 'Request timed out or was aborted'
+        : 'Network request failed';
+
+    return new HttpError(message, {
+      status: 0,
+      statusText: 'Network Error',
+      url,
+      body: cause instanceof Error ? cause.message : null,
+    });
+  }
 }

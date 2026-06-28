@@ -6,8 +6,6 @@ function DunetaDateRangePickerRoot(props: DunetaDateRangePickerProps) {
   return <DateRangePicker {...props} />;
 }
 
-
-
 export const DunetaDateRangePicker = Object.assign(DunetaDateRangePickerRoot, {
   Root: DunetaDateRangePickerRoot,
 });

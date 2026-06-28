@@ -6,8 +6,6 @@ function DunetaToggleButtonRoot(props: DunetaToggleButtonProps) {
   return <ToggleButton {...props} />;
 }
 
-
-
 export const DunetaToggleButton = Object.assign(DunetaToggleButtonRoot, {
   Root: DunetaToggleButtonRoot,
 });

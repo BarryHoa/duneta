@@ -2,6 +2,10 @@
 import { Calendar } from '@heroui/react';
 import type { DunetaCalendarProps } from './types';
 
-export function DunetaCalendar(props: DunetaCalendarProps) {
+function DunetaCalendarRoot(props: DunetaCalendarProps) {
   return <Calendar {...props} />;
 }
+
+export const DunetaCalendar = Object.assign(DunetaCalendarRoot, {
+  Root: DunetaCalendarRoot,
+});

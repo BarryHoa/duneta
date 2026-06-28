@@ -6,8 +6,6 @@ function DunetaSpinnerRoot(props: DunetaSpinnerProps) {
   return <Spinner {...props} />;
 }
 
-
-
 export const DunetaSpinner = Object.assign(DunetaSpinnerRoot, {
   Root: DunetaSpinnerRoot,
 });

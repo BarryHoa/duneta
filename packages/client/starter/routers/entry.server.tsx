@@ -1,7 +1,11 @@
 import type { EntryContext, RouterContextProvider } from 'react-router';
 import { ServerRouter } from 'react-router';
-import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
+import { createDunetaQueryClient } from '@duneta/client/query';
+import {
+  DunetaServerQueryProvider,
+  finalizeSsrQueryResponse,
+} from '@duneta/client/query/ssr-server';
 
 export const streamTimeout = 5_000;
 
@@ -21,10 +25,12 @@ export default async function handleRequest(
   }
 
   let shellRendered = false;
-  const userAgent = request.headers.get('user-agent');
+  const queryClient = createDunetaQueryClient();
 
   const body = await renderToReadableStream(
-    <ServerRouter context={routerContext} url={request.url} />,
+    <DunetaServerQueryProvider client={queryClient}>
+      <ServerRouter context={routerContext} url={request.url} />
+    </DunetaServerQueryProvider>,
     {
       onError(error: unknown) {
         responseStatusCode = 500;
@@ -36,12 +42,12 @@ export default async function handleRequest(
   );
   shellRendered = true;
 
-  if ((userAgent && isbot(userAgent)) || routerContext.isSpaMode) {
-    await body.allReady;
-  }
+  await body.allReady;
 
   responseHeaders.set('Content-Type', 'text/html');
-  return new Response(body, {
+  const dehydratedBody = finalizeSsrQueryResponse(body, queryClient);
+
+  return new Response(dehydratedBody ?? body, {
     headers: responseHeaders,
     status: responseStatusCode,
   });

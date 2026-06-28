@@ -3,7 +3,7 @@ import type { DunetaWebConfig } from './types';
 
 export const CLIENT_CONFIG_FILENAME = 'duneta.client.config.ts';
 
-const WEB_KEYS = ['app', 'api', 'theme', 'router', 'image'] as const satisfies readonly (keyof DunetaWebConfig)[];
+const WEB_KEYS = ['app', 'api', 'theme', 'locale', 'router', 'image'] as const satisfies readonly (keyof DunetaWebConfig)[];
 
 /** Web sections — `duneta.client.config.ts` (Vite / React Router only). */
 export type DunetaClientConfig = DeepPartial<DunetaWebConfig>;

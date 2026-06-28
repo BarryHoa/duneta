@@ -6,8 +6,6 @@ function DunetaDrawerRoot(props: DunetaDrawerProps) {
   return <Drawer {...props} />;
 }
 
-
-
 export const DunetaDrawer = Object.assign(DunetaDrawerRoot, {
   Root: DunetaDrawerRoot,
 });

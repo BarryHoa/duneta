@@ -6,8 +6,6 @@ function DunetaCheckboxRoot(props: DunetaCheckboxProps) {
   return <Checkbox {...props} />;
 }
 
-
-
 export const DunetaCheckbox = Object.assign(DunetaCheckboxRoot, {
   Root: DunetaCheckboxRoot,
 });

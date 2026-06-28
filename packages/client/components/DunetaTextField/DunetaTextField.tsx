@@ -6,8 +6,6 @@ function DunetaTextFieldRoot(props: DunetaTextFieldProps) {
   return <TextField {...props} />;
 }
 
-
-
 export const DunetaTextField = Object.assign(DunetaTextFieldRoot, {
   Root: DunetaTextFieldRoot,
 });
