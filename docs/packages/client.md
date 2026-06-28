@@ -27,6 +27,28 @@ import { DunetaButton, DunetaCard, DunetaModal } from '@duneta/client/components
 import { DunetaTabs } from '@duneta/client/components/DunetaTabs';
 ```
 
+## Kit
+
+`@duneta/client/kit` là public client toolkit của Duneta. Nó export lại component set hiện có và thêm một số app-building primitives để user không nhầm với API của React hoặc Next.js:
+
+```tsx
+import {
+  DunetaButton,
+  DunetaImage,
+  DunetaScript,
+  createDynamicComponent,
+  createPageMeta,
+} from '@duneta/client/kit';
+```
+
+| Export | Mô tả |
+|--------|------|
+| `DunetaImage` | Responsive image wrapper với `priority`, `fill`, `sizes`, custom loader |
+| `DunetaScript` | Load third-party script theo `afterInteractive` hoặc `lazyOnload` |
+| `createDynamicComponent` | Dynamic import wrapper với fallback, preload, optional client-only render |
+| `createPageMeta` / `defineMeta` | Helper tạo React Router meta descriptors |
+| `preloadImage` / `preconnect` | Helper cho resource hints |
+
 ## Extensions (app-level)
 
 | Export | Mô tả |
@@ -44,6 +66,7 @@ import { DunetaTabs } from '@duneta/client/components/DunetaTabs';
 
 | Path | Nội dung |
 |------|----------|
+| `@duneta/client/kit` | Duneta client toolkit: components + app-building primitives |
 | `@duneta/client/components` | Barrel (wrappers + extensions) |
 | `@duneta/client/components/DunetaButton` | Single component module |
 | `@duneta/client/configs` | Web config |

@@ -11,8 +11,10 @@ Vite **không** import server config → secrets không evaluate lúc web build.
 
 | File | Đọc bởi | Nội dung |
 |------|---------|----------|
-| `duneta.client.config.ts` | `loadConfig`, sync routers | `app`, `theme`, `api`, `router` |
-| `duneta.server.config.ts` | `defineServer({ importConfig })` | `database`, `auth`, `security`, … |
+| `duneta.client.config.ts` | `loadConfig`, sync routers | `app`, `theme`, `api`, `router`, `image` (sizes, quality) |
+| `duneta.server.config.ts` | `defineServer({ importConfig })` | `database`, `auth`, `image` (domains, cache), … |
+
+Image optimization route is fixed at `/duneta/image` (`IMAGE_OPTIMIZATION_PATH`) — not in user config.
 
 Cấu hình sai → runtime lỗi. Framework không tự skip.
 

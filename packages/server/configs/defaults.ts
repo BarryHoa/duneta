@@ -114,6 +114,13 @@ export function createDefaultConfig(): DunetaServerConfig {
 
     cron: { enabled: false },
 
+    image: {
+      domains: [],
+      remotePatterns: [],
+      formats: ['auto'],
+      minimumCacheTtl: THIRTY_DAYS,
+    },
+
     debug: { enabled: false, logLevel: 'debug' },
   };
 }

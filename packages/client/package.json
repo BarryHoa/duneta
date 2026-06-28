@@ -8,6 +8,7 @@
   "files": [
     "dist",
     "configs",
+    "kit",
     "routers",
     "layouts",
     "providers",
@@ -53,6 +54,10 @@
     "./helpers": {
       "types": "./dist/helpers/index.d.ts",
       "import": "./dist/helpers/index.js"
+    },
+    "./kit": {
+      "types": "./dist/kit/index.d.ts",
+      "import": "./dist/kit/index.js"
     },
     "./hooks/link": {
       "types": "./dist/hooks/link/index.d.ts",

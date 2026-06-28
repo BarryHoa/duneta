@@ -141,6 +141,16 @@ export type CronConfig = {
   enabled?: boolean;
 };
 
+export type ImageFormat = 'auto' | 'avif' | 'webp';
+
+/** Server image optimization — remote fetch policy and cache (route path is fixed). */
+export type ImageOptimizationConfig = {
+  domains: string[];
+  remotePatterns: string[];
+  formats: ImageFormat[];
+  minimumCacheTtl: number;
+};
+
 export type DebugConfig = {
   enabled: boolean;
   logLevel: 'debug' | 'info' | 'warn' | 'error';
@@ -161,6 +171,7 @@ export interface DunetaCoreConfig {
   security: SecurityConfig;
   logging: LoggingConfig;
   cron: CronConfig;
+  image: ImageOptimizationConfig;
   debug: DebugConfig;
 }
 

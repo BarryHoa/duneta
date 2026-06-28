@@ -1,5 +1,12 @@
 export type ThemeMode = 'dark' | 'light' | 'system';
 
+/** Web image display — `DunetaImage` srcset widths and default quality. */
+export type ImageConfig = {
+  deviceSizes: number[];
+  imageSizes: number[];
+  quality: number;
+};
+
 export type DunetaWebConfig = {
   app: {
     name: string;
@@ -18,4 +25,5 @@ export type DunetaWebConfig = {
   theme: {
     default: ThemeMode;
   };
+  image: ImageConfig;
 };

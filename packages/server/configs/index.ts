@@ -58,6 +58,7 @@ export {
   DEFAULT_CONFIG_APP_PORT,
   DEFAULT_TIMEZONE,
 } from './defaults.js';
+export { IMAGE_OPTIMIZATION_PATH } from './image-path.js';
 export {
   buildSocialProviders,
   isAuthEnabled,
@@ -96,6 +97,8 @@ export type {
   LocaleConfig,
   LoggingConfig,
   CronConfig,
+  ImageFormat,
+  ImageOptimizationConfig,
   NodeEnv,
   OAuthProviderConfig,
   RequestConfig,

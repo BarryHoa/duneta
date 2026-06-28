@@ -15,6 +15,7 @@
     "configs",
     "validators",
     "helpers",
+    "kit",
     "hooks",
     "components",
     "layouts",
