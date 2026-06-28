@@ -9,6 +9,7 @@
     "dist",
     "configs",
     "core",
+    "validators",
     "runtime",
     "router",
     "ui",
@@ -25,6 +26,30 @@
     "./core": {
       "types": "./dist/core/index.d.ts",
       "import": "./dist/core/index.js"
+    },
+    "./validators": {
+      "types": "./dist/validators/index.d.ts",
+      "import": "./dist/validators/index.js"
+    },
+    "./validators/string": {
+      "types": "./dist/validators/string/index.d.ts",
+      "import": "./dist/validators/string/index.js"
+    },
+    "./validators/number": {
+      "types": "./dist/validators/number/index.d.ts",
+      "import": "./dist/validators/number/index.js"
+    },
+    "./validators/auth": {
+      "types": "./dist/validators/auth/index.d.ts",
+      "import": "./dist/validators/auth/index.js"
+    },
+    "./validators/scalar": {
+      "types": "./dist/validators/scalar/index.d.ts",
+      "import": "./dist/validators/scalar/index.js"
+    },
+    "./validators/types": {
+      "types": "./dist/validators/types/index.d.ts",
+      "import": "./dist/validators/types/index.js"
     },
     "./runtime": {
       "types": "./dist/runtime/index.d.ts",

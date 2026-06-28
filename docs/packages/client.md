@@ -8,7 +8,8 @@ Framework React Router web — layered frontend lib.
 @duneta/client/ui        → Duneta* components (design system)
 @duneta/client/runtime   → Image, Script, apiFetch, ThemeProvider
 @duneta/client/router    → Link hooks, meta, dynamic import
-@duneta/client/core      → cn, validators, constants
+@duneta/client/core        → cn, constants
+@duneta/client/validators  → Zod schema factories (string, number, auth, …)
 @duneta/client/configs   → duneta.client.config.ts (Vite / sync)
 starter/                 → default routers + layouts (sync only, not imported)
 ```
@@ -53,7 +54,43 @@ import { defineMeta, createDynamicComponent, useRouter } from '@duneta/client/ro
 ## Core (`@duneta/client/core`)
 
 ```ts
-import { cn, emailSchema, IMAGE_OPTIMIZATION_PATH } from '@duneta/client/core';
+import { cn, IMAGE_OPTIMIZATION_PATH } from '@duneta/client/core';
+```
+
+## Validators (`@duneta/client/validators`)
+
+Zod schema factories — import all or by category:
+
+```text
+validators/
+  types/       → FieldMessageOptions, PasswordSchemaOptions, …
+  string/      → base, email, identity, web, search
+  number/      → integer, pagination
+  auth/        → password, otp, passwordsMatch, acceptedTerms
+  scalar/      → boolean, uuid, date
+```
+
+```ts
+import { z } from 'zod';
+import {
+  displayNameSchema,
+  emailSchema,
+  passwordSchema,
+  passwordsMatch,
+} from '@duneta/client/validators';
+
+// Or granular imports:
+import { emailSchema } from '@duneta/client/validators/string';
+import { passwordSchema, passwordsMatch } from '@duneta/client/validators/auth';
+
+const signupSchema = z
+  .object({
+    name: displayNameSchema({ label: 'Full name', max: 80 }),
+    email: emailSchema({ message: 'Email không hợp lệ' }),
+    password: passwordSchema({ min: 10, strong: true }),
+    confirmPassword: z.string(),
+  })
+  .superRefine(passwordsMatch({ message: 'Mật khẩu không khớp' }));
 ```
 
 ## Config
