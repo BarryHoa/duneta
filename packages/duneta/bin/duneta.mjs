@@ -38,6 +38,11 @@ function writeNewFile(file, content) {
   console.log(`[duneta] created ${path.relative(projectRoot, file)}`);
 }
 
+function writeFile(file, content) {
+  fs.writeFileSync(file, content);
+  console.log(`[duneta] updated ${path.relative(projectRoot, file)}`);
+}
+
 function words(input) {
   return input
     .trim()
@@ -181,10 +186,74 @@ export const ${exportName} = createMiddleware<RequestContext>(async (_c, next) =
   );
 }
 
+function makeCron(name) {
+  const base = kebab(name);
+  const cronName = base.endsWith('-cron') ? base.slice(0, -'-cron'.length) : base;
+  const fileBase = `${cronName}-cron`;
+  const className = `${pascal(cronName)}Cron`;
+  const cronDir = path.join(appRoot, 'api/cron');
+  writeNewFile(
+    path.join(cronDir, `${fileBase}.ts`),
+    `import { BaseKernelCron, type CronJobContext } from '@duneta/server/cron';
+
+export class ${className} extends BaseKernelCron {
+  readonly name = '${cronName}';
+  readonly schedule = '0 0 * * *';
+
+  async handle(ctx: CronJobContext) {
+    void ctx;
+  }
+}
+`,
+  );
+  updateCronKernel(cronDir, fileBase, className);
+}
+
+function defaultCronKernel() {
+  return `import { defineCronKernel } from '@duneta/server/cron';
+
+export const registerCron = defineCronKernel([
+  // Register cron classes here.
+]);
+`;
+}
+
+function updateCronKernel(cronDir, fileBase, className) {
+  const kernelFile = path.join(cronDir, 'index.ts');
+  if (!existsSync(kernelFile)) {
+    writeNewFile(kernelFile, defaultCronKernel());
+  }
+
+  let content = fs.readFileSync(kernelFile, 'utf8');
+  const importLine = `import { ${className} } from './${fileBase}';`;
+  if (!content.includes(importLine)) {
+    const importMatches = [...content.matchAll(/^import .+;$/gm)];
+    const insertAt = importMatches.length
+      ? importMatches[importMatches.length - 1].index + importMatches[importMatches.length - 1][0].length
+      : 0;
+    content = `${content.slice(0, insertAt)}\n${importLine}${content.slice(insertAt)}`;
+  }
+
+  if (!content.includes(`${className},`)) {
+    const marker = 'defineCronKernel([';
+    const markerIndex = content.indexOf(marker);
+    if (markerIndex === -1) {
+      console.log(`[duneta] add ${className} to ${path.relative(projectRoot, kernelFile)} manually`);
+      return;
+    }
+    const insertAt = content.indexOf('\n', markerIndex + marker.length);
+    const line = `  ${className},\n`;
+    content = `${content.slice(0, insertAt + 1)}${line}${content.slice(insertAt + 1)}`;
+  }
+
+  writeFile(kernelFile, content);
+}
+
 function packagesBuilt() {
   return (
     existsSync(path.join(clientRoot, 'dist/components/index.js')) &&
-    existsSync(path.join(serverRoot, 'dist/http/index.js'))
+    existsSync(path.join(serverRoot, 'dist/http/index.js')) &&
+    existsSync(path.join(serverRoot, 'dist/cron/index.js'))
   );
 }
 
@@ -461,9 +530,12 @@ try {
     case 'make:middleware':
       makeMiddleware(requireName(command, rest));
       break;
+    case 'make:cron':
+      makeCron(requireName(command, rest));
+      break;
     default:
       console.error(`[duneta] unknown command: ${command}`);
-      console.error('[duneta] usage: duneta <dev|build|deploy|prepare|routes|make:page|make:controller|make:repository|make:route|make:policy|make:middleware>');
+      console.error('[duneta] usage: duneta <dev|build|deploy|prepare|routes|make:page|make:controller|make:repository|make:route|make:policy|make:middleware|make:cron>');
       process.exit(1);
   }
 } catch (error) {

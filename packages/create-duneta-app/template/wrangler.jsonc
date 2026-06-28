@@ -6,5 +6,7 @@
   "compatibility_flags": ["nodejs_compat", "nodejs_compat_populate_process_env"],
   "vars": {
     "NODE_ENV": "development"
-  }
+  },
+  // Cron triggers (requires `cron.enabled: true` in duneta.server.config.ts):
+  // "triggers": { "crons": ["0 0 * * *"] }
 }

@@ -50,6 +50,7 @@ pnpm duneta make:repository post
 pnpm duneta make:route posts
 pnpm duneta make:policy post
 pnpm duneta make:middleware audit
+pnpm duneta make:cron delete-user-session
 ```
 
 `make:*` tạo file theo convention trong `app/`. Nếu app đang dùng `api/services.ts` hoặc `api/router.ts` thủ công, import/mount file mới ở đó. Nếu bỏ qua file thủ công, `duneta sync` trong dev/build sẽ tự sinh từ `controllers/`, `repositories/`, `routers/`.

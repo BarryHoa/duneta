@@ -137,6 +137,10 @@ export type LoggingConfig = {
   format?: 'json' | 'text';
 };
 
+export type CronConfig = {
+  enabled?: boolean;
+};
+
 export type DebugConfig = {
   enabled: boolean;
   logLevel: 'debug' | 'info' | 'warn' | 'error';
@@ -156,6 +160,7 @@ export interface DunetaCoreConfig {
   storage: StorageConfig;
   security: SecurityConfig;
   logging: LoggingConfig;
+  cron: CronConfig;
   debug: DebugConfig;
 }
 

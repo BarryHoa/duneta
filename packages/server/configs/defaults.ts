@@ -112,6 +112,8 @@ export function createDefaultConfig(): DunetaServerConfig {
 
     logging: { enabled: false },
 
+    cron: { enabled: false },
+
     debug: { enabled: false, logLevel: 'debug' },
   };
 }

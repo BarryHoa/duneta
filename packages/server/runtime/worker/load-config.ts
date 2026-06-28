@@ -20,6 +20,7 @@ const SERVER_KEYS = [
   'storage',
   'security',
   'logging',
+  'cron',
   'debug',
 ] as const satisfies readonly (keyof DunetaServerConfig)[];
 

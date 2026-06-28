@@ -10,6 +10,8 @@
   "vars": {
     "NODE_ENV": "development",
   },
+  // Cron triggers (requires `cron.enabled: true` in duneta.server.config.ts):
+  // "triggers": { "crons": ["0 0 * * *"] },
   "secrets": {
     // "required": ["DATABASE_URL", "AUTH_SECRET", "CSRF_SECRET"]
   },

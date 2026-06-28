@@ -3,6 +3,7 @@ import type { Hono as HonoType } from 'hono';
 import type { PermissionResolver } from '../../permissions/types.js';
 import type { DeepPartial, DunetaServerConfig } from '../../configs/index.js';
 import type { RegisterServices } from '../../container/index.js';
+import type { RegisterCronJobs } from '../../cron/index.js';
 import type { RequestContext } from '../../middlewares/request-context.js';
 
 export type ServerConfigImport = () => Promise<{ default?: DeepPartial<DunetaServerConfig> }>;
@@ -12,6 +13,8 @@ export type ServerOptions = {
   importConfig: ServerConfigImport;
   createAppRouter?: (config: DunetaServerConfig) => HonoType<RequestContext>;
   registerServices?: RegisterServices;
+  /** Register Cloudflare Worker scheduled jobs. */
+  registerCron?: RegisterCronJobs;
   /** Role → grants; loaded by `requireSession()` on protected routes. */
   resolvePermissions?: PermissionResolver;
 };
@@ -26,6 +29,7 @@ export function resolveServerHandlers(options: ServerOptions) {
   return {
     createAppRouter: options.createAppRouter ?? (() => emptyAppRouter()),
     registerServices: options.registerServices ?? noopRegisterServices,
+    registerCron: options.registerCron,
     resolvePermissions: options.resolvePermissions,
   };
 }

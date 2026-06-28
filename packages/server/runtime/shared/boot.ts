@@ -13,14 +13,24 @@ import type { RequestContext } from '../../middlewares/request-context.js';
 import { registerPermissionResolver } from '../../permissions/context.js';
 import { resolveServerHandlers, type ServerOptions } from './types.js';
 
-let cachedApp: Hono<RequestContext> | undefined;
+let cachedRuntime: RuntimeServices | undefined;
 let cachedAppKey: string | undefined;
 
 function appCacheKey(config: DunetaServerConfig): string {
   return `${connectionUrl(config.database) ?? ''}:${config.auth?.secret ?? ''}`;
 }
 
-export async function loadApp(options: ServerOptions) {
+export type RuntimeServices = {
+  app: Hono<RequestContext>;
+  config: DunetaServerConfig;
+  db: ReturnType<typeof createDatabase>;
+  auth: ReturnType<typeof createAuth>;
+  cache: ReturnType<typeof createCache>;
+  controllers: ReturnType<typeof createControllerContainer>;
+  repositories: ReturnType<typeof createRepositoryContainer>;
+};
+
+export async function loadRuntimeServices(options: ServerOptions): Promise<RuntimeServices> {
   const handlers = resolveServerHandlers(options);
 
   if (handlers.resolvePermissions) {
@@ -30,7 +40,7 @@ export async function loadApp(options: ServerOptions) {
   const config = getConfig();
   const cacheKey = appCacheKey(config);
 
-  if (cachedApp && cachedAppKey === cacheKey) return cachedApp;
+  if (cachedRuntime && cachedAppKey === cacheKey) return cachedRuntime;
 
   const controllers = createControllerContainer();
   const repositories = createRepositoryContainer();
@@ -43,7 +53,7 @@ export async function loadApp(options: ServerOptions) {
   const cache = createCache(config.cache);
   const router = handlers.createAppRouter(config);
 
-  cachedApp = createHttpApp({
+  const app = createHttpApp({
     router,
     config,
     db,
@@ -52,7 +62,12 @@ export async function loadApp(options: ServerOptions) {
     controllers,
     repositories,
   });
+  cachedRuntime = { app, config, db, auth, cache, controllers, repositories };
   cachedAppKey = cacheKey;
 
-  return cachedApp;
+  return cachedRuntime;
+}
+
+export async function loadApp(options: ServerOptions) {
+  return (await loadRuntimeServices(options)).app;
 }

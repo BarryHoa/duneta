@@ -21,6 +21,7 @@ Monorepo TypeScript: **Hono API** (`@duneta/server`) + **React Router web** (`@d
 - [Sync convention](./api/sync.md)
 - [Runtime](./api/runtime.md)
 - [Routes & `createAppRouter`](./api/routes.md)
+- [Cron scheduled jobs](./api/cron.md)
 - [Services & DI](./api/services.md)
 - [Controller → Repository](./api/controllers-repositories.md)
 

@@ -3,11 +3,13 @@ import { defineServer } from '@duneta/server/runtime/worker';
 import { createAppRouter } from './app/api/router';
 import { resolvePermissions } from './app/api/permissions';
 import { registerServices } from './app/api/services';
+import { registerCron } from './app/api/cron';
 
 const api = defineServer({
   importConfig: () => import('./duneta.server.config'),
   createAppRouter,
   registerServices,
+  registerCron,
   resolvePermissions,
 });
 
@@ -35,5 +37,8 @@ export default {
     }
 
     return web(request, new RouterContextProvider());
+  },
+  scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {
+    return api.scheduled(controller, env, ctx);
   },
 } satisfies ExportedHandler<Env>;

@@ -103,9 +103,9 @@ Workers **không có filesystem** — stdout JSON. Set trong `duneta.server.conf
 logging: { enabled: true, format: 'json' },
 ```
 
-## Cache / Storage / Auth / Rate limit
+## Cache / Storage / Auth / Rate limit / Cron
 
-Cấu hình trong `duneta.server.config.ts`. Chi tiết storage: [storage](./api/storage.md).
+Cấu hình trong `duneta.server.config.ts`. Chi tiết storage: [storage](./api/storage.md). Cron: [cron](./api/cron.md).
 
 ## Worker bindings
 

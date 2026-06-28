@@ -37,6 +37,10 @@ export function isLoggingEnabled(config: DunetaServerConfig): boolean {
   return config.logging?.enabled === true;
 }
 
+export function isCronEnabled(config: DunetaServerConfig): boolean {
+  return config.cron?.enabled === true;
+}
+
 export function isBearerTokenEnabled(config: DunetaServerConfig): boolean {
   const { tokens } = config.auth;
   return (
