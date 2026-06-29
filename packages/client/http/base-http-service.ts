@@ -47,6 +47,8 @@ export abstract class BaseHttpService {
   } {
     const { path: _path, params: _params, responseType, json, timeout, headers, body, ...init } =
       options;
+    void _path;
+    void _params;
 
     const mergedHeaders = mergeHeaders(this.getDefaultHeaders(), this.options.defaultHeaders, headers);
 

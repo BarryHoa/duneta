@@ -14,6 +14,7 @@ Monorepo TypeScript: **Hono API** (`@duneta/server`) + **React Router web** (`@d
 
 - [Tổng quan kiến trúc — ba lớp (core / build sẵn / user)](./architecture.md)
 - [Cấu hình](./configuration.md)
+- [Design system contract](../DESIGN.md)
 
 ### API (`app/api`)
 

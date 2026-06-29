@@ -5,7 +5,7 @@ export function resolveUrl(
 ): string {
   const base = baseUrl.replace(/\/$/, '');
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  let url = `${base}${normalizedPath}`;
+  const url = `${base}${normalizedPath}`;
 
   if (!params) return url;
 
