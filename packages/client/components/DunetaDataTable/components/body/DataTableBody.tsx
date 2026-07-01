@@ -6,6 +6,7 @@ import { isSelectionColumnId } from '../../core/row-selection';
 import { SELECTION_COLUMN_CLASS } from '../../constants';
 import { DunetaTable } from '../../../DunetaTable';
 import { DataTableEmptyState } from './DataTableEmptyState';
+import type { DunetaDataTableEmptyStateConfig } from '../../types';
 
 type DataTableRowProps<TData> = {
   row: Row<TData>;
@@ -65,18 +66,22 @@ type DataTableStaticBodyProps<TData> = {
   table: ReactTable<TData>;
   columnCount: number;
   pinEnabled: boolean;
+  emptyState?: DunetaDataTableEmptyStateConfig;
 };
 
 export function DataTableStaticBody<TData>({
   table,
   columnCount,
   pinEnabled,
+  emptyState,
 }: DataTableStaticBodyProps<TData>) {
   const rows = table.getRowModel().rows;
 
   return (
     <DunetaTable.Body
-      renderEmptyState={() => <DataTableEmptyState columnCount={columnCount} />}
+      renderEmptyState={() => (
+        <DataTableEmptyState columnCount={columnCount} emptyState={emptyState} />
+      )}
     >
       {rows.map((row) => (
         <DataTableRow
@@ -95,12 +100,14 @@ type DataTableVirtualBodyProps<TData extends object> = {
   table: ReactTable<TData>;
   columnCount: number;
   pinEnabled: boolean;
+  emptyState?: DunetaDataTableEmptyStateConfig;
 };
 
 export function DataTableVirtualBody<TData extends object>({
   table,
   columnCount,
   pinEnabled,
+  emptyState,
 }: DataTableVirtualBodyProps<TData>) {
   const rows = table.getRowModel().rows;
 
@@ -108,7 +115,9 @@ export function DataTableVirtualBody<TData extends object>({
     <DunetaTable.Body
       items={rows}
       dependencies={[rows]}
-      renderEmptyState={() => <DataTableEmptyState columnCount={columnCount} />}
+      renderEmptyState={() => (
+        <DataTableEmptyState columnCount={columnCount} emptyState={emptyState} />
+      )}
     >
       {(item) => {
         const row = item as Row<TData>;

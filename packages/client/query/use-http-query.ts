@@ -15,17 +15,17 @@ import type { httpQueryKey } from './client.js';
 
 type HttpQueryKey = ReturnType<typeof httpQueryKey>;
 
-type SharedHttpQueryOptions<T> = {
+type SharedHttpQueryOptions = {
   client?: BaseHttpService;
   request?: Omit<HttpRequestOptions, 'path' | 'responseType'>;
   /** Prefetch on the server during SSR and hydrate on the client (requires `<Suspense>`). */
   ssr?: boolean;
 };
 
-export type UseHttpQueryOptions<T> = SharedHttpQueryOptions<T> &
+export type UseHttpQueryOptions<T> = SharedHttpQueryOptions &
   Omit<UseQueryOptions<T, Error, T, HttpQueryKey>, 'queryKey' | 'queryFn'>;
 
-export type UseHttpSuspenseQueryOptions<T> = SharedHttpQueryOptions<T> &
+export type UseHttpSuspenseQueryOptions<T> = SharedHttpQueryOptions &
   Omit<UseSuspenseQueryOptions<T, Error, T, HttpQueryKey>, 'queryKey' | 'queryFn'>;
 
 export function useHttpQuery<T = unknown>(
@@ -46,6 +46,7 @@ export function useHttpQuery<T = unknown>(
   const definition = createHttpQueryDefinition<T>(path, { client, request });
 
   if (ssr) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- overload selects suspense vs non-suspense mode.
     return useSuspenseQuery({
       ...queryOptions,
       ...definition,
@@ -53,6 +54,7 @@ export function useHttpQuery<T = unknown>(
     });
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- overload selects suspense vs non-suspense mode.
   return useQuery({
     ...queryOptions,
     ...definition,

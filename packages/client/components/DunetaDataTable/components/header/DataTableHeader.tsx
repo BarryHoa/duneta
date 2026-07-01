@@ -93,7 +93,7 @@ function ColumnDropIndicator({ side }: { side: 'left' | 'right' }) {
     <span
       aria-hidden
       className={cn(
-        'pointer-events-none absolute top-1 bottom-1 z-20 w-1 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.65)]',
+        'pointer-events-none absolute top-1 bottom-1 z-20 w-1 rounded-full bg-primary shadow-sm',
         side === 'left' ? '-left-0.5' : '-right-0.5',
       )}
     />
@@ -123,7 +123,7 @@ function HeaderColumnShell({
         'bg-surface-secondary',
         pinClassName,
         resizable &&
-          'group/column relative data-[resizing]:!bg-cyan-100 data-[resizing]:text-foreground dark:data-[resizing]:!bg-cyan-900',
+          'group/column relative data-[resizing]:!bg-primary/10 data-[resizing]:text-foreground dark:data-[resizing]:!bg-primary/20',
       )}
       id={id}
       isRowHeader={isRowHeader}

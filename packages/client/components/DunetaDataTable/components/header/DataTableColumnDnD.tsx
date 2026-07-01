@@ -125,7 +125,7 @@ export function DataTableColumnDnD({
         </SortableContext>
         <DragOverlay dropAnimation={null}>
           {activeLabel ? (
-            <div className="cursor-grabbing rounded-md border border-cyan-500/60 bg-surface px-3 py-2 text-sm font-medium text-foreground shadow-lg ring-2 ring-cyan-500/30">
+            <div className="cursor-grabbing rounded-md border border-primary/60 bg-surface px-3 py-2 text-sm font-medium text-foreground shadow-lg ring-2 ring-primary/30">
               {activeLabel}
             </div>
           ) : null}

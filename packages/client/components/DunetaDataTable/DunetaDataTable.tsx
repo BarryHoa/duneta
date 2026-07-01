@@ -47,6 +47,7 @@ function DunetaDataTableImpl<TData extends object>({
   toolbar,
   onRefresh,
   isRefreshing,
+  emptyState,
 }: DunetaDataTableProps<TData>) {
   const rowSelectionConfig = isObject(rowSelection) ? rowSelection : undefined;
 
@@ -187,12 +188,14 @@ function DunetaDataTableImpl<TData extends object>({
                 table={table}
                 columnCount={columnCount}
                 pinEnabled={pinEnabled}
+                emptyState={emptyState}
               />
             ) : (
               <DataTableStaticBody
                 table={table}
                 columnCount={columnCount}
                 pinEnabled={pinEnabled}
+                emptyState={emptyState}
               />
             )}
           </DataTableContent>

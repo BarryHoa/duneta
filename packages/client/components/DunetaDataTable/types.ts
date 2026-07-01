@@ -1,5 +1,6 @@
 import type { ColumnDef, ColumnPinningState } from '@tanstack/react-table';
 import type { SortDescriptor } from '@heroui/react';
+import type { ReactNode } from 'react';
 import type { DunetaTableProps } from '../DunetaTable/types';
 import type { ColumnDragConfig, ColumnResizeConfig } from './core/columns';
 import type { DunetaDataTableToolbarConfig } from './types/toolbar';
@@ -17,6 +18,12 @@ export type DunetaDataTableRowSelectionConfig = {
 export type DunetaDataTableSortConfig = {
   descriptor?: SortDescriptor;
   onChange: (descriptor: SortDescriptor) => void;
+};
+
+export type DunetaDataTableEmptyStateConfig = {
+  title?: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
 };
 
 export type DunetaDataTablePaginationConfig = {
@@ -50,8 +57,8 @@ export type DunetaDataTableProps<TData extends object> = {
   ariaLabel?: string;
   className?: string;
   /**
-   * HeroUI table shell variant. `primary` uses large ~32px card radius;
-   * `secondary` is flatter. Default: `secondary`.
+   * HeroUI table shell variant. Default: `secondary`, matching Duneta's compact operational
+   * table contract. `primary` is available when a larger HeroUI table shell is desired.
    */
   variant?: DunetaTableProps['variant'];
   /** Enable row virtualization when pagination is disabled. Default: false */
@@ -79,6 +86,8 @@ export type DunetaDataTableProps<TData extends object> = {
   rowSelection?: false | null | DunetaDataTableRowSelectionConfig;
   /** Max height of the scrollable table body (`tbody`). Header and pagination footer stay fixed. */
   height?: number | string;
+  /** Explicit empty state content. Keep it short and actionable for operational screens. */
+  emptyState?: DunetaDataTableEmptyStateConfig;
   /**
    * Header toolbar with search, filter, group, and column controls.
    * `true` enables all features with defaults.
